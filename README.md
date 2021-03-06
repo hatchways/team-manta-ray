@@ -5,3 +5,7 @@ This starter repo will be used for building applications using React, Material-U
 ## Getting started
 
 The project is broken down into a client and server folder.
+
+Members:
+
+- Arcival Palma
