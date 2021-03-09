@@ -28,10 +28,10 @@ function App() {
     if (isLoggedIn) {
         routes = (
             <Switch>
-                <Route path="/" exact>
+                <Route path="/profile" exact>
                     <CustomerProfile />
                 </Route>
-                <Redirect to="/" />
+                <Redirect to="/profile" />
             </Switch>
         );
     } else {
