@@ -8,6 +8,7 @@ import {
     List,
     ListItem,
     ListItemText,
+    Avatar,
 } from "@material-ui/core";
 import useStyles from "./NavBar.style";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
@@ -41,17 +42,26 @@ const NavBar = () => {
                                 className={classes.logo}
                             />
                         </Grid>
-                        <Grid item>
-                            <IconButton
-                                edge="start"
-                                className={classes.menuButton}
-                                color="inherit"
-                                aria-label="menu"
-                                onClick={drawerHandler}
-                            >
-                                <DragHandleIcon className={classes.icon} />
-                            </IconButton>
-                        </Grid>
+                        <div className={classes.navBarRight}>
+                            <Grid item>
+                                <Avatar
+                                    src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50.png"
+                                    alt="user profile pic"
+                                />
+                            </Grid>
+
+                            <Grid item>
+                                <IconButton
+                                    edge="start"
+                                    className={classes.menuButton}
+                                    color="inherit"
+                                    aria-label="menu"
+                                    onClick={drawerHandler}
+                                >
+                                    <DragHandleIcon className={classes.icon} />
+                                </IconButton>
+                            </Grid>
+                        </div>
                     </Grid>
                 </Toolbar>
             </AppBar>

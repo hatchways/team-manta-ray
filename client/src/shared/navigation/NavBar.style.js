@@ -31,6 +31,12 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(3),
         minHeight: 60,
     },
+    navBarRight: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: 150,
+    },
 }));
 
 export default useStyles;
