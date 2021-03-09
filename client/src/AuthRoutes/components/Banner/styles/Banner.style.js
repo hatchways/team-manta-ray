@@ -10,19 +10,18 @@ const useStyles = makeStyles((theme) => ({
 	content: {
 		color: '#fff',
 		margin: theme.spacing(4, 4),
-		fontSize: '2rem',
 		display: 'flex',
 		justifyContent: 'flex-end',
 	},
 	btn: {
-		padding: '0.7rem 2rem',
+		padding: theme.spacing(1, 4),
 		borderRadius: '0',
-		marginLeft: '1.5rem',
+		marginLeft: theme.spacing(3),
 		textTransform: 'capitalize',
 	},
 	txt: {
-		lineHeight: '3rem',
 		fontWeight: '400',
+		lineHeight: theme.spacing(0.3),
 	},
 	link: {
 		textDecoration: 'none',

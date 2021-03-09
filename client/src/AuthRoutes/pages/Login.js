@@ -45,7 +45,7 @@ const Login = () => {
 		<Grid container component='main' className={classes.root}>
 			<CssBaseline />
 			<Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-				<img src='/images/logo.png' alt='logo' className={classes.margin} />
+				<img src='/images/logo.jpg' alt='logo' className={classes.margin} />
 				<div className={classes.paper}>
 					<Typography variant='h3'>Login</Typography>
 					<div className={classes.form}>
