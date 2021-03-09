@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../shared/context/auth-context";
 import {
     AppBar,
     Toolbar,
@@ -20,6 +21,7 @@ const ListItemLink = (props) => {
 const NavBar = () => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
+    const userInfo = useContext(AuthContext);
 
     const drawerHandler = () => {
         setOpen(true);
@@ -45,7 +47,7 @@ const NavBar = () => {
                         <div className={classes.navBarRight}>
                             <Grid item>
                                 <Avatar
-                                    src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50.png"
+                                    src={userInfo.avatar}
                                     alt="user profile pic"
                                 />
                             </Grid>
