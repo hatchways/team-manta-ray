@@ -22,5 +22,6 @@ yarn-error.log*
 
 #TODO add .env to your gitignore
 .env
+server/.env
 
 .env.example
