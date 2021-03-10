@@ -18,11 +18,7 @@ import DragHandleIcon from "@material-ui/icons/DragHandle";
 const NavBar = () => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
-<<<<<<< HEAD
     const { userData, setIsLoggedIn } = useContext(AuthContext);
-=======
-    const auth = useContext(AuthContext);
->>>>>>> a44ba22193529c4628850a1ae709e1dfbdec70c8
 
     const drawerHandler = () => {
         setOpen(true);
@@ -82,7 +78,6 @@ const NavBar = () => {
                         <ListItem button component={Link} to="/profile" divider>
                             <ListItemText primary="Profile" />
                         </ListItem>
-<<<<<<< HEAD
                         <ListItem
                             button
                             divider
@@ -90,9 +85,6 @@ const NavBar = () => {
                                 setIsLoggedIn(false);
                             }}
                         >
-=======
-                        <ListItem button divider onClick={auth.logout}>
->>>>>>> a44ba22193529c4628850a1ae709e1dfbdec70c8
                             <ListItemText primary="Log Out" />
                         </ListItem>
                     </List>
