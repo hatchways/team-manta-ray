@@ -1,37 +1,28 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { MuiThemeProvider } from "@material-ui/core";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { AuthContext } from "./shared/context/auth-context";
 
 import { theme } from "./themes/theme";
 import CustomerProfile from "./profiles/pages/CustomerProfile";
+import Login from "./AuthRoutes/pages/Login";
 import NavBar from "./shared/navigation/NavBar";
 
 import "./App.css";
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
-    const [avatar, setAvatar] = useState(
-        "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50.png"
-    );
-
-    const login = useCallback(() => {
-        setIsLoggedIn(true);
-    }, []);
-
-    const logout = useCallback(() => {
-        setIsLoggedIn(false);
-    }, []);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userData, setUserData] = useState(null);
 
     let routes;
 
     if (isLoggedIn) {
         routes = (
             <Switch>
-                <Route path="/" exact>
+                <Route path="/profile" exact>
                     <CustomerProfile />
                 </Route>
-                <Redirect to="/" />
+                <Redirect to="/profile" />
             </Switch>
         );
     } else {
@@ -39,7 +30,7 @@ function App() {
             <Switch>
                 <Route path="/login">
                     {/* Location of login page */}
-                    <h1>Login page</h1>
+                    <Login />
                 </Route>
                 <Route path="/signup">
                     {/* Location of signup page */}
@@ -52,7 +43,12 @@ function App() {
 
     return (
         <AuthContext.Provider
-            value={{ isLoggedIn: isLoggedIn, avatar: avatar, login, logout }}
+            value={{
+                isLoggedIn: isLoggedIn,
+                setIsLoggedIn: setIsLoggedIn,
+                userData: userData,
+                setUserData: setUserData,
+            }}
         >
             <MuiThemeProvider theme={theme}>
                 <BrowserRouter>

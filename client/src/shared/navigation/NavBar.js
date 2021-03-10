@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../shared/context/auth-context";
+import { Link } from "react-router-dom";
 import {
     AppBar,
     Toolbar,
@@ -14,14 +15,10 @@ import {
 import useStyles from "./NavBar.style";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 
-const ListItemLink = (props) => {
-    return <ListItem button component="a" {...props} />;
-};
-
 const NavBar = () => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
-    const userInfo = useContext(AuthContext);
+    const { userData, setIsLoggedIn } = useContext(AuthContext);
 
     const drawerHandler = () => {
         setOpen(true);
@@ -47,7 +44,7 @@ const NavBar = () => {
                         <div className={classes.navBarRight}>
                             <Grid item>
                                 <Avatar
-                                    src={userInfo.avatar}
+                                    src={userData.avatar}
                                     alt="user profile pic"
                                 />
                             </Grid>
@@ -78,12 +75,18 @@ const NavBar = () => {
                         <ListItem divider className={classes.plateIcon}>
                             <img src="images/plate.svg" alt="plate icon" />
                         </ListItem>
-                        <ListItemLink divider href="#">
+                        <ListItem button component={Link} to="/profile" divider>
                             <ListItemText primary="Profile" />
-                        </ListItemLink>
-                        <ListItemLink divider href="#">
+                        </ListItem>
+                        <ListItem
+                            button
+                            divider
+                            onClick={() => {
+                                setIsLoggedIn(false);
+                            }}
+                        >
                             <ListItemText primary="Log Out" />
-                        </ListItemLink>
+                        </ListItem>
                     </List>
                 </div>
             </Drawer>
