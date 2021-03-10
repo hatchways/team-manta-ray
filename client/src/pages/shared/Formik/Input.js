@@ -1,7 +1,22 @@
 import React from 'react';
 import {Field} from 'formik';
 import {TextField, Typography} from '@material-ui/core';
-import useStyles from '../styles/Input.style';
+import {makeStyles} from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+	formGroup: {
+		marginBottom: 20,
+		height: theme.spacing(11),
+	},
+	label: {
+		fontWeight: 900,
+		fontSize: 12,
+	},
+	input: {
+		margin: '3px 0',
+		borderRadius: '0',
+	},
+}));
 
 const Input = ({label, name, ...rest}) => {
 	const classes = useStyles();
