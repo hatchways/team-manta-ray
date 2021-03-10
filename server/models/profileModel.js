@@ -9,7 +9,13 @@ const profileSchema = new Schema({
     required: true,
   },
   location: {
-    type: String,
+    type: {
+      type: String,
+      enum: ["Point"],
+    },
+    coordinates: {
+      type: [Number],
+    },
   },
   bio: String,
   favCuisines: {
