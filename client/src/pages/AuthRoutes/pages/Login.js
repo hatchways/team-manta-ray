@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Button } from "@material-ui/core";
 import { AuthContext } from "../../shared/context/auth-context";
-import { login } from "../../mockAPI";
+import { login } from "../../../mockAPI";
 
 const Login = () => {
     const { setIsLoggedIn, setUserData } = useContext(AuthContext);
