@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import {Formik, Form} from 'formik';
 import * as Yup from 'yup';
-import useStyles from './Auth.style';
+import {useStyles} from './Login';
 import Banner from '../components/Banner';
 import FormikControl from '../../shared/Formik/FormikControl';
 
