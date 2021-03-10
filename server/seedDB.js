@@ -10,16 +10,16 @@ dotenv.config();
 connectDB();
 
 const importData = async () => {
-	try {
-		await User.deleteMany();
-		await User.insertMany(users);
+  try {
+    await User.deleteMany();
+    await User.insertMany(users);
 
-		console.log("Data imported!");
-		process.exit();
-	} catch (err) {
-		console.log("Error in importing!", err.message);
-		process.exit(1);
-	}
+    console.log("Data imported!");
+    process.exit();
+  } catch (err) {
+    console.log("Error in importing!", err.message);
+    process.exit(1);
+  }
 };
 
 importData();
