@@ -2,36 +2,6 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const recipeSchema = Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  pictureUrl: {
-    type: String,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  ingredients: {
-    type: [String],
-    required: true,
-  },
-  requiredStuff: {
-    type: [String],
-  },
-  portionDescription: {
-    type: String,
-    required: true,
-  },
-  cuisineTags: {
-    type: [String],
-    required: true,
-  },
-});
-
 const profileSchema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -40,18 +10,18 @@ const profileSchema = new Schema({
   },
   location: {
     type: String,
-    required: true,
   },
   bio: String,
   favCuisines: {
     type: [String],
-    required: true,
   },
   profilePictureUrl: {
     type: String,
     required: true,
   },
-  recipes: [recipeSchema],
+  cuisineTags: {
+    type: [String],
+  },
 });
 
 const Profile = mongoose.model("Profile", profileSchema);
