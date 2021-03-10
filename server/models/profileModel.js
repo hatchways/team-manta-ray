@@ -15,6 +15,7 @@ const profileSchema = new Schema({
     },
     coordinates: {
       type: [Number],
+      index: "2dsphere",
     },
   },
   bio: String,
