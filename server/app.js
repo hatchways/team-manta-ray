@@ -4,23 +4,15 @@ const express = require("express");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const connectDB = require("./config/db");
 
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
 const userRoutes = require("./routes/userRoutes");
 
+connectDB();
+
 const { json, urlencoded } = express;
-
-// Database Setup
-const mongoose = require("mongoose");
-
-const MONGODB_URI =
-	process.env.MONGODB_URI || "mongodb://localhost:27017/myapp";
-
-mongoose.connect(MONGODB_URI, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-});
 
 var app = express();
 
