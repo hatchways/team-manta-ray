@@ -8,7 +8,6 @@ const generateToken = require("../utils/generateToken");
  * @access Public
  */
 
-//Work on this when you come back
 const registerUser = AsyncHandler(async (req, res) => {
   const { name, email, password, isChef } = req.body;
 
