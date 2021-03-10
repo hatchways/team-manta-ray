@@ -1,5 +1,6 @@
 const User = require("../models/userModel.js");
 const AsyncHandler = require("express-async-handler");
+const generateToken = require("../utils/generateToken");
 
 /**
  * @description Register a new user
@@ -37,6 +38,7 @@ const registerUser = AsyncHandler(async (req, res) => {
 			name: user.name,
 			email: user.email,
 			isChef: user.isChef,
+			token: generateToken(user._id),
 		});
 	} else {
 		res.status(400).send({ message: "Invalid user data" });
@@ -59,9 +61,10 @@ const loginUser = AsyncHandler(async (req, res) => {
 			name: user.name,
 			email: user.email,
 			isChef: user.isChef,
+			token: generateToken(user._id),
 		});
 	} else {
-		res.status(401).send({ message: "Invalid username or password" });
+		res.status(401).send({ message: "Invalid user data" });
 	}
 });
 
