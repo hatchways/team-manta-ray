@@ -5,13 +5,18 @@
   "scripts": {
     "dev": "nodemon ./bin/www",
     "debug": "nodemon  --inspect ./bin/www",
-    "test": "NODE_ENV=test ./node_modules/.bin/mocha --exit --timeout 30000"
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha --exit --timeout 30000",
+    "import:data": "node seedDB.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "http-errors": "^1.8.0",
+    "express-async-handler": "^1.1.4",
+    "http-errors": "~1.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.19",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.6"
   },
