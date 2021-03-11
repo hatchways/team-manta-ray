@@ -38,9 +38,13 @@ app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   // render the error page
-  res.status(err.status || 500);
-  res.json({ error: err });
+  res.status(statusCode);
+  res.json({
+    error: err.message,
+    stack: process.env.NODE_ENV === "production" ? null : err.stack,
+  });
 });
 
 module.exports = app;

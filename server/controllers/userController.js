@@ -6,23 +6,22 @@ const generateToken = require("../utils/generateToken");
  * @description Register a new user
  * @route POST /api/users/register
  * @access Public
+ * @data => name, email, password, isChef(optional)
  */
 
 const registerUser = AsyncHandler(async (req, res) => {
   const { name, email, password, isChef } = req.body;
 
   if (password.length <= 6) {
-    res
-      .status(400)
-      .send({ message: "Password length must be atleast 7 characters" });
-    return;
+    res.status(400);
+    throw new Error("Password length must be atleast 7 characters");
   }
 
   const userExist = await User.findOne({ email });
 
   if (userExist) {
-    res.status(400).send({ message: "User already exists" });
-    return;
+    res.status(400);
+    throw new Error("User already exists");
   }
 
   const user = await User.create({
@@ -36,7 +35,7 @@ const registerUser = AsyncHandler(async (req, res) => {
     const token = generateToken(user._id);
 
     res.cookie("token", token, {
-      maxAge: 86400000,
+      maxAge: 86400000, // 24hrs
       httpOnly: true,
     });
 
@@ -54,6 +53,8 @@ const registerUser = AsyncHandler(async (req, res) => {
 /**
  * @description Login and authenticate a user
  * @route POST /api/users/login
+ * @access Public
+ * @data => email, password
  */
 
 const loginUser = AsyncHandler(async (req, res) => {
@@ -76,7 +77,8 @@ const loginUser = AsyncHandler(async (req, res) => {
       isChef: user.isChef,
     });
   } else {
-    res.status(401).send({ message: "Invalid user data" });
+    res.status(401);
+    throw new Error("Invalid email or password");
   }
 });
 
