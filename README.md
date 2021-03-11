@@ -8,7 +8,7 @@ The project is broken down into a client and server folder.
 
 ## Requirements
 
-##### MongoDB
+### MongoDB
 
 The project uses MongoDB as a database. Please follow this [installation guide](https://docs.mongodb.com/manual/installation/) in how to install and start your local database server.
 
