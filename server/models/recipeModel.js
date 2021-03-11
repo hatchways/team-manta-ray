@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const recipeSchema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "ChefProfile",
     required: true,
   },
   name: {
