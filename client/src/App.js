@@ -7,6 +7,7 @@ import Login from "./pages/AuthRoutes/pages/Login";
 import Signup from "./pages/AuthRoutes/pages/Signup";
 
 import "./App.css";
+import TestDropZone from "./pages/shared/Formik/DialogBox/TestDropZone";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route exact path="/">
           <Redirect to="/signup" />
         </Route>
+        <Route exact path="/upload" component={TestDropZone} />
       </BrowserRouter>
     </MuiThemeProvider>
   );
