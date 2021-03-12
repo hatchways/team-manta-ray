@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { MuiThemeProvider } from "@material-ui/core";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import { AuthContext } from "./pages/shared/context/auth-context";
+import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 
 import { theme } from "./themes/theme";
-import CustomerProfile from "./pages/profiles/pages/CustomerProfile";
+import { AuthContext } from "./pages/shared/context/auth-context";
+
 import Login from "./pages/AuthRoutes/pages/Login";
+import Signup from "./pages/AuthRoutes/pages/Signup";
+import CustomerProfile from "./pages/profiles/pages/CustomerProfile";
 import NavBar from "./pages/shared/navigation/NavBar";
 
 import "./App.css";
@@ -29,12 +31,10 @@ function App() {
     routes = (
       <Switch>
         <Route path="/login">
-          {/* Location of login page */}
           <Login />
         </Route>
         <Route path="/signup">
-          {/* Location of signup page */}
-          <h1>Signup page</h1>
+          <Signup />
         </Route>
         <Redirect to="/login" />
       </Switch>

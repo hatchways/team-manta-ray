@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   Grid,
   CssBaseline,
@@ -9,43 +9,12 @@ import {
 } from "@material-ui/core";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { useStyles } from "./Login";
 import Banner from "../components/Banner";
 import FormikControl from "../../shared/Formik/FormikControl";
-import { makeStyles } from "@material-ui/core/styles";
 
-import { login } from "../../../mockAPI";
-
-import { AuthContext } from "../../shared/context/auth-context";
-
-export const useStyles = makeStyles((theme) => ({
-  root: {
-    height: "100vh",
-  },
-  paper: {
-    margin: theme.spacing(3, 8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-  },
-  margin: {
-    margin: theme.spacing(4, 4),
-  },
-  form: {
-    width: "100%",
-    marginTop: theme.spacing(2),
-  },
-  btn: {
-    borderRadius: "0",
-    width: "50%",
-    height: theme.spacing(7),
-    marginTop: theme.spacing(3),
-    textTransform: "capitalize",
-  },
-}));
-
-const Login = () => {
+const Signup = () => {
   const classes = useStyles();
-  const { setIsLoggedIn, setUserData } = useContext(AuthContext);
 
   const [open, setOpen] = useState(false);
 
@@ -54,25 +23,28 @@ const Login = () => {
   };
 
   const initialValues = {
+    name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   };
 
   const validationSchema = Yup.object({
+    name: Yup.string().required("Name is Required"),
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is Required"),
     password: Yup.string()
       .required("Password is Required")
       .min(6, "Password too short"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password"), ""], "Passwords must match")
+      .required("Confirm password is required"),
   });
 
-  const onSubmit = async (values) => {
+  const onSubmit = (values) => {
     console.log(values);
     setOpen(true);
-    const userData = await login(); //Get data from mock API
-    setUserData(userData);
-    setIsLoggedIn(true);
   };
 
   return (
@@ -81,7 +53,9 @@ const Login = () => {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <img src="/images/logo.jpg" alt="logo" className={classes.margin} />
         <div className={classes.paper}>
-          <Typography variant="h3">Login</Typography>
+          <Typography component="h3" variant="h3">
+            Create an account
+          </Typography>
           <div className={classes.form}>
             <Formik
               initialValues={initialValues}
@@ -92,15 +66,31 @@ const Login = () => {
                 <Form>
                   <FormikControl
                     control="input"
+                    type="name"
+                    label="Name"
+                    name="name"
+                    placeholder="Enter your name"
+                  />
+                  <FormikControl
+                    control="input"
                     type="email"
                     label="EMAIL"
                     name="email"
+                    placeholder="Enter your e-mail address"
                   />
                   <FormikControl
                     control="input"
                     type="password"
                     label="PASSWORD"
                     name="password"
+                    placeholder="Enter password"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="password"
+                    label="CONFIRM PASSWORD"
+                    name="confirmPassword"
+                    placeholder="Confirm password"
                   />
                   <Button
                     type="submit"
@@ -108,7 +98,7 @@ const Login = () => {
                     color="secondary"
                     className={classes.btn}
                   >
-                    Sign In
+                    Sign Up
                   </Button>
                 </Form>
               )}
@@ -127,9 +117,9 @@ const Login = () => {
           }}
         />
       </Grid>
-      <Banner />
+      <Banner signUp={true} />
     </Grid>
   );
 };
 
-export default Login;
+export default Signup;
