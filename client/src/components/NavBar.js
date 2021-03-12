@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { AuthContext } from "../../shared/context/auth-context";
+import { AuthContext } from "../context/auth-context";
 import { Link } from "react-router-dom";
 import {
   AppBar,
@@ -14,6 +14,9 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
+
+import logo from "../assets/logo.svg";
+import plateLogo from "../assets/plate.svg";
 
 const useStyles = makeStyles((theme) => ({
   toolBar: {
@@ -74,7 +77,7 @@ const NavBar = () => {
             alignItems="center"
           >
             <Grid item>
-              <img src="images/logo.svg" alt="logo" className={classes.logo} />
+              <img src={logo} alt="logo" className={classes.logo} />
             </Grid>
             <div className={classes.navBarRight}>
               <Grid item>
@@ -105,7 +108,7 @@ const NavBar = () => {
         <div className={classes.drawerDiv}>
           <List component="nav" aria-label="navigation">
             <ListItem divider className={classes.plateIcon}>
-              <img src="images/plate.svg" alt="plate icon" />
+              <img src={plateLogo} alt="plate icon" />
             </ListItem>
             <ListItem button component={Link} to="/profile" divider>
               <ListItemText primary="Profile" />

@@ -3,12 +3,12 @@ import { MuiThemeProvider } from "@material-ui/core";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 
 import { theme } from "./themes/theme";
-import { AuthContext } from "./pages/shared/context/auth-context";
+import { AuthContext } from "./context/auth-context";
 
-import Login from "./pages/AuthRoutes/pages/Login";
-import Signup from "./pages/AuthRoutes/pages/Signup";
-import CustomerProfile from "./pages/profiles/pages/CustomerProfile";
-import NavBar from "./pages/shared/navigation/NavBar";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import CustomerProfile from "./pages/CustomerProfile";
+import NavBar from "./components/NavBar";
 
 import "./App.css";
 

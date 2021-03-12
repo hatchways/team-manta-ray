@@ -3,9 +3,11 @@ import { Grid, Typography, Button, Hidden } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 
+import banner from "../assets/banner.png";
+
 const useStyles = makeStyles((theme) => ({
   image: {
-    backgroundImage: "url(/images/banner.png)",
+    backgroundImage: `url(${banner})`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     backgroundPosition: "center",
