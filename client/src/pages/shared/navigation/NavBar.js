@@ -74,7 +74,7 @@ const NavBar = () => {
             alignItems="center"
           >
             <Grid item>
-              <img src="images/logo.jpg" alt="logo" className={classes.logo} />
+              <img src="images/logo.svg" alt="logo" className={classes.logo} />
             </Grid>
             <div className={classes.navBarRight}>
               <Grid item>
