@@ -9,6 +9,9 @@ const connectDB = require("./config/db");
 const indexRouter = require("./routes/index");
 
 const userRoutes = require("./routes/userRoutes");
+const recipeRoutes = require("./routes/recipeRoutes");
+const userProfileRoutes = require("./routes/userProfileRoutes");
+const chefProfileRoutes = require("./routes/chefProfileRoutes");
 
 connectDB();
 
@@ -26,6 +29,12 @@ app.use("/", indexRouter);
 
 // Routes for users
 app.use("/api/users", userRoutes);
+// Routes for userProfiles
+app.use("/api/userProfiles", userProfileRoutes);
+// // Routes for chefProfiles
+app.use("/api/chefProfiles", chefProfileRoutes);
+// Routes for recipes
+app.use("/api/recipes", recipeRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
