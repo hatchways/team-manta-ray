@@ -15,8 +15,8 @@ const userProfileSchema = new Schema({
     },
     coordinates: {
       type: [Number],
+      index: "2dsphere",
     },
-    index: "2dsphere",
   },
   about: String,
   favCuisines: {
