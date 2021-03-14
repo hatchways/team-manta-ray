@@ -11,7 +11,7 @@ import CustomerProfile from "./pages/CustomerProfile";
 import NavBar from "./components/NavBar";
 
 import "./App.css";
-import TestDropZone from "./pages/shared/Formik/DialogBox/TestDropZone";
+import ChefProfile from "./pages/ChefProfile";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,6 +37,7 @@ function App() {
         <Route path="/signup">
           <Signup />
         </Route>
+        <Route path="/chef" component={ChefProfile} />
         <Redirect to="/login" />
       </Switch>
     );
