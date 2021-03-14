@@ -11,7 +11,7 @@ const useUploadImage = () => {
         },
       };
 
-      const res = await axios.post(`/upload`, formData, config);
+      const res = await axios.post(`/api/image`, formData, config);
       if (res.status === 200) {
         return res.data;
       }

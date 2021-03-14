@@ -3,7 +3,7 @@ import axios from "axios";
 const useGetSrcData = () => {
   const getSrcData = async (key) => {
     try {
-      const response = await axios.get(`/image/${key}`);
+      const response = await axios.get(`/api/image/${key}`);
       if (response.status === 200) {
         return response.data;
       }

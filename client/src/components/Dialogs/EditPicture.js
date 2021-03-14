@@ -1,22 +1,16 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import useUploadImage from "../hooks/useUplaodImage";
-import useGetSrcData from "../hooks/useGetSrcData";
-import {
-  Dialog,
-  DialogTitle,
-  List,
-  ListItem,
-  Snackbar,
-} from "@material-ui/core";
-import defaultUserImage from "../assets/defaultUserImage.png";
+import useUploadImage from "../../hooks/useUplaodImage";
+import useGetSrcData from "../../hooks/useGetSrcData";
+import { DialogTitle, List, ListItem, Snackbar } from "@material-ui/core";
+import defaultUserImage from "../../assets/defaultUserImage.png";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     img: {
-      height: "200px",
-      width: "200px",
+      height: theme.spacing(25),
+      width: theme.spacing(25),
       margin: "auto",
       borderRadius: "50%",
     },
@@ -33,7 +27,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const EditPicture = ({ open, onClose, selectedValue }) => {
+const EditPicture = () => {
   const classes = useStyles();
 
   const [src, setSrc] = useState(null);
@@ -42,10 +36,6 @@ const EditPicture = ({ open, onClose, selectedValue }) => {
 
   const uploadImage = useUploadImage();
   const getSrcData = useGetSrcData();
-
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
 
   const handleSnackBarClose = () => {
     setSnackBarOpen(false);
@@ -58,7 +48,6 @@ const EditPicture = ({ open, onClose, selectedValue }) => {
         setSnackBarOpen(true);
         return;
       }
-      // Do something with the files
       const res = await uploadImage(acceptedFiles[0]);
       if (res.key) {
         const response = await getSrcData(res.key);
@@ -78,11 +67,7 @@ const EditPicture = ({ open, onClose, selectedValue }) => {
   });
 
   return (
-    <Dialog
-      onClose={handleClose}
-      aria-labelledby="simple-dialog-title"
-      open={open}
-    >
+    <>
       <DialogTitle id="simple-dialog-title">Edit Profile Picture</DialogTitle>
       <List>
         <ListItem>
@@ -99,7 +84,10 @@ const EditPicture = ({ open, onClose, selectedValue }) => {
               <p>Drop the files here ...</p>
             ) : (
               <>
-                <p>Drag 'n' drop some files here.., or click to select files</p>
+                <p>
+                  Drag 'n' drop an image here.., or click here to select an
+                  image
+                </p>
               </>
             )}
           </div>
@@ -117,7 +105,7 @@ const EditPicture = ({ open, onClose, selectedValue }) => {
           />
         </ListItem>
       </List>
-    </Dialog>
+    </>
   );
 };
 
