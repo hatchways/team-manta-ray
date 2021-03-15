@@ -8,7 +8,8 @@ const ChefProfile = () => {
 
   const handleClickOpen = (e) => {
     setOpen(true);
-    setControl(e.target.name);
+    const ctl = e.target.name === "image" ? "image" : "input";
+    setControl(ctl);
   };
 
   const handleClose = (value) => {
@@ -27,7 +28,14 @@ const ChefProfile = () => {
         style={{ cursor: "pointer" }}
         onClick={handleClickOpen}
         name="location"
-        value="mexico"
+        value="Toronto, canada"
+        readOnly
+      />
+      <input
+        style={{ cursor: "pointer" }}
+        onClick={handleClickOpen}
+        name="name"
+        value="Atsushi Mikazuki"
         readOnly
       />
       <DialogControl open={open} onClose={handleClose} control={control} />

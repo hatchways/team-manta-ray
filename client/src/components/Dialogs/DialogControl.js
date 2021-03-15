@@ -1,6 +1,6 @@
 import { Dialog } from "@material-ui/core";
 import React from "react";
-import EditLocation from "./EditLocation";
+import EditInput from "./EditInput";
 import EditPicture from "./EditPicture";
 
 const DialogControl = ({ open, onClose, selectedValue, control }) => {
@@ -8,8 +8,8 @@ const DialogControl = ({ open, onClose, selectedValue, control }) => {
     switch (control) {
       case "image":
         return <EditPicture />;
-      case "location":
-        return <EditLocation />;
+      case "input":
+        return <EditInput />;
       default:
         return null;
     }

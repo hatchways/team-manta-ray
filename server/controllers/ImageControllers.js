@@ -1,6 +1,12 @@
 const AWS = require("aws-sdk");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
+const ChefProfile = require("../models/chefProfileModel");
+const UserProfile = require("../models/userProfileModel");
+const User = require("../models/userModel");
+const NodeCache = require("node-cache");
+
+const imgCache = new NodeCache();
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ID,
@@ -16,6 +22,9 @@ const storage = multer.memoryStorage({
 const upload = multer({ storage }).single("profilePicture");
 
 const uploadImage = async (req, res) => {
+  // const user = await User.findById(req.user);
+  // const Profile = user.isChef ? ChefProfile : UserProfile;
+
   const fileNameParts = req.file.originalname.split(".");
   const fileType = fileNameParts[fileNameParts.length - 1];
 
@@ -26,12 +35,11 @@ const uploadImage = async (req, res) => {
     Key: key,
     Body: req.file.buffer,
   };
-  s3.upload(params, (error, data) => {
+  s3.upload(params, async (error, data) => {
     if (error) throw new Error(error);
-    //const currentChef = ChefProfile.findById(req.id)
-    //if not currentChef res.status(404)
-    //else currentChef.pictureKey = key || data.key
-    //currentChef.save();
+    // const userProfile = await Profile.find({ user: req.id });
+    // userProfile.key = key;
+    // await userProfile.save();
     res.json(data);
   });
 };
@@ -44,12 +52,15 @@ const getImageSrc = async (req, res) => {
     secretAccessKey: process.env.AWS_SECRET,
   });
   async function getImage() {
+    if (imgCache.has(key)) return imgCache.get(key);
+
     const data = s3
       .getObject({
         Bucket: process.env.AWS_BUCKET_NAME,
         Key: `${key}`,
       })
       .promise();
+    imgCache.set(key, data);
     return data;
   }
   function encode(data) {
