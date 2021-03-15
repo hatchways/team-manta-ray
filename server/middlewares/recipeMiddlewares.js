@@ -2,8 +2,6 @@ const Recipe = require("../models/recipeModel");
 
 module.exports = {
   getRecipe: async (req, res, next) => {
-    console.log("get recipe middleware reached");
-
     try {
       const { recipeId } = req.params;
 
@@ -11,11 +9,14 @@ module.exports = {
       const recipe = await Recipe.findById(recipeId)
         .populate({
           path: "user",
-          select: "-password", //exclude password
+          populate: {
+            path: "user",
+            select: "-password", // exclude password
+          },
         })
         .exec();
 
-      if (!recipe) throw "Recipe not found";
+      if (!recipe) throw new Error({ recipe });
 
       // save the recipe inside the req.recipe
       req.recipe = recipe;
@@ -24,7 +25,10 @@ module.exports = {
     } catch (error) {
       console.log(error);
 
-      return res.status(404).json({ error });
+      return res.status(503).json({
+        success: false,
+        error: error.message,
+      });
     }
   },
 };

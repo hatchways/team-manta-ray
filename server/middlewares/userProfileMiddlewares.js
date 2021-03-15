@@ -2,32 +2,35 @@ const UserProfile = require("../models/userProfileModel");
 
 const getUserProfile = async (req, res, next) => {
   try {
-    console.log("get user profile middleware reached");
-
-    //get userId from middleware
-    const userId = req.user._id;
+    //get userId from params
+    const { userId } = req.params;
 
     // find profile by user._id
-    const userProfile = await UserProfile.findOne()
+    const userProfile = await UserProfile.findOne({
+      user: userId,
+    })
       .populate({
         path: "user",
-        match: {
-          _id: userId,
-        },
         select: "-password", // DO NOT INCLUDE PASSWORD
       })
       .exec();
 
-    if (userProfile.length < 1) throw "Profile not found";
+    if (!userProfile) throw new Error("Profile not found");
+
+    console.log("user profile found");
+    console.log(userProfile);
 
     // save the userProfile inside the req.userProfile
     req.userProfile = userProfile;
 
     next();
   } catch (error) {
-    console.log(error);
+    console.log("getUserProfileMiddleware", error);
 
-    return res.status(404).json({ error });
+    return res.status(503).json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 

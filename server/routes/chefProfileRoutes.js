@@ -15,10 +15,10 @@ const {
 
 router.route("/").post(auth, createChefProfile); // create chef profile
 
-router.route("/:id").get(auth, getChefProfile, retrieveChefProfile); // get chef profile by user._id
+router.route("/:userId").get(auth, getChefProfile, retrieveChefProfile); // get chef profile by user._id
 
-router.route("/:id").put(auth, getChefProfile, updateChefProfile); // update chef profile by user._id
+router.route("/:userId").put(auth, getChefProfile, updateChefProfile); // update chef profile by user._id
 
-router.route("/:id").delete(auth, getChefProfile, deleteChefProfile); // delete chef profile by user._id
+router.route("/:userId").delete(auth, getChefProfile, deleteChefProfile); // delete chef profile by user._id
 
 module.exports = router;

@@ -26,12 +26,12 @@ passport.use(
       secretOrKey: process.env.JWT_SECRET || "secretIsTheKey",
     },
     async (payload, done) => {
-      console.log("auth middleware reached");
-
       try {
         // check the token generator if the signed object is id
         // change the payload props otherwise
-        const user = await User.findById(payload.id);
+        const user = await User.findById(payload.id)
+          .select(["-password"])
+          .exec(); //exclude password
 
         // check token expiration
         if (Date.now() > payload.expiration) {
@@ -46,7 +46,7 @@ passport.use(
         // continue
         done(null, user);
       } catch (error) {
-        console.log(error);
+        error["success"] = false;
 
         done(error, false);
       }

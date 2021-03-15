@@ -2,32 +2,35 @@ const ChefProfile = require("../models/chefProfileModel");
 
 const getChefProfile = async (req, res, next) => {
   try {
-    console.log("get chef profile middleware reached");
-
-    //get userId from middleware
-    const userId = req.user._id;
+    //get userId from params
+    const { userId } = req.params;
 
     // find profile by user._id
-    const chefProfile = await ChefProfile.findOne()
+    const chefProfile = await ChefProfile.findOne({
+      user: userId,
+    })
       .populate({
         path: "user",
-        match: {
-          _id: userId,
-        },
         select: "-password", // DO NOT INCLUDE PASSWORD
       })
       .exec();
 
-    if (chefProfile.length < 1) throw "Profile not found";
+    if (!chefProfile) throw new Error("Profile not found");
+
+    console.log("chef profile found");
+    console.log(chefProfile);
 
     // save the chefProfile inside the req.chefProfile
     req.chefProfile = chefProfile;
 
     next();
   } catch (error) {
-    console.log(error);
+    console.log("getChefProfileMiddleware", error);
 
-    return res.status(404).json({ error });
+    return res.status(503).json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 

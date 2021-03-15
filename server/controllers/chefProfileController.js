@@ -1,37 +1,34 @@
 const ChefProfile = require("../models/chefProfileModel");
-const AsyncHandler = require("express-async-handler");
+const getCoordsFromAddress = require("../utils/geocoding");
 
 const createChefProfile = async (req, res) => {
   try {
-    console.log("create chef profile controller reached");
-
     // get authenticated user from middleware
     const { user } = req;
 
     // if authenticated user is not chef
-    if (!user.isChef) throw "Only chef can create chef profile";
+    if (!user.isChef) throw new Error("Only chef can create chef profile");
 
     // if chef profile exists
-    const chefProfile = await ChefProfile.find()
-      .populate({
-        path: "user",
-        match: {
-          _id: user._id,
-        },
-      })
-      .exec();
+    const chefProfile = await ChefProfile.find({ user: user._id }).exec();
 
     if (chefProfile.length > 0)
-      throw "This chef has already a profile. Cannot create another one";
+      throw new Error(
+        "This chef has already a profile. Cannot create another one"
+      );
 
-    // Wiill change the location field
-    // Still figuring out how to save coordinates
     const { location, bio, profilePictureUrl, cuisineTags } = req.body;
+
+    // convert location to coordinates
+    const coordinates = await getCoordsFromAddress(location);
 
     // create chef profile
     const newChefProfile = new ChefProfile({
       user,
-      location, // may throw an error
+      location: {
+        type: "Point",
+        coordinates,
+      },
       bio,
       profilePictureUrl,
       cuisineTags,
@@ -48,44 +45,64 @@ const createChefProfile = async (req, res) => {
     console.log(error);
 
     return res.status(400).json({
-      error,
+      success: false,
+      error: error.message,
     });
   }
 };
 
-const retrieveChefProfile = AsyncHandler(async (req, res) => {
-  console.log("retrieve chef profile controller reached");
+const retrieveChefProfile = async (req, res) => {
+  try {
+    // get profile from middleware
+    const { chefProfile } = req;
 
-  // get profile from middleware
-  const { chefProfile } = req;
+    return res.status(200).json({
+      success: true,
+      chefProfile,
+    });
+  } catch (error) {
+    console.log(error);
 
-  return res.status(200).json({
-    success: true,
-    chefProfile,
-  });
-});
+    return res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
 
 const updateChefProfile = async (req, res) => {
-  console.log("update chef profile controller reached");
-
   try {
     // get profile and user from middleware
     const { chefProfile, user } = req;
 
     // if authenticated user is not the owner of the profile
     if (user._id.toString() !== chefProfile.user._id.toString())
-      throw "Cannot update someones chef profile";
+      throw new Error("You can only update your own chef profile");
 
-    const { location, bio, profilePictureUrl, cuisineTags } = req.body;
+    const fields = req.body;
 
-    // update chef profile
-    // Will change the location field
-    // Still figuring out how to save coordinates
-    chefProfile.location = location; // may throw an error
-    chefProfile.bio = bio;
-    chefProfile.profilePictureUrl = profilePictureUrl;
-    chefProfile.cuisineTags = cuisineTags;
+    // Convert req.body to an array to loop all given field props
+    // since the getCoordsFromAddress function returns a promise
+    // use await Promise.all to await
+    // If not used the chefProfile will save before the promise return from getCoordsFromAddress
+    await Promise.all(
+      Object.keys(fields).map(async (key) => {
+        // if the field's name === 'location'
+        if (key === "location") {
+          // pass the location value
+          const coordinates = await getCoordsFromAddress(fields[key]);
 
+          chefProfile[key] = {
+            type: "Point",
+            coordinates,
+          };
+        } else {
+          chefProfile[key] = fields[key];
+        }
+      })
+    );
+
+    // save the chefProfile
     await chefProfile.save();
 
     return res.status(200).json({
@@ -95,20 +112,21 @@ const updateChefProfile = async (req, res) => {
   } catch (error) {
     console.log(error);
 
-    return res.status(400).json({ error });
+    return res.status(400).json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 
 const deleteChefProfile = async (req, res) => {
   try {
-    console.log("delete chef profile controller reached");
-
     // get user and chefProfile from middleware
     const { user, chefProfile } = req;
 
     // if authenticated user is not the owner of the profile
     if (user._id.toString() !== chefProfile.user._id.toString())
-      throw "You can only delete your own chef profile";
+      throw new Error("You can only delete your own chef profile");
 
     // delete profile
     await chefProfile.delete();
@@ -120,7 +138,10 @@ const deleteChefProfile = async (req, res) => {
   } catch (error) {
     console.log(error);
 
-    return res.status(400).json({ error });
+    return res.status(400).json({
+      success: false,
+      error: error.message,
+    });
   }
 };
 
