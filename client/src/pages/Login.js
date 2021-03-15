@@ -47,7 +47,7 @@ export const useStyles = makeStyles((theme) => ({
 const Login = ({ history }) => {
   const classes = useStyles();
 
-  // dispatch from reducer
+  // dispatch function from reducer
   const dispatch = useContext(UserDispatchContext);
 
   // data from context
