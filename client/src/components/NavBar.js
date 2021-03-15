@@ -20,7 +20,7 @@ import plateLogo from "../assets/plate.svg";
 
 const useStyles = makeStyles((theme) => ({
   toolBar: {
-    minHeight: 75,
+    minHeight: 60,
     display: "grid",
     backgroundColor: "white",
   },
