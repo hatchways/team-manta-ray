@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Grid,
   CssBaseline,
@@ -12,12 +12,11 @@ import * as Yup from "yup";
 import Banner from "../components/Banner";
 import FormikControl from "../components/Formik/FormikControl";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { login } from "../actions/userActions";
 import logo from "../assets/logo.svg";
+import Loader from "../components/Loader";
 
-import { login } from "../mockAPI";
-
-import { AuthContext } from "../context/auth-context";
+import { UserContext, UserDispatchContext } from "../Context/UserContext";
 
 export const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,9 +44,21 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = () => {
+const Login = ({ history }) => {
   const classes = useStyles();
-  const { setIsLoggedIn, setUserData } = useContext(AuthContext);
+
+  // dispatch from reducer
+  const dispatch = useContext(UserDispatchContext);
+
+  // data from context
+  const { loading, error, userInfo } = useContext(UserContext);
+
+  // check if userInfo is present (user logged in)
+  useEffect(() => {
+    if (userInfo) {
+      history.push("/test"); // push to test component
+    }
+  }, [userInfo, history]);
 
   const [open, setOpen] = useState(false);
 
@@ -70,11 +81,21 @@ const Login = () => {
   });
 
   const onSubmit = async (values) => {
-    console.log(values);
-    setOpen(true);
-    const userData = await login(); //Get data from mock API
-    setUserData(userData);
-    setIsLoggedIn(true);
+    let payload = {};
+
+    // payload values for request
+    payload.email = values.email;
+    payload.password = values.password;
+
+    try {
+      const user = await login(dispatch, payload); // Get data from backend API using User Actions
+
+      if (user) {
+        history.push("/test");
+      } else setOpen(true);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -84,6 +105,9 @@ const Login = () => {
         <img src={logo} alt="logo" className={classes.margin} />
         <div className={classes.paper}>
           <Typography variant="h3">Login</Typography>
+
+          {loading && <Loader />}
+
           <div className={classes.form}>
             <Formik
               initialValues={initialValues}
@@ -120,7 +144,7 @@ const Login = () => {
         <Snackbar
           open={open}
           onClose={handleClose}
-          message="Invalid Email or Password"
+          message={error}
           autoHideDuration={4000}
           className={classes.alert}
           anchorOrigin={{

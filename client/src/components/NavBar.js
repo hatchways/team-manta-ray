@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
-import { AuthContext } from "../context/auth-context";
-import { Link } from "react-router-dom";
+import { UserDispatchContext } from "../Context/UserContext";
+import { Link, withRouter } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -10,13 +10,13 @@ import {
   List,
   ListItem,
   ListItemText,
-  Avatar,
+  // Avatar,
   makeStyles,
 } from "@material-ui/core";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
-
 import logo from "../assets/logo.svg";
 import plateLogo from "../assets/plate.svg";
+import { logout } from "../actions/userActions";
 
 const useStyles = makeStyles((theme) => ({
   toolBar: {
@@ -57,13 +57,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NavBar = () => {
+const NavBar = ({ history }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const { userData, setIsLoggedIn } = useContext(AuthContext);
+
+  // reducer dispatch function
+  const dispatch = useContext(UserDispatchContext);
 
   const drawerHandler = () => {
     setOpen(true);
+  };
+
+  const logoutHandler = (e) => {
+    e.preventDefault();
+    logout(dispatch);
+    localStorage.removeItem("userInfo");
+    history.replace("/login");
   };
 
   return (
@@ -80,9 +89,9 @@ const NavBar = () => {
               <img src={logo} alt="logo" className={classes.logo} />
             </Grid>
             <div className={classes.navBarRight}>
-              <Grid item>
+              {/* <Grid item>
                 <Avatar src={userData.avatar} alt="user profile pic" />
-              </Grid>
+              </Grid> */}
 
               <Grid item>
                 <IconButton
@@ -113,13 +122,7 @@ const NavBar = () => {
             <ListItem button component={Link} to="/profile" divider>
               <ListItemText primary="Profile" />
             </ListItem>
-            <ListItem
-              button
-              divider
-              onClick={() => {
-                setIsLoggedIn(false);
-              }}
-            >
+            <ListItem button divider onClick={logoutHandler}>
               <ListItemText primary="Log Out" />
             </ListItem>
           </List>
@@ -129,4 +132,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default withRouter(NavBar);
