@@ -16,9 +16,7 @@ If "290 bremner blvd toronto" is passed in, { lat: 43.6426283, lng: -79.3868547 
 const getCoordsFromAddress = async (address) => {
   const addressURIString = encodeURIComponent(address);
   const response = await axios.get(
-    `https://maps.googleapis.com/maps/api/geocode/json?
-    address=${addressURIString}
-    &key=${API_KEY}`
+    `https://maps.googleapis.com/maps/api/geocode/json?address=${addressURIString}&key=${API_KEY}`
   );
 
   const data = response.data;
@@ -29,9 +27,10 @@ const getCoordsFromAddress = async (address) => {
     throw error;
   }
 
-  const coordinates = data.results[0].geometry.location;
+  const { lng, lat } = data.results[0].geometry.location;
 
-  return coordinates;
+  // Always list coordinates in longitude, latitude order.
+  return [lng, lat];
 };
 
 module.exports = getCoordsFromAddress;
