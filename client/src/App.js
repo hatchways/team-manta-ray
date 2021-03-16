@@ -7,7 +7,7 @@ import Signup from "./pages/Signup";
 import CustomerProfile from "./pages/CustomerProfile";
 import NavBar from "./components/NavBar";
 import "./App.css";
-import { ContextProvider } from "./Context/UserContext";
+import { ContextProvider } from "./context/UserContext";
 import TestComponent from "./pages/TestComponent";
 
 function App() {

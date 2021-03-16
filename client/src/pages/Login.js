@@ -16,7 +16,7 @@ import { login } from "../actions/userActions";
 import logo from "../assets/logo.svg";
 import Loader from "../components/Loader";
 
-import { UserContext, UserDispatchContext } from "../Context/UserContext";
+import { UserContext, UserDispatchContext } from "../context/UserContext";
 
 export const useStyles = makeStyles((theme) => ({
   root: {

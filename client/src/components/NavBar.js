@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { UserDispatchContext } from "../Context/UserContext";
+import { UserDispatchContext } from "../context/UserContext";
 import { Link, withRouter } from "react-router-dom";
 import {
   AppBar,

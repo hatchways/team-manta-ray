@@ -14,7 +14,7 @@ import Banner from "../components/Banner";
 import FormikControl from "../components/Formik/FormikControl";
 
 import logo from "../assets/logo.svg";
-import { UserContext, UserDispatchContext } from "../Context/UserContext";
+import { UserContext, UserDispatchContext } from "../context/UserContext";
 import { register } from "../actions/userActions";
 import Loader from "../components/Loader";
 

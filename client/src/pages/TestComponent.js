@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import NavBar from "../components/NavBar";
-import { UserContext } from "../Context/UserContext";
+import { UserContext } from "../context/UserContext";
 
 const TestComponent = ({ history }) => {
   const { loading, error, userInfo } = useContext(UserContext);
