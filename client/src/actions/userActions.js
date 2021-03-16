@@ -29,7 +29,7 @@ export const login = async (dispatch, loginPayload) => {
     };
 
     const { data } = await axios.post(
-      "http://localhost:3001/api/users/login",
+      "/api/users/login",
       { email, password },
       config
     );
@@ -70,7 +70,7 @@ export const register = async (dispatch, registerPayload) => {
 
     // data from backend server
     const { data } = await axios.post(
-      "http://localhost:3001/api/users/register",
+      "/api/users/register",
       { name, email, password },
       config
     );
