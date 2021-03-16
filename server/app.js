@@ -31,6 +31,7 @@ app.use("/", indexRouter);
 
 // Routes for users
 app.use("/api/users", userRoutes);
+app.use("/api/recipes", require("./routes/testRecipeRoute"));
 app.use("/api/image", imageRoutes);
 
 // catch 404 and forward to error handler

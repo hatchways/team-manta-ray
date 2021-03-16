@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 
 import { theme } from "./themes/theme";
 import { AuthContext } from "./context/auth-context";
+import RecipeContextProvider from "./context/recipe-context";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -52,12 +53,14 @@ function App() {
         setUserData: setUserData,
       }}
     >
-      <MuiThemeProvider theme={theme}>
-        <BrowserRouter>
-          {isLoggedIn && <NavBar />}
-          <main>{routes}</main>
-        </BrowserRouter>
-      </MuiThemeProvider>
+      <RecipeContextProvider>
+        <MuiThemeProvider theme={theme}>
+          <BrowserRouter>
+            {isLoggedIn && <NavBar />}
+            <main>{routes}</main>
+          </BrowserRouter>
+        </MuiThemeProvider>
+      </RecipeContextProvider>
     </AuthContext.Provider>
   );
 }

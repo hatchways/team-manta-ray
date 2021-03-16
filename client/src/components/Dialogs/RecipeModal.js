@@ -1,10 +1,15 @@
-import { Button, DialogTitle } from "@material-ui/core";
-import React, { useState } from "react";
+import { Button, DialogTitle, TextField, Typography } from "@material-ui/core";
+import React, { useState, useContext } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormikControl from "../Formik/FormikControl";
 import { makeStyles } from "@material-ui/core/styles";
 import EditPicture from "./EditPicture";
+import {
+  RecipeContext,
+  RecipeDispatchContext,
+} from "../../context/recipe-context";
+import { createRecipe } from "../../actions/recipeActions";
 
 export const useStyles = makeStyles((theme) => ({
   form: {
@@ -31,19 +36,21 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecipeModal = ({ edit }) => {
+const RecipeModal = ({ edit, id }) => {
   const classes = useStyles();
+
+  const { recipe, addRecipe } = useContext(RecipeContext);
+  const dispatch = useContext(RecipeDispatchContext);
 
   const [pictureKey, setPictureKey] = useState(null);
 
   const initialValues = {
-    name: "",
-    price: 0,
-    ingredients: "",
-    requiredStuff: "",
-    portionDescription: "",
-    cuisineTags: "",
-    pictureKey: "",
+    name: edit ? recipe.name : "",
+    price: edit ? recipe.price : 0,
+    ingredients: edit ? recipe.ingredients : "",
+    requiredStuff: edit ? recipe.requiredStuff : "",
+    portionDescription: edit ? recipe.portionDescription : "",
+    cuisineTags: edit ? recipe.cuisineTags : "",
   };
 
   const validationSchema = Yup.object({
@@ -59,7 +66,7 @@ const RecipeModal = ({ edit }) => {
   });
 
   const onSubmit = async (values) => {
-    console.log({ ...values, pictureKey });
+    await createRecipe(dispatch, { ...values, pictureKey });
   };
 
   return (
@@ -76,6 +83,25 @@ const RecipeModal = ({ edit }) => {
         >
           {(formik) => (
             <Form>
+              <div className={classes.formGroup}>
+                <label htmlFor="pictureLey">
+                  <Typography variant="h6" className={classes.label}>
+                    Picture Key
+                  </Typography>
+                </label>
+                <TextField
+                  name="pictureKey"
+                  className={classes.input}
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={pictureKey}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  helperText="This field is read only and will be filled after you provide your image"
+                />
+              </div>
               <FormikControl
                 control="input"
                 type="text"

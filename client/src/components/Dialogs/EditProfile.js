@@ -1,97 +1,127 @@
-import {
-  Button,
-  DialogTitle,
-  FormLabel,
-  List,
-  ListItem,
-  TextField,
-} from "@material-ui/core";
+import { Button, DialogTitle, TextField, Typography } from "@material-ui/core";
 import React, { useState } from "react";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import FormikControl from "../Formik/FormikControl";
 import { makeStyles } from "@material-ui/core/styles";
 import EditPicture from "./EditPicture";
 
-const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
+  form: {
+    margin: theme.spacing(2),
+  },
   btn: {
     borderRadius: "0",
+    width: "50%",
     height: theme.spacing(7),
     marginTop: theme.spacing(3),
     textTransform: "capitalize",
   },
-  listItem: {
-    flexDirection: "column",
-    alignItems: "flex-start",
+  formGroup: {
+    marginBottom: 20,
+    height: theme.spacing(11),
   },
   label: {
+    fontWeight: 900,
+    fontSize: 12,
+  },
+  input: {
     margin: "3px 0",
+    borderRadius: "0",
   },
 }));
 
-const EditProfile = () => {
+const EditProfile = ({ edit }) => {
   const classes = useStyles();
 
-  const [value, setValue] = useState("Toronto");
+  const [pictureKey, setPictureKey] = useState("");
 
-  const handleChange = (e) => {
-    setValue(e.target.value);
+  const initialValues = {
+    name: "",
+    location: "",
+    bio: "",
+    cuisineTags: "",
+    pictureKey: pictureKey,
   };
+
+  const validationSchema = Yup.object({
+    location: Yup.string().required("Location is required"),
+    cuisineTags: Yup.string().required("Cuisine Tags are required"),
+  });
+
+  const onSubmit = async (values) => {
+    console.log({ ...values, pictureKey });
+  };
+
   return (
-    <>
+    <div>
       <DialogTitle id="simple-dialog-title">Edit Profile</DialogTitle>
-      <EditPicture profile={true} />
-      <List>
-        <ListItem className={classes.listItem}>
-          <FormLabel className={classes.label}>Picture Key</FormLabel>
-          <TextField
-            name="pictureKey"
-            variant="outlined"
-            fullWidth
-            value={value}
-            onChange={handleChange}
-          />
-        </ListItem>
-        <ListItem className={classes.listItem}>
-          <FormLabel className={classes.label}>Location</FormLabel>
-          <TextField
-            name="location"
-            variant="outlined"
-            fullWidth
-            value={value}
-            onChange={handleChange}
-          />
-        </ListItem>
-        <ListItem className={classes.listItem}>
-          <FormLabel className={classes.label}>Name</FormLabel>
-          <TextField
-            name="name"
-            variant="outlined"
-            fullWidth
-            value={value}
-            onChange={handleChange}
-          />
-        </ListItem>
-        <ListItem className={classes.listItem}>
-          <FormLabel className={classes.label}>Bio</FormLabel>
-          <TextField
-            name="bio"
-            variant="outlined"
-            fullWidth
-            value={value}
-            onChange={handleChange}
-          />
-        </ListItem>
-        <ListItem>
-          <Button
-            type="submit"
-            variant="contained"
-            color="secondary"
-            className={classes.btn}
-            fullWidth
-          >
-            Submit
-          </Button>
-        </ListItem>
-      </List>
-    </>
+      <EditPicture setPictureKey={setPictureKey} profile={true} />
+      <div className={classes.form}>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {(formik) => (
+            <Form>
+              <div className={classes.formGroup}>
+                <label htmlFor="pictureLey">
+                  <Typography variant="h6" className={classes.label}>
+                    Picture Key
+                  </Typography>
+                </label>
+                <TextField
+                  name="pictureKey"
+                  className={classes.input}
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  value={pictureKey}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  helperText="This field is read only and will be filled after you provide your image"
+                />
+              </div>
+              <FormikControl
+                control="input"
+                type="text"
+                label="Name"
+                name="name"
+              />
+              <FormikControl
+                control="input"
+                type="text"
+                label="Location"
+                name="location"
+              />
+              <FormikControl
+                control="input"
+                type="text"
+                label="Bio"
+                name="bio"
+              />
+              <FormikControl
+                control="input"
+                type="text"
+                label="Cuisine Tags"
+                name="cuisineTags"
+                helperText="please provide a comma separated list"
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+                className={classes.btn}
+              >
+                Submit
+              </Button>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </div>
   );
 };
 
