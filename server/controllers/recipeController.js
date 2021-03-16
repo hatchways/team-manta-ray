@@ -171,7 +171,7 @@ const getAllRecipesByChef = async (req, res) => {
 
     // if no recipes founds
     if (allRecipesByChef.length < 1)
-      return res.status(200).json({
+      return res.status(404).json({
         success: false,
         message: "No recipes available for this chef",
       });
