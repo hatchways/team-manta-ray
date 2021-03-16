@@ -34,10 +34,10 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const EditPicture = ({ profile, setPictureKey }) => {
+const EditPicture = ({ profile, setPictureKey, srcData, setSrcData }) => {
   const classes = useStyles();
   //src will come from profile context and also an addSrcData action from context
-  const [src, setSrc] = useState(null);
+  const [src, setSrc] = useState(srcData ? srcData : null);
   const [err, setErr] = useState(null);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
 
@@ -59,7 +59,10 @@ const EditPicture = ({ profile, setPictureKey }) => {
       if (res.key) {
         setPictureKey(res.key);
         const response = await getSrcData(res.key);
-        if (response.srcData) setSrc(response.srcData);
+        if (response.srcData) {
+          setSrc(response.srcData);
+          setSrcData(response.srcData);
+        }
         //This setSrc will eventually be connected to our ProfileContext and add srcData in there.
         else setErr(response);
       } else {
@@ -67,7 +70,7 @@ const EditPicture = ({ profile, setPictureKey }) => {
         setSnackBarOpen(true);
       }
     },
-    [uploadImage, getSrcData, setPictureKey]
+    [uploadImage, getSrcData, setPictureKey, setSrcData]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

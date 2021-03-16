@@ -3,17 +3,17 @@ import React from "react";
 import RecipeModal from "./RecipeModal";
 import EditProfile from "./EditProfile";
 
-const DialogControl = ({ open, onClose, selectedValue, id }) => {
+const DialogControl = ({ open, onClose, selectedValue, id, ...rest }) => {
   const getComponent = () => {
     switch (id) {
       case "image":
       case "location":
       case "name":
-        return <EditProfile />;
+        return <EditProfile {...rest} />;
       case "AddRecipe":
-        return <RecipeModal />;
+        return <RecipeModal {...rest} />;
       case "EditRecipe":
-        return <RecipeModal edit={true} />;
+        return <RecipeModal edit={true} {...rest} />;
       default:
         return null;
     }

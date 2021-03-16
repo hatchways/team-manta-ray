@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import defaultUserImage from "../assets/defaultUserImage.png";
 import DialogControl from "../components/Dialogs/DialogControl";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
+import { RecipeContext } from "../context/recipe-context";
+import Recipe from "../components/Recipe";
 
 const ChefProfile = () => {
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(null);
+
+  const { recipes } = useContext(RecipeContext);
 
   const handleClickOpen = (e) => {
     setOpen(true);
@@ -43,11 +47,17 @@ const ChefProfile = () => {
         readOnly
       />
 
-      <PlaylistAddIcon
-        id="AddRecipe"
-        onClick={handleClickOpen}
-        style={{ height: "50px", width: "50px", cursor: "pointer" }}
-      />
+      <div style={{ float: "right" }}>
+        <h1>Recipes</h1>
+        <PlaylistAddIcon
+          id="AddRecipe"
+          onClick={handleClickOpen}
+          style={{ height: "20px", width: "20px", cursor: "pointer" }}
+        />
+        {recipes.map((recipe) => (
+          <Recipe recipe={recipe} key={recipe.id} />
+        ))}
+      </div>
 
       <DialogControl open={open} onClose={handleClose} id={id} />
     </div>

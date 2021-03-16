@@ -36,13 +36,15 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecipeModal = ({ edit, id }) => {
+const RecipeModal = ({ edit, id, recipe }) => {
   const classes = useStyles();
 
-  const { recipe, addRecipe } = useContext(RecipeContext);
+  // const { recipes } = useContext(RecipeContext);
+
   const dispatch = useContext(RecipeDispatchContext);
 
-  const [pictureKey, setPictureKey] = useState(null);
+  const [pictureKey, setPictureKey] = useState(edit ? recipe.pictureKey : "");
+  const [srcData, setSrsData] = useState(edit ? recipe.srcData : "");
 
   const initialValues = {
     name: edit ? recipe.name : "",
@@ -66,7 +68,16 @@ const RecipeModal = ({ edit, id }) => {
   });
 
   const onSubmit = async (values) => {
-    await createRecipe(dispatch, { ...values, pictureKey });
+    if (edit) {
+      return;
+    } else {
+      await createRecipe(dispatch, {
+        ...values,
+        pictureKey,
+        srcData,
+        id: pictureKey,
+      });
+    }
   };
 
   return (
@@ -74,7 +85,11 @@ const RecipeModal = ({ edit, id }) => {
       <DialogTitle id="simple-dialog-title">
         {edit ? "Edit Recipe" : "Add a recipe"}
       </DialogTitle>
-      <EditPicture setPictureKey={setPictureKey} />
+      <EditPicture
+        setPictureKey={setPictureKey}
+        srcData={srcData}
+        setSrcData={setSrsData}
+      />
       <div className={classes.form}>
         <Formik
           initialValues={initialValues}
