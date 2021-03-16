@@ -1,45 +1,15 @@
-import React, { useState } from "react";
-import defaultUserImage from "../assets/defaultUserImage.png";
-import DialogControl from "../components/Dialogs/DialogControl";
+/**Comment added to avoid merge conflict with ongoing development  */
+// import React, { useContext } from "react";
+// import { AuthContext } from "../context/auth-context";
 
 const ChefProfile = () => {
-  const [open, setOpen] = useState(false);
-  const [control, setControl] = useState(null);
-
-  const handleClickOpen = (e) => {
-    setOpen(true);
-    const ctl = e.target.name === "image" ? "image" : "input";
-    setControl(ctl);
-  };
-
-  const handleClose = (value) => {
-    setOpen(false);
-  };
+  // const { userData } = useContext(AuthContext);
   return (
-    <div>
-      <img
-        src={defaultUserImage}
-        onClick={handleClickOpen}
-        name="image"
-        alt="profile"
-        style={{ height: "100px", width: "100px", cursor: "pointer" }}
-      />
-      <input
-        style={{ cursor: "pointer" }}
-        onClick={handleClickOpen}
-        name="location"
-        value="Toronto, canada"
-        readOnly
-      />
-      <input
-        style={{ cursor: "pointer" }}
-        onClick={handleClickOpen}
-        name="name"
-        value="Atsushi Mikazuki"
-        readOnly
-      />
-      <DialogControl open={open} onClose={handleClose} control={control} />
-    </div>
+    <>
+      <h2>This is the chef profile page</h2>
+      {/* <h3>Name: {userData.name}</h3>
+      <h3>Email: {userData.email}</h3> */}
+    </>
   );
 };
 
