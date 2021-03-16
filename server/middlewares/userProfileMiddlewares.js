@@ -15,7 +15,11 @@ const getUserProfile = async (req, res, next) => {
       })
       .exec();
 
-    if (!userProfile) throw new Error("Profile not found");
+    if (!userProfile)
+      return res.status(404).json({
+        success: false,
+        error: "User profile not found.",
+      });
 
     console.log("user profile found");
     console.log(userProfile);

@@ -15,7 +15,11 @@ const getChefProfile = async (req, res, next) => {
       })
       .exec();
 
-    if (!chefProfile) throw new Error("Profile not found");
+    if (!chefProfile)
+      return res.status(404).json({
+        success: false,
+        error: "Chef profile not found.",
+      });
 
     console.log("chef profile found");
     console.log(chefProfile);

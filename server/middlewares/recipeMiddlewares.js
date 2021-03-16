@@ -16,7 +16,11 @@ module.exports = {
         })
         .exec();
 
-      if (!recipe) throw new Error({ recipe });
+      if (!recipe)
+        return res.status(404).json({
+          success: false,
+          error: "Recipe not found.",
+        });
 
       // save the recipe inside the req.recipe
       req.recipe = recipe;
