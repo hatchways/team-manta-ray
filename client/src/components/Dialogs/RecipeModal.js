@@ -5,11 +5,8 @@ import * as Yup from "yup";
 import FormikControl from "../Formik/FormikControl";
 import { makeStyles } from "@material-ui/core/styles";
 import EditPicture from "./EditPicture";
-import {
-  RecipeContext,
-  RecipeDispatchContext,
-} from "../../context/recipe-context";
-import { createRecipe } from "../../actions/recipeActions";
+import { RecipeDispatchContext } from "../../context/recipe-context";
+import { createRecipe, editRecipe } from "../../actions/recipeActions";
 
 export const useStyles = makeStyles((theme) => ({
   form: {
@@ -39,12 +36,13 @@ export const useStyles = makeStyles((theme) => ({
 const RecipeModal = ({ edit, id, recipe }) => {
   const classes = useStyles();
 
-  // const { recipes } = useContext(RecipeContext);
+  // const { recipe } = useContext(RecipeContext);
 
   const dispatch = useContext(RecipeDispatchContext);
 
   const [pictureKey, setPictureKey] = useState(edit ? recipe.pictureKey : "");
   const [srcData, setSrsData] = useState(edit ? recipe.srcData : "");
+  const [recipeId, setRecipeId] = useState(edit ? recipe.id : null);
 
   const initialValues = {
     name: edit ? recipe.name : "",
@@ -69,13 +67,12 @@ const RecipeModal = ({ edit, id, recipe }) => {
 
   const onSubmit = async (values) => {
     if (edit) {
-      return;
+      editRecipe(dispatch, { ...values, pictureKey, srcData, id: recipeId });
     } else {
       await createRecipe(dispatch, {
         ...values,
         pictureKey,
         srcData,
-        id: pictureKey,
       });
     }
   };

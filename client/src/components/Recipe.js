@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -18,6 +18,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import plate from "../assets/plate.svg";
 import useGetSrcData from "../hooks/useGetSrcData";
 import DialogControl from "./Dialogs/DialogControl";
+import { RecipeContext } from "../context/recipe-context";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,30 +43,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RecipeReviewCard({ recipe }) {
+export default function RecipeReviewCard({ id }) {
+  const { recipes } = useContext(RecipeContext);
+  const recipe = recipes.filter((res) => res.id === id)[0];
   const {
-    pictureKey,
     name,
     price,
     ingredients,
     requiredStuff,
     portionDescription,
     cuisineTags,
+    pictureKey,
+    srcData,
   } = recipe;
 
-  const [src, setSrc] = useState(null);
+  const [src, setSrc] = useState(srcData ? srcData : null);
   const [open, setOpen] = useState(false);
-  const [id, setId] = useState(false);
+  const [control, setControl] = useState(false);
 
   const getSrcData = useGetSrcData();
   useEffect(() => {
     const getImageSrcData = async () => {
-      if (!pictureKey) return;
+      if (srcData || !pictureKey) return;
       const response = await getSrcData(pictureKey);
       if (response.srcData) setSrc(response.srcData);
     };
+    if (srcData) {
+      setSrc(srcData);
+    }
     getImageSrcData();
-  }, [pictureKey, getSrcData]);
+  }, [pictureKey, getSrcData, srcData]);
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -75,7 +82,7 @@ export default function RecipeReviewCard({ recipe }) {
 
   const handleClickOpen = (e) => {
     setOpen(true);
-    setId("EditRecipe");
+    setControl("EditRecipe");
   };
   const handleClose = (value) => {
     setOpen(false);
@@ -95,7 +102,7 @@ export default function RecipeReviewCard({ recipe }) {
           </IconButton>
         }
         title={name}
-        subheader="September 14, 2016"
+        subheader={portionDescription}
         onClick={handleClickOpen}
       />
       <CardMedia
@@ -105,7 +112,7 @@ export default function RecipeReviewCard({ recipe }) {
       />
       <CardContent>
         <Typography variant="body2" color="secondary" component="p">
-          {`${portionDescription}`}
+          ${`${price}`}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -134,17 +141,14 @@ export default function RecipeReviewCard({ recipe }) {
           <Typography paragraph>${`${ingredients}`}</Typography>
           <Typography paragraph>Required Stuff</Typography>
           <Typography paragraph>${`${requiredStuff}`}</Typography>
-
-          <Typography>
-            Set aside off of the heat to let rest for 10 minutes, and then
-            serve.
-          </Typography>
+          <Typography paragraph>Cuisine Tags</Typography>
+          <Typography paragraph>${`${cuisineTags}`}</Typography>
         </CardContent>
       </Collapse>
       <DialogControl
         open={open}
         onClose={handleClose}
-        id={id}
+        id={control}
         recipe={recipe}
       />
     </Card>

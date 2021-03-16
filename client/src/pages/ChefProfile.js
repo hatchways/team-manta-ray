@@ -49,13 +49,21 @@ const ChefProfile = () => {
 
       <div style={{ float: "right" }}>
         <h1>Recipes</h1>
-        <PlaylistAddIcon
+        <input
+          type="checkbox"
+          name="panel-toggle"
           id="AddRecipe"
           onClick={handleClickOpen}
-          style={{ height: "20px", width: "20px", cursor: "pointer" }}
+          style={{ visibility: "hidden" }}
         />
+        <label htmlFor="AddRecipe">
+          <PlaylistAddIcon
+            style={{ height: "20px", width: "20px", cursor: "pointer" }}
+          />
+        </label>
+
         {recipes.map((recipe) => (
-          <Recipe recipe={recipe} key={recipe.id} />
+          <Recipe recipe={recipe} key={recipe.id} id={recipe.id} />
         ))}
       </div>
 
