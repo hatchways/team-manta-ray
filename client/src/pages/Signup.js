@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Grid,
   CssBaseline,
@@ -14,11 +14,27 @@ import Banner from "../components/Banner";
 import FormikControl from "../components/Formik/FormikControl";
 
 import logo from "../assets/logo.svg";
+import { UserContext, UserDispatchContext } from "../context/UserContext";
+import { register } from "../actions/userActions";
+import Loader from "../components/Loader";
 
-const Signup = () => {
+const Signup = ({ history }) => {
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
+
+  // dispatch from reducer
+  const dispatch = useContext(UserDispatchContext);
+
+  // Context values
+  const { loading, error, userInfo } = useContext(UserContext);
+
+  // check if user logged in
+  useEffect(() => {
+    if (userInfo) {
+      history.push("/test");
+    }
+  }, [userInfo, history]);
 
   const handleClose = () => {
     setOpen(false);
@@ -44,8 +60,23 @@ const Signup = () => {
       .required("Confirm password is required"),
   });
 
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values) => {
+    let payload = {};
+
+    payload.name = values.name;
+    payload.email = values.email;
+    payload.password = values.password;
+
+    try {
+      const user = await register(dispatch, payload); //Get data from backend API
+
+      if (user) {
+        history.push("/test");
+      } else setOpen(true);
+    } catch (err) {
+      console.log(err);
+    }
+
     setOpen(true);
   };
 
@@ -58,6 +89,8 @@ const Signup = () => {
           <Typography component="h3" variant="h3">
             Create an account
           </Typography>
+
+          {loading && <Loader />}
           <div className={classes.form}>
             <Formik
               initialValues={initialValues}
@@ -110,7 +143,7 @@ const Signup = () => {
         <Snackbar
           open={open}
           onClose={handleClose}
-          message="Invalid Email or Password"
+          message={error}
           autoHideDuration={4000}
           className={classes.alert}
           anchorOrigin={{
