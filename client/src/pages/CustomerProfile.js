@@ -4,7 +4,7 @@ import { Paper, Grid, Button, makeStyles } from "@material-ui/core";
 
 import Map from "../components/Map";
 
-import profilePic from "../assets/profilepic.png";
+import profilePic from "../assets/dummyavatar.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
