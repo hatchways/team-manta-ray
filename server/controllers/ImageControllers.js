@@ -22,8 +22,7 @@ const storage = multer.memoryStorage({
 const upload = multer({ storage }).single("profilePicture");
 
 const uploadImage = async (req, res) => {
-  // const user = await User.findById(req.user);
-  // const Profile = user.isChef ? ChefProfile : UserProfile;
+  // const Profile = req.user.isChef ? ChefProfile : UserProfile;
 
   const fileNameParts = req.file.originalname.split(".");
   const fileType = fileNameParts[fileNameParts.length - 1];
@@ -37,7 +36,7 @@ const uploadImage = async (req, res) => {
   };
   s3.upload(params, async (error, data) => {
     if (error) throw new Error(error);
-    // const userProfile = await Profile.find({ user: req.id });
+    // const userProfile = await Profile.find({ user: req.user._id });
     // userProfile.key = key;
     // await userProfile.save();
     res.json(data);

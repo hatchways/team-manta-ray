@@ -1,15 +1,19 @@
 import { Dialog } from "@material-ui/core";
 import React from "react";
-import EditInput from "./EditInput";
-import EditPicture from "./EditPicture";
+import RecipeModal from "./RecipeModal";
+import EditProfile from "./EditProfile";
 
-const DialogControl = ({ open, onClose, selectedValue, control }) => {
+const DialogControl = ({ open, onClose, selectedValue, id }) => {
   const getComponent = () => {
-    switch (control) {
+    switch (id) {
       case "image":
-        return <EditPicture />;
-      case "input":
-        return <EditInput />;
+      case "location":
+      case "name":
+        return <EditProfile />;
+      case "AddRecipe":
+        return <RecipeModal />;
+      case "EditRecipe":
+        return <RecipeModal edit={true} />;
       default:
         return null;
     }
@@ -18,6 +22,7 @@ const DialogControl = ({ open, onClose, selectedValue, control }) => {
   const handleClose = () => {
     onClose(selectedValue);
   };
+
   return (
     <Dialog
       onClose={handleClose}

@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import defaultUserImage from "../assets/defaultUserImage.png";
 import DialogControl from "../components/Dialogs/DialogControl";
+import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 
 const ChefProfile = () => {
   const [open, setOpen] = useState(false);
-  const [control, setControl] = useState(null);
+  const [id, setId] = useState(null);
 
   const handleClickOpen = (e) => {
     setOpen(true);
-    const ctl = e.target.name === "image" ? "image" : "input";
-    setControl(ctl);
+    console.log(e.target);
+    setId(e.target.id);
   };
 
   const handleClose = (value) => {
@@ -21,6 +22,7 @@ const ChefProfile = () => {
         src={defaultUserImage}
         onClick={handleClickOpen}
         name="image"
+        id="image"
         alt="profile"
         style={{ height: "100px", width: "100px", cursor: "pointer" }}
       />
@@ -28,6 +30,7 @@ const ChefProfile = () => {
         style={{ cursor: "pointer" }}
         onClick={handleClickOpen}
         name="location"
+        id="location"
         value="Toronto, canada"
         readOnly
       />
@@ -35,10 +38,18 @@ const ChefProfile = () => {
         style={{ cursor: "pointer" }}
         onClick={handleClickOpen}
         name="name"
+        id="name"
         value="Atsushi Mikazuki"
         readOnly
       />
-      <DialogControl open={open} onClose={handleClose} control={control} />
+
+      <PlaylistAddIcon
+        id="AddRecipe"
+        onClick={handleClickOpen}
+        style={{ height: "50px", width: "50px", cursor: "pointer" }}
+      />
+
+      <DialogControl open={open} onClose={handleClose} id={id} />
     </div>
   );
 };

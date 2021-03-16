@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import EditPicture from "./EditPicture";
 
 const useStyles = makeStyles((theme) => ({
   btn: {
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditLocation = () => {
+const EditProfile = () => {
   const classes = useStyles();
 
   const [value, setValue] = useState("Toronto");
@@ -36,7 +37,18 @@ const EditLocation = () => {
   return (
     <>
       <DialogTitle id="simple-dialog-title">Edit Profile</DialogTitle>
+      <EditPicture profile={true} />
       <List>
+        <ListItem className={classes.listItem}>
+          <FormLabel className={classes.label}>Picture Key</FormLabel>
+          <TextField
+            name="pictureKey"
+            variant="outlined"
+            fullWidth
+            value={value}
+            onChange={handleChange}
+          />
+        </ListItem>
         <ListItem className={classes.listItem}>
           <FormLabel className={classes.label}>Location</FormLabel>
           <TextField
@@ -83,4 +95,4 @@ const EditLocation = () => {
   );
 };
 
-export default EditLocation;
+export default EditProfile;
