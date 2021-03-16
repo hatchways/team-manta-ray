@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) =>
 const EditPicture = () => {
   const classes = useStyles();
 
+  //srcData will come from profile context and on drop it will be added to profile context
   const [src, setSrc] = useState(null);
   const [err, setErr] = useState(null);
   const [snackBarOpen, setSnackBarOpen] = useState(false);

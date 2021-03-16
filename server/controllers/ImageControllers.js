@@ -1,9 +1,6 @@
 const AWS = require("aws-sdk");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
-const ChefProfile = require("../models/chefProfileModel");
-const UserProfile = require("../models/userProfileModel");
-const User = require("../models/userModel");
 const NodeCache = require("node-cache");
 
 const imgCache = new NodeCache();
@@ -22,9 +19,6 @@ const storage = multer.memoryStorage({
 const upload = multer({ storage }).single("profilePicture");
 
 const uploadImage = async (req, res) => {
-  // const user = await User.findById(req.user);
-  // const Profile = user.isChef ? ChefProfile : UserProfile;
-
   const fileNameParts = req.file.originalname.split(".");
   const fileType = fileNameParts[fileNameParts.length - 1];
 
@@ -37,9 +31,6 @@ const uploadImage = async (req, res) => {
   };
   s3.upload(params, async (error, data) => {
     if (error) throw new Error(error);
-    // const userProfile = await Profile.find({ user: req.id });
-    // userProfile.key = key;
-    // await userProfile.save();
     res.json(data);
   });
 };
