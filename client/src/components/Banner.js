@@ -3,9 +3,11 @@ import { Grid, Typography, Button, Hidden } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 
+import banner from "../assets/banner.png";
+
 const useStyles = makeStyles((theme) => ({
   image: {
-    backgroundImage: "url(/images/banner.png)",
+    backgroundImage: `url(${banner})`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     backgroundPosition: "center",
@@ -34,9 +36,9 @@ const useStyles = makeStyles((theme) => ({
 const Banner = ({ signUp }) => {
   const classes = useStyles();
 
-  const text = signUp ? "Already member?" : "Don't have an account?";
+  const text = signUp ? "Already a member?" : "Don't have an account?";
 
-  const btnText = signUp ? "Sign In" : "Sign UP";
+  const btnText = signUp ? "Sign In" : "Sign Up";
 
   return (
     <Hidden xsDown>
