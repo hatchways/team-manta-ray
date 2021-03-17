@@ -7,7 +7,7 @@ const createRecipe = async (req, res) => {
     // check if user is not chef
     if (!req.user.isChef) throw new Error("Must be a chef to create a recipe");
 
-    const {
+    let {
       name,
       pictureUrl,
       price,
@@ -26,14 +26,19 @@ const createRecipe = async (req, res) => {
     if (!chefProfile)
       throw new Error("You need a chef profile first to create a recipe");
 
-    cuisineTags = cuisineTags.split(",").map((tag) => tag.trim().toLowerCase());
-    requiredStuff = requiredStuff
-      .split(",")
-      .map((stuff) => stuff.trim().toLowerCase());
+    if (cuisineTags)
+      cuisineTags = cuisineTags
+        .split(",")
+        .map((tag) => tag.trim().toLowerCase());
+    if (requiredStuff)
+      requiredStuff = requiredStuff
+        .split(",")
+        .map((stuff) => stuff.trim().toLowerCase());
 
-    ingredients = ingredients
-      .split(",")
-      .map((ingredient) => ingredient.trim().toLowerCase());
+    if (ingredients)
+      ingredients = ingredients
+        .split(",")
+        .map((ingredient) => ingredient.trim().toLowerCase());
 
     // Create a recipe
     const newRecipe = new Recipe({

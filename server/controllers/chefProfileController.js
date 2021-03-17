@@ -17,11 +17,14 @@ const createChefProfile = async (req, res) => {
         "This chef has already a profile. Cannot create another one"
       );
 
-    const { location, bio, profilePictureUrl, cuisineTags } = req.body;
+    let { location, bio, profilePictureUrl, cuisineTags } = req.body;
 
     // convert location to coordinates
     const coordinates = await getCoordsFromAddress(location);
-    cuisineTags = cuisineTags.split(",").map((tag) => tag.trim().toLowerCase());
+    if (cuisineTags)
+      cuisineTags = cuisineTags
+        .split(",")
+        .map((tag) => tag.trim().toLowerCase());
 
     // create chef profile
     const newChefProfile = new ChefProfile({
