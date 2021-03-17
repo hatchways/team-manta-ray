@@ -3,7 +3,10 @@ const ChefProfile = require("../models/chefProfileModel");
 const getChefProfile = async (req, res, next) => {
   try {
     //get userId from params
-    const { userId } = req.params;
+
+    //Mina: I don't think we need to get it from param, we will get it from auth middleWare
+    // const { userId } = req.params;
+    const userId = req.user._id;
 
     // find profile by user._id
     const chefProfile = await ChefProfile.findOne({

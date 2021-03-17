@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import FormikControl from "../Formik/FormikControl";
 import { makeStyles } from "@material-ui/core/styles";
 import EditPicture from "./EditPicture";
+import axios from "axios";
 
 export const useStyles = makeStyles((theme) => ({
   form: {
@@ -31,17 +32,17 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditProfile = ({ edit }) => {
+const EditProfile = ({ create }) => {
   const classes = useStyles();
 
   const [pictureKey, setPictureKey] = useState("");
+  const [srcData, setSrcData] = useState(null);
 
   const initialValues = {
     name: "",
     location: "",
     bio: "",
     cuisineTags: "",
-    pictureKey: pictureKey,
   };
 
   const validationSchema = Yup.object({
@@ -50,13 +51,23 @@ const EditProfile = ({ edit }) => {
   });
 
   const onSubmit = async (values) => {
+    if (create) {
+      const profile = await axios.post("/api/chefProfiles", {
+        ...values,
+        pictureKey,
+      });
+    }
     console.log({ ...values, pictureKey });
   };
 
   return (
     <div>
       <DialogTitle id="simple-dialog-title">Edit Profile</DialogTitle>
-      <EditPicture setPictureKey={setPictureKey} profile={true} />
+      <EditPicture
+        setPictureKey={setPictureKey}
+        profile={true}
+        setSrcData={setSrcData}
+      />
       <div className={classes.form}>
         <Formik
           initialValues={initialValues}

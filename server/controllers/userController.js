@@ -81,5 +81,19 @@ const loginUser = AsyncHandler(async (req, res) => {
     throw new Error("Invalid user data");
   }
 });
+/**
+ * @description make the current user a chef
+ * @route POST /api/users/isChef
+ * @access Private
+ * @data => success, userInfo
+ */
 
-module.exports = { registerUser, loginUser };
+const makeUserAChef = AsyncHandler(async (req, res) => {
+  const { user } = req;
+  const currentUser = await User.findById(user._id);
+  currentUser.isChef = true;
+  await currentUser.save();
+  res.json({ currentUser });
+});
+
+module.exports = { registerUser, loginUser, makeUserAChef };

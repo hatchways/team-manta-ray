@@ -24,9 +24,10 @@ function App() {
                 <NavBar />
               </Route>
               <Route path="/test" component={TestComponent} />
+              <Route path="/chef" component={TestChefProfile} />
               <Route path="/login" component={Login} />
               <Route path="/signup" component={Signup} />
-              <Route path="/chef" component={TestChefProfile} />
+
               <Route path="/" component={Login} exact>
                 <Redirect to="/login" />
               </Route>

@@ -4,6 +4,7 @@ import {
   EDIT_RECIPE,
   GET_RECIPE,
   GET_RECIPES_BY_CHEF,
+  SET_SRC_DATA,
 } from "../constants/RecipeConstants";
 
 export const initialState = {
@@ -12,6 +13,8 @@ export const initialState = {
 };
 
 export const RecipeReducer = (state, action) => {
+  console.log(action.type);
+  console.log(action.payload);
   switch (action.type) {
     case CREATE_RECIPE_SUCCESS:
       return { ...state, recipes: [action.payload, ...state.recipes] };
@@ -37,6 +40,17 @@ export const RecipeReducer = (state, action) => {
       return {
         ...state,
         recipe: action.payload,
+      };
+    case SET_SRC_DATA:
+      return {
+        ...state,
+        recipes: state.recipes.map((recipe) => {
+          if (recipe._id === action.payload.recipeId) {
+            return { ...recipe, srcData: action.payload.srcData };
+          } else {
+            return recipe;
+          }
+        }),
       };
     case GET_RECIPES_BY_CHEF:
       return {

@@ -23,6 +23,9 @@ const upload = multer({ storage }).single("profilePicture");
 
 const uploadImage = async (req, res) => {
   // const Profile = req.user.isChef ? ChefProfile : UserProfile;
+  console.log("upload image");
+  console.log(req.user);
+  console.log(req.file);
 
   const fileNameParts = req.file.originalname.split(".");
   const fileType = fileNameParts[fileNameParts.length - 1];
@@ -44,22 +47,24 @@ const uploadImage = async (req, res) => {
 };
 
 const getImageSrc = async (req, res) => {
+  console.log(req.user);
   const key = req.params.key;
-
+  if (imgCache.has(key)) {
+    console.log("Dont worry, it's coming from cache");
+    return res.json(imgCache.get(key));
+  }
   AWS.config.update({
     accessKeyId: process.env.AWS_ID,
     secretAccessKey: process.env.AWS_SECRET,
   });
   async function getImage() {
-    if (imgCache.has(key)) return imgCache.get(key);
-
     const data = s3
       .getObject({
         Bucket: process.env.AWS_BUCKET_NAME,
         Key: `${key}`,
       })
       .promise();
-    imgCache.set(key, data);
+
     return data;
   }
   function encode(data) {
@@ -69,6 +74,9 @@ const getImageSrc = async (req, res) => {
   }
   getImage()
     .then((img) => {
+      imgCache.set(key, {
+        srcData: "data:image/jpeg;base64," + encode(img.Body),
+      });
       res.json({ srcData: "data:image/jpeg;base64," + encode(img.Body) });
     })
     .catch((e) => {

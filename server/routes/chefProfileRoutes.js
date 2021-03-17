@@ -15,7 +15,7 @@ const {
 
 router.route("/").post(auth, createChefProfile); // create chef profile
 
-router.route("/:userId").get(auth, getChefProfile, retrieveChefProfile); // get chef profile by user._id
+router.route("/").get(auth, getChefProfile, retrieveChefProfile); // get chef profile by user._id
 
 router.route("/:userId").put(auth, getChefProfile, updateChefProfile); // update chef profile by user._id
 

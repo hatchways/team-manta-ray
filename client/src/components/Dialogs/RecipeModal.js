@@ -1,4 +1,5 @@
-import { Button, DialogTitle, TextField, Typography } from "@material-ui/core";
+import { Button, DialogTitle, Fab } from "@material-ui/core";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import React, { useState, useContext } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -6,7 +7,11 @@ import FormikControl from "../Formik/FormikControl";
 import { makeStyles } from "@material-ui/core/styles";
 import EditPicture from "./EditPicture";
 import { RecipeDispatchContext } from "../../context/recipe-context";
-import { createRecipe, editRecipe } from "../../actions/recipeActions";
+import {
+  createRecipe,
+  deleteRecipe,
+  editRecipe,
+} from "../../actions/recipeActions";
 
 export const useStyles = makeStyles((theme) => ({
   form: {
@@ -14,8 +19,9 @@ export const useStyles = makeStyles((theme) => ({
   },
   btn: {
     borderRadius: "0",
-    width: "50%",
+    width: "40%",
     height: theme.spacing(7),
+    margin: "0 3px",
     marginTop: theme.spacing(3),
     textTransform: "capitalize",
   },
@@ -42,15 +48,14 @@ const RecipeModal = ({ edit, id, recipe }) => {
 
   const [pictureKey, setPictureKey] = useState(edit ? recipe.pictureKey : "");
   const [srcData, setSrsData] = useState(edit ? recipe.srcData : "");
-  const [recipeId, setRecipeId] = useState(edit ? recipe.id : null);
 
   const initialValues = {
     name: edit ? recipe.name : "",
     price: edit ? recipe.price : 0,
-    ingredients: edit ? recipe.ingredients : "",
-    requiredStuff: edit ? recipe.requiredStuff : "",
+    ingredients: edit ? recipe.ingredients.join(",") : "",
+    requiredStuff: edit ? recipe.requiredStuff.join(",") : "",
     portionDescription: edit ? recipe.portionDescription : "",
-    cuisineTags: edit ? recipe.cuisineTags : "",
+    cuisineTags: edit ? recipe.cuisineTags.join(",") : "",
   };
 
   const validationSchema = Yup.object({
@@ -67,7 +72,7 @@ const RecipeModal = ({ edit, id, recipe }) => {
 
   const onSubmit = async (values) => {
     if (edit) {
-      editRecipe(dispatch, { ...values, pictureKey, srcData, id: recipeId });
+      editRecipe(dispatch, { ...values, pictureKey, srcData, _id: recipe._id });
     } else {
       await createRecipe(dispatch, {
         ...values,
@@ -79,9 +84,24 @@ const RecipeModal = ({ edit, id, recipe }) => {
 
   return (
     <div>
+      {edit && (
+        <Fab
+          color="primary"
+          onClick={() => deleteRecipe(dispatch, recipe._id)}
+          style={{
+            float: "right",
+            margin: "4px",
+            width: "40px",
+            height: "40px",
+          }}
+        >
+          <DeleteForeverIcon />
+        </Fab>
+      )}
       <DialogTitle id="simple-dialog-title">
-        {edit ? "Edit Recipe" : "Add a recipe"}
+        {edit ? `Edit "${recipe.name}" Recipe` : "Add a recipe"}
       </DialogTitle>
+
       <EditPicture
         setPictureKey={setPictureKey}
         srcData={srcData}
@@ -95,25 +115,6 @@ const RecipeModal = ({ edit, id, recipe }) => {
         >
           {(formik) => (
             <Form>
-              <div className={classes.formGroup}>
-                <label htmlFor="pictureLey">
-                  <Typography variant="h6" className={classes.label}>
-                    Picture Key
-                  </Typography>
-                </label>
-                <TextField
-                  name="pictureKey"
-                  className={classes.input}
-                  variant="outlined"
-                  fullWidth
-                  margin="normal"
-                  value={pictureKey}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  helperText="This field is read only and will be filled after you provide your image"
-                />
-              </div>
               <FormikControl
                 control="input"
                 type="text"

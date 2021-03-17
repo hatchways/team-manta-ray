@@ -8,7 +8,6 @@ const logger = require("morgan");
 const cors = require("cors");
 
 const connectDB = require("./config/db");
-const cors = require("cors");
 
 const indexRouter = require("./routes/index");
 
@@ -30,7 +29,6 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
-app.use(cors());
 
 app.use("/", indexRouter);
 

@@ -6,10 +6,10 @@ const {
   getImageSrc,
 } = require("../controllers/ImageControllers");
 
-// const { auth } = require("../middlewares/authMiddlewares");
+const { auth } = require("../middlewares/authMiddlewares");
 
 //Add auth to both routes-to be the first arguments-
-router.route("/").post(upload, uploadImage);
-router.route("/:key").get(getImageSrc);
+router.route("/").post(auth, upload, uploadImage);
+router.route("/:key").get(auth, getImageSrc);
 
 module.exports = router;
