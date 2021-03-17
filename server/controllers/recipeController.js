@@ -26,9 +26,18 @@ const createRecipe = async (req, res) => {
     if (!chefProfile)
       throw new Error("You need a chef profile first to create a recipe");
 
+    cuisineTags = cuisineTags.split(",").map((tag) => tag.trim().toLowerCase());
+    requiredStuff = requiredStuff
+      .split(",")
+      .map((stuff) => stuff.trim().toLowerCase());
+
+    ingredients = ingredients
+      .split(",")
+      .map((ingredient) => ingredient.trim().toLowerCase());
+
     // Create a recipe
     const newRecipe = new Recipe({
-      user: chefProfile,
+      user: chefProfile._id,
       name,
       pictureUrl,
       price,

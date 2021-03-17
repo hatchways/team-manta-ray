@@ -21,10 +21,11 @@ const createChefProfile = async (req, res) => {
 
     // convert location to coordinates
     const coordinates = await getCoordsFromAddress(location);
+    cuisineTags = cuisineTags.split(",").map((tag) => tag.trim().toLowerCase());
 
     // create chef profile
     const newChefProfile = new ChefProfile({
-      user,
+      user: user._id,
       location: {
         type: "Point",
         coordinates,
