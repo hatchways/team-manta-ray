@@ -1,17 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { Marker, StaticMap } from "react-map-gl";
 
 import radius from "../assets/radius.svg";
 
 const Map = ({ lat, lng }) => {
-  const [viewport, setViewport] = useState({
-    latitude: lat,
-    longitude: lng,
-    zoom: 12.5,
-  });
   return (
     <StaticMap
-      {...viewport}
+      latitude={lat}
+      longitude={lng}
       zoom={12.5}
       width="100%"
       height="100%"

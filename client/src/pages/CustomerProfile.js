@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { AuthContext } from "../context/auth-context";
+import React from "react";
+// import { AuthContext } from "../context/auth-context";
 import { Paper, Grid, Button, makeStyles } from "@material-ui/core";
 
 import Map from "../components/Map";
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     width: "60vw",
   },
   paper: {
-    height: "100%",
+    height: "97%",
     width: "100%",
     fontFamily: "Montserrat, sans-serif",
   },
