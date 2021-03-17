@@ -23,7 +23,7 @@ const ChefProfile = () => {
 
   useEffect(() => {
     const getProfileAndRecipes = async () => {
-      const res = await axios.get("/api/chefProfiles");
+      const res = await axios.get("/api/chefProfiles/me");
       if (res.data) {
         setProfile(res.data.chefProfile);
         getRecipesByChef(dispatch, res.data.chefProfile._id);
@@ -133,7 +133,12 @@ const ChefProfile = () => {
           ))}
         </div>
 
-        <DialogControl open={open} onClose={handleClose} control={control} />
+        <DialogControl
+          open={open}
+          onClose={handleClose}
+          control={control}
+          profile={profile}
+        />
       </div>
     </>
   );

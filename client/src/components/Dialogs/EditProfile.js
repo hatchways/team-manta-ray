@@ -1,11 +1,12 @@
-import { Button, DialogTitle, TextField, Typography } from "@material-ui/core";
-import React, { useState } from "react";
+import { Button, DialogTitle } from "@material-ui/core";
+import React, { useState, useContext } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormikControl from "../Formik/FormikControl";
 import { makeStyles } from "@material-ui/core/styles";
 import EditPicture from "./EditPicture";
 import axios from "axios";
+import { UserContext } from "../../context/UserContext";
 
 export const useStyles = makeStyles((theme) => ({
   form: {
@@ -32,16 +33,17 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditProfile = ({ create }) => {
+const EditProfile = ({ create, profile }) => {
   const classes = useStyles();
 
   const [pictureKey, setPictureKey] = useState("");
   const [srcData, setSrcData] = useState(null);
+  const { userInfo } = useContext(UserContext);
 
   const initialValues = {
-    name: "",
+    name: userInfo.name,
     location: "",
-    bio: "",
+    bio: create ? "" : profile.bio,
     cuisineTags: "",
   };
 
@@ -76,25 +78,6 @@ const EditProfile = ({ create }) => {
         >
           {(formik) => (
             <Form>
-              <div className={classes.formGroup}>
-                <label htmlFor="pictureLey">
-                  <Typography variant="h6" className={classes.label}>
-                    Picture Key
-                  </Typography>
-                </label>
-                <TextField
-                  name="pictureKey"
-                  className={classes.input}
-                  variant="outlined"
-                  fullWidth
-                  margin="normal"
-                  value={pictureKey}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  helperText="This field is read only and will be filled after you provide your image"
-                />
-              </div>
               <FormikControl
                 control="input"
                 type="text"

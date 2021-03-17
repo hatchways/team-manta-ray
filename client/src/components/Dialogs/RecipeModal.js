@@ -82,12 +82,16 @@ const RecipeModal = ({ edit, id, recipe }) => {
     }
   };
 
+  const handleDelete = () => {
+    deleteRecipe(dispatch, recipe._id);
+  };
+
   return (
     <div>
       {edit && (
         <Fab
           color="primary"
-          onClick={() => deleteRecipe(dispatch, recipe._id)}
+          onClick={handleDelete}
           style={{
             float: "right",
             margin: "4px",
