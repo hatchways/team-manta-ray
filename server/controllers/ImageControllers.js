@@ -2,6 +2,7 @@ const AWS = require("aws-sdk");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const NodeCache = require("node-cache");
+const AsyncHandler = require("express-async-handler");
 
 const imgCache = new NodeCache();
 
@@ -18,7 +19,7 @@ const storage = multer.memoryStorage({
 
 const upload = multer({ storage }).single("profilePicture");
 
-const uploadImage = async (req, res) => {
+const uploadImage = AsyncHandler(async (req, res) => {
   const fileNameParts = req.file.originalname.split(".");
   const fileType = fileNameParts[fileNameParts.length - 1];
 
@@ -33,9 +34,9 @@ const uploadImage = async (req, res) => {
     if (error) throw new Error(error);
     res.json(data);
   });
-};
+});
 
-const getImageSrc = async (req, res) => {
+const getImageSrc = AsyncHandler(async (req, res) => {
   const key = req.params.key;
 
   AWS.config.update({
@@ -67,6 +68,6 @@ const getImageSrc = async (req, res) => {
       console.log(e);
       res.send(e);
     });
-};
+});
 
 module.exports = { upload, getImageSrc, uploadImage };
