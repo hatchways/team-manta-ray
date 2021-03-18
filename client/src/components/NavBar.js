@@ -20,7 +20,7 @@ import { logout } from "../actions/userActions";
 
 const useStyles = makeStyles((theme) => ({
   toolBar: {
-    minHeight: 75,
+    minHeight: 60,
     display: "grid",
     backgroundColor: "white",
   },
