@@ -2,6 +2,9 @@ const AsyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
+/**
+ * @description If already a customer this function can be used to charge the saved card directly in the future
+ */
 const chargeCustomer = async (customerId) => {
   // Lookup the payment methods available for the customer
   const paymentMethods = await stripe.paymentMethods.list({
