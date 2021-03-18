@@ -16,6 +16,7 @@ const imageRoutes = require("./routes/imageRoutes");
 const recipeRoutes = require("./routes/recipeRoutes");
 const userProfileRoutes = require("./routes/userProfileRoutes");
 const chefProfileRoutes = require("./routes/chefProfileRoutes");
+const searchRoutes = require("./routes/searchRoutes");
 
 connectDB();
 
@@ -41,6 +42,8 @@ app.use("/api/userProfiles", userProfileRoutes);
 app.use("/api/chefProfiles", chefProfileRoutes);
 // Routes for recipes
 app.use("/api/recipes", recipeRoutes);
+// Routes for searching recipes and chefs
+app.use("/api/search", searchRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
