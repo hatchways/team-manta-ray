@@ -23,6 +23,10 @@ const userSchema = new Schema(
       required: true,
       default: false,
     },
+    stripeCustomer: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,
