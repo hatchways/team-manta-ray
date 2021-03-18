@@ -16,11 +16,18 @@ const getFiltered = async (req, res) => {
       mongoQuery.cuisineTags = { $in: cuisinesTagsParam };
     }
 
+    //Pagination
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 3; //Results per page
+    const skip = (page - 1) * limit;
+
     //If asking for chefs
     if (getChefsParam) {
-      filteredOutput = await ChefProfile.find(mongoQuery);
+      filteredOutput = await ChefProfile.find(mongoQuery)
+        .skip(skip)
+        .limit(limit);
     } else {
-      filteredOutput = await Recipe.find(mongoQuery);
+      filteredOutput = await Recipe.find(mongoQuery).skip(skip).limit(limit);
     }
 
     return res.status(200).json({
