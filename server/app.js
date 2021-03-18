@@ -10,6 +10,7 @@ const cors = require("cors");
 const indexRouter = require("./routes/index");
 
 const userRoutes = require("./routes/userRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
 const recipeRoutes = require("./routes/recipeRoutes");
 const userProfileRoutes = require("./routes/userProfileRoutes");
 const chefProfileRoutes = require("./routes/chefProfileRoutes");
@@ -37,6 +38,8 @@ app.use("/api/userProfiles", userProfileRoutes);
 app.use("/api/chefProfiles", chefProfileRoutes);
 // Routes for recipes
 app.use("/api/recipes", recipeRoutes);
+
+app.use("/payment", paymentRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
