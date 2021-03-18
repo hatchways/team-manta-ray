@@ -282,12 +282,8 @@ const Payment = ({ history }) => {
               succeeded ? `${classes.resultMessage}` : `${classes.hidden}`
             }
           >
-            Payment succeeded, see the result in your
-            <a href={`https://dashboard.stripe.com/test/payments`}>
-              {" "}
-              Stripe dashboard.
-            </a>{" "}
-            Refresh the page to pay again.
+            Payment succeeded, see the result in your Stripe dashboard. Refresh
+            the page to pay again.
           </p>
         </div>
       </div>
