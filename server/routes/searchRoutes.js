@@ -3,6 +3,6 @@ const router = express.Router();
 
 const { getFiltered } = require("../controllers/searchController");
 
-router.route("/filter").get(getFiltered);
+router.route("/").get(getFiltered);
 
 module.exports = router;

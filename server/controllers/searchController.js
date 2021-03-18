@@ -20,6 +20,10 @@ const getFiltered = async (req, res) => {
       ? JSON.parse(req.query.maxdistance)
       : 0; // Max radius in km (0 means there is no max distance, any chef can be returned regardless of distance)
 
+    const sortByParam = req.query.sortby ? req.query.sortby : undefined;
+
+    const orderParam = req.query.order ? req.query.order : "asc";
+
     //Filter for matching cuisine tags
     if (cuisinesTagsParam.length > 0) {
       mongoQuery.cuisineTags = { $in: cuisinesTagsParam };
@@ -47,12 +51,26 @@ const getFiltered = async (req, res) => {
         .skip(skip)
         .limit(limit);
     } else {
-      filteredOutput = await Recipe.find(mongoQuery).skip(skip).limit(limit);
+      //To sort or not to sort
+      if (sortByParam === "price") {
+        if (orderParam === "asc") {
+          filteredOutput = await Recipe.find(mongoQuery)
+            .sort({ price: 1 })
+            .skip(skip)
+            .limit(limit);
+        } else if (orderParam === "desc") {
+          filteredOutput = await Recipe.find(mongoQuery)
+            .sort({ price: -1 })
+            .skip(skip)
+            .limit(limit);
+        }
+      } else {
+        filteredOutput = await Recipe.find(mongoQuery).skip(skip).limit(limit);
+      }
     }
 
     return res.status(200).json({
       success: true,
-      count: filteredOutput.length,
       data: filteredOutput,
     });
   } catch (error) {
