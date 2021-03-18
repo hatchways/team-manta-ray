@@ -3,6 +3,7 @@ const ChefProfile = require("../models/chefProfileModel");
 const getChefProfile = async (req, res, next) => {
   try {
     //get userId from params
+
     const { userId } = req.params;
 
     // find profile by user._id

@@ -32,7 +32,7 @@ const Signup = ({ history }) => {
   // check if user logged in
   useEffect(() => {
     if (userInfo) {
-      history.push("/test");
+      history.push("/chef");
     }
   }, [userInfo, history]);
 
@@ -71,7 +71,7 @@ const Signup = ({ history }) => {
       const user = await register(dispatch, payload); //Get data from backend API
 
       if (user) {
-        history.push("/test");
+        history.push("/chef");
       } else setOpen(true);
     } catch (err) {
       console.log(err);

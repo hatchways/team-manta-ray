@@ -2,8 +2,9 @@ import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import useUploadImage from "../../hooks/useUplaodImage";
 import useGetSrcData from "../../hooks/useGetSrcData";
-import { DialogTitle, List, ListItem, Snackbar } from "@material-ui/core";
+import { List, ListItem, Snackbar } from "@material-ui/core";
 import defaultUserImage from "../../assets/defaultUserImage.png";
+import plate from "../../assets/plate.svg";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) =>
@@ -24,14 +25,19 @@ const useStyles = makeStyles((theme) =>
         textAlign: "center",
       },
     },
+    fieldImg: {
+      height: theme.spacing(5),
+      width: theme.spacing(5),
+      float: "left",
+      borderRadius: "50%",
+    },
   })
 );
 
-const EditPicture = () => {
+const EditPicture = ({ profile, setPictureKey, srcData, setSrcData }) => {
   const classes = useStyles();
 
-  //srcData will come from profile context and on drop it will be added to profile context
-  const [src, setSrc] = useState(null);
+  const [src, setSrc] = useState(srcData ? srcData : null);
   const [err, setErr] = useState(null);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
 
@@ -51,15 +57,18 @@ const EditPicture = () => {
       }
       const res = await uploadImage(acceptedFiles[0]);
       if (res.key) {
+        setPictureKey(res.key);
         const response = await getSrcData(res.key);
-        if (response.srcData) setSrc(response.srcData);
-        else setErr(response);
+        if (response.srcData) {
+          setSrc(response.srcData);
+          setSrcData(response.srcData);
+        } else setErr(response);
       } else {
         setErr(res);
         setSnackBarOpen(true);
       }
     },
-    [uploadImage, getSrcData]
+    [uploadImage, getSrcData, setPictureKey, setSrcData]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -69,11 +78,10 @@ const EditPicture = () => {
 
   return (
     <>
-      <DialogTitle id="simple-dialog-title">Edit Profile Picture</DialogTitle>
       <List>
         <ListItem>
           <img
-            src={src ? src : defaultUserImage}
+            src={src ? src : profile ? defaultUserImage : plate}
             alt="profileImage"
             className={classes.img}
           />

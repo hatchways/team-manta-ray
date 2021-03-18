@@ -81,5 +81,31 @@ const loginUser = AsyncHandler(async (req, res) => {
     throw new Error("Invalid user data");
   }
 });
+/**
+ * @description make the current user a chef
+ * @route POST /api/users/isChef
+ * @access Private
+ * @data => success, userInfo
+ */
 
-module.exports = { registerUser, loginUser };
+const makeUserAChef = AsyncHandler(async (req, res) => {
+  const { user } = req;
+  const currentUser = await User.findById(user._id);
+  currentUser.isChef = true;
+  await currentUser.save();
+  res.json({ currentUser });
+});
+
+const logoutUser = async (req, res) => {
+  // Set token to none and expire after 5 seconds
+  console.log("we are in controller");
+  res.cookie("token", "none", {
+    maxAge: 1000,
+    httpOnly: true,
+  });
+  res
+    .status(200)
+    .json({ success: true, message: "User logged out successfully" });
+};
+
+module.exports = { registerUser, loginUser, makeUserAChef, logoutUser };
