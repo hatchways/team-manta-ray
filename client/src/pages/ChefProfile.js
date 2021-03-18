@@ -2,7 +2,7 @@
 // import React, { useContext } from "react";
 // import { AuthContext } from "../context/auth-context";
 
-const CustomerProfile = () => {
+const ChefProfile = () => {
   // const { userData } = useContext(AuthContext);
   return (
     <>
@@ -13,4 +13,4 @@ const CustomerProfile = () => {
   );
 };
 
-export default CustomerProfile;
+export default ChefProfile;
