@@ -6,6 +6,7 @@ import {
   RecipeContext,
   RecipeDispatchContext,
 } from "../context/recipe-context";
+import { UserContext } from "../context/UserContext";
 import Recipe from "../components/Recipe";
 import axios from "axios";
 import { Button } from "@material-ui/core";
@@ -19,18 +20,19 @@ const ChefProfile = () => {
   const { recipes } = useContext(RecipeContext);
   const dispatch = useContext(RecipeDispatchContext);
 
+  const { userInfo } = useContext(UserContext);
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const getProfileAndRecipes = async () => {
-      const res = await axios.get("/api/chefProfiles/me");
+      const res = await axios.get(`/api/chefProfiles/${userInfo._id}`);
       if (res.data) {
         setProfile(res.data.chefProfile);
         getRecipesByChef(dispatch, res.data.chefProfile._id);
       }
     };
     getProfileAndRecipes();
-  }, [dispatch]);
+  }, [dispatch, userInfo._id]);
 
   const handleClickOpen = (e) => {
     setOpen(true);

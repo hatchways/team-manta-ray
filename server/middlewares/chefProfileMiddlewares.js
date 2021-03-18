@@ -4,9 +4,7 @@ const getChefProfile = async (req, res, next) => {
   try {
     //get userId from params
 
-    //Mina: I don't think we need to get it from param, we will get it from auth middleWare
-    // const { userId } = req.params;
-    const userId = req.user._id;
+    const { userId } = req.params;
 
     // find profile by user._id
     const chefProfile = await ChefProfile.findOne({

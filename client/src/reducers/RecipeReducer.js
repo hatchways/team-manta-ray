@@ -1,5 +1,5 @@
 import {
-  CREATE_RECIPE_SUCCESS,
+  CREATE_RECIPE,
   DELETE_RECIPE,
   EDIT_RECIPE,
   GET_RECIPE,
@@ -16,7 +16,7 @@ export const RecipeReducer = (state, action) => {
   console.log(action.type);
   console.log(action.payload);
   switch (action.type) {
-    case CREATE_RECIPE_SUCCESS:
+    case CREATE_RECIPE:
       return { ...state, recipes: [action.payload, ...state.recipes] };
     case EDIT_RECIPE:
       return {

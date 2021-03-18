@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) =>
 
 const EditPicture = ({ profile, setPictureKey, srcData, setSrcData }) => {
   const classes = useStyles();
-  //src will come from profile context and also an addSrcData action from context
+
   const [src, setSrc] = useState(srcData ? srcData : null);
   const [err, setErr] = useState(null);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
@@ -62,9 +62,7 @@ const EditPicture = ({ profile, setPictureKey, srcData, setSrcData }) => {
         if (response.srcData) {
           setSrc(response.srcData);
           setSrcData(response.srcData);
-        }
-        //This setSrc will eventually be connected to our ProfileContext and add srcData in there.
-        else setErr(response);
+        } else setErr(response);
       } else {
         setErr(res);
         setSnackBarOpen(true);

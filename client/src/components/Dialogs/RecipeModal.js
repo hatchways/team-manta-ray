@@ -17,6 +17,12 @@ export const useStyles = makeStyles((theme) => ({
   form: {
     margin: theme.spacing(2),
   },
+  deleteBtn: {
+    float: "right",
+    margin: "4px",
+    width: theme.spacing(5),
+    height: theme.spacing(5),
+  },
   btn: {
     borderRadius: "0",
     width: "40%",
@@ -60,7 +66,7 @@ const RecipeModal = ({ edit, id, recipe }) => {
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Name of the recipe is required"),
-    price: Yup.number("Price should be a number")
+    price: Yup.number()
       .required("Price is required")
       .positive("Price should be positive"),
     ingredients: Yup.string().required("Ingredients of the recipe is required"),
@@ -74,7 +80,7 @@ const RecipeModal = ({ edit, id, recipe }) => {
     if (edit) {
       editRecipe(dispatch, { ...values, pictureKey, srcData, _id: recipe._id });
     } else {
-      await createRecipe(dispatch, {
+      createRecipe(dispatch, {
         ...values,
         pictureKey,
         srcData,
@@ -92,12 +98,7 @@ const RecipeModal = ({ edit, id, recipe }) => {
         <Fab
           color="primary"
           onClick={handleDelete}
-          style={{
-            float: "right",
-            margin: "4px",
-            width: "40px",
-            height: "40px",
-          }}
+          className={classes.deleteBtn}
         >
           <DeleteForeverIcon />
         </Fab>

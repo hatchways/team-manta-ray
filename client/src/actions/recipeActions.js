@@ -1,8 +1,6 @@
 import axios from "axios";
 import {
-  CREATE_RECIPE_REQUEST,
-  CREATE_RECIPE_SUCCESS,
-  CREATE_RECIPE_FAIL,
+  CREATE_RECIPE,
   EDIT_RECIPE,
   GET_RECIPE,
   DELETE_RECIPE,
@@ -12,10 +10,6 @@ import {
 
 export const createRecipe = async (dispatch, payload) => {
   try {
-    dispatch({
-      type: CREATE_RECIPE_REQUEST,
-    });
-
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -34,14 +28,12 @@ export const createRecipe = async (dispatch, payload) => {
     if (res.status === 201) {
       console.log(res.data.newRecipe);
       dispatch({
-        type: CREATE_RECIPE_SUCCESS,
+        type: CREATE_RECIPE,
         payload: { ...res.data.newRecipe, srcData: payload.srcData },
       });
     }
   } catch (err) {
-    dispatch({
-      type: CREATE_RECIPE_FAIL,
-    });
+    console.log(err);
   }
 };
 
@@ -72,7 +64,9 @@ export const editRecipe = async (dispatch, payload) => {
         payload: { ...res.data.updatedRecipe, srcData: payload.srcData },
       });
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const deleteRecipe = async (dispatch, recipeId) => {
@@ -81,7 +75,9 @@ export const deleteRecipe = async (dispatch, recipeId) => {
     if (res.status === 200) {
       dispatch({ type: DELETE_RECIPE, payload: recipeId });
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getRecipesByChef = async (dispatch, chefId) => {
@@ -93,7 +89,9 @@ export const getRecipesByChef = async (dispatch, chefId) => {
         payload: res.data.allRecipesByChef,
       });
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getRecipeById = async (dispatch, recipeId) => {
