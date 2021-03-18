@@ -9,6 +9,7 @@ import NavBar from "./components/NavBar";
 import "./App.css";
 import { ContextProvider } from "./context/UserContext";
 import TestComponent from "./pages/TestComponent";
+import chefProfileTest from "./pages/ChefProfileTest";
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
             <Route path="/test" component={TestComponent} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
-
+            <Route path="/chef" component={chefProfileTest} />
             <Route path="/" component={Login} exact>
               <Redirect to="/login" />
             </Route>
