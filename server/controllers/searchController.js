@@ -9,19 +9,39 @@ const getFiltered = async (req, res) => {
     const cuisinesTagsParam = req.query.cuisines
       ? JSON.parse(req.query.cuisines)
       : [];
+
     const getChefsParam = req.query.chefs ? JSON.parse(req.query.chefs) : false;
 
-    //Add cuisine tags as a filter
+    const locationParam = req.query.location
+      ? JSON.parse(req.query.location)
+      : undefined; //Coordinates of user making the search in [lng,lat] format
+
+    const maxDistanceParam = req.query.maxdistance
+      ? JSON.parse(req.query.maxdistance)
+      : 0; // Max radius in km (0 means there is no max distance, any chef can be returned regardless of distance)
+
+    //Filter for matching cuisine tags
     if (cuisinesTagsParam.length > 0) {
       mongoQuery.cuisineTags = { $in: cuisinesTagsParam };
     }
 
+    //Max distance filtering for chefs
+    if (getChefsParam && locationParam && maxDistanceParam) {
+      //The $centerSphere operator accepts the radius in radians, which can be found by dividing the maxdistance by the circumference of the earth
+      const radius = maxDistanceParam / 6378;
+      const lng = locationParam[0];
+      const lat = locationParam[1];
+      mongoQuery.location = {
+        $geoWithin: { $centerSphere: [[lng, lat], radius] },
+      };
+    }
+
     //Pagination
     const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 3; //Results per page
+    const limit = parseInt(req.query.limit, 10) || 12; //Results per page
     const skip = (page - 1) * limit;
 
-    //If asking for chefs
+    //Determine whether to return chefs or recipes
     if (getChefsParam) {
       filteredOutput = await ChefProfile.find(mongoQuery)
         .skip(skip)
