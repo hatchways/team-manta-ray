@@ -216,7 +216,7 @@ const Payment = ({ history }) => {
       setError(null);
       setProcessing(false);
       setSucceeded(true);
-      // history.replace("/success");
+      history.replace("/success");
     }
   };
 
