@@ -7,7 +7,7 @@ import RecipeContextProvider from "./context/recipe-context";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import CustomerProfile from "./pages/CustomerProfile";
-import NavBar from "./components/NavBar";
+// import NavBar from "./components/NavBar";
 import "./App.css";
 import { ContextProvider } from "./context/UserContext";
 import TestComponent from "./pages/TestComponent";
@@ -31,9 +31,8 @@ function App() {
           <RecipeContextProvider>
             <Elements stripe={promise}>
               <Switch>
-                <Route path="/profile" component={CustomerProfile}>
-                  <NavBar />
-                </Route>
+                <Route path="/profile" component={CustomerProfile} />
+
                 <Route path="/test" component={TestComponent} />
                 <Route path="/success" component={SuccessPage} />
                 {/** This will be moved once we have a parent component for payment */}
@@ -42,7 +41,7 @@ function App() {
                   render={(props) => <Payment {...props} />}
                 />
                 <Route path="/chef" component={TestChefProfile} />
-
+                <Route path="/login" component={Login} />
                 <Route path="/signup" component={Signup} />
 
                 <Route path="/" component={Login} exact>
