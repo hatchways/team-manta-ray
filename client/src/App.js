@@ -5,6 +5,7 @@ import { theme } from "./themes/theme";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import CustomerProfile from "./pages/CustomerProfile";
+import ChefProfile from "./pages/ChefProfile";
 import NavBar from "./components/NavBar";
 import "./App.css";
 import { ContextProvider } from "./context/UserContext";
@@ -19,6 +20,7 @@ function App() {
             <Route path="/profile" component={CustomerProfile}>
               <NavBar />
             </Route>
+            <Route path="/chefprofile" component={ChefProfile} />
             <Route path="/test" component={TestComponent} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
