@@ -56,7 +56,7 @@ const Login = ({ history }) => {
   // check if userInfo is present (user logged in)
   useEffect(() => {
     if (userInfo) {
-      history.push("/test"); // push to test component
+      history.push("/chef"); // push to test component
     }
   }, [userInfo, history]);
 
@@ -91,7 +91,7 @@ const Login = ({ history }) => {
       const user = await login(dispatch, payload); // Get data from backend API using User Actions
 
       if (user) {
-        history.push("/test");
+        history.push("/chef");
       } else setOpen(true);
     } catch (err) {
       console.log(err);
