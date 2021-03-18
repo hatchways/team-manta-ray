@@ -1,7 +1,7 @@
 import React from "react";
 // import { AuthContext } from "../context/auth-context";
 import { Paper, Grid, Button, makeStyles } from "@material-ui/core";
-
+import NavBar from "../components/NavBar";
 import Map from "../components/Map";
 
 import profilePic from "../assets/dummyavatar.png";
@@ -76,89 +76,95 @@ const CustomerProfile = () => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <Paper className={classes.paper} elevation={5} square>
-        <Grid container className={classes.gridParent}>
-          <Grid
-            item
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            xs={5}
-            className={classes.nameCard}
-          >
+    <>
+      <NavBar />
+
+      <div className={classes.root}>
+        <Paper className={classes.paper} elevation={5} square>
+          <Grid container className={classes.gridParent}>
             <Grid
               item
               container
+              direction="column"
               justify="center"
-              className={classes.profilePic}
-              xs={12}
+              alignItems="center"
+              xs={5}
+              className={classes.nameCard}
             >
-              <Grid item>
-                <img
-                  src={profilePic}
-                  className={classes.profileImage}
-                  alt="profile pic"
-                />
-              </Grid>
-              <Grid item container justify="center" xs={12}>
-                <Grid item>
-                  <h2 className={classes.nameText}>{userData.name}</h2>
-                  <h3
-                    style={{ fontSize: "11px", opacity: 0.4 }}
-                    className={classes.nameText}
-                  >
-                    {userData.city}
-                  </h3>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  size="large"
-                  className={classes.button}
-                >
-                  Send message
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item container alignItems="center" xs={7}>
-            <Grid item xs={12}>
-              <h2 style={{ fontSize: "13px", paddingTop: "20px" }}>
-                ABOUT ME:
-              </h2>
-              <p style={{ fontSize: "11px", opacity: 0.6 }}>{userData.about}</p>
-            </Grid>
-            <Grid item container xs={12}>
-              <h2 style={{ fontSize: "13px" }}>FAVORITE CUISINES:</h2>
               <Grid
                 item
                 container
-                direction="row"
-                justify="flex-start"
-                alignItems="center"
-                spacing={1}
+                justify="center"
+                className={classes.profilePic}
                 xs={12}
               >
-                {userData.favCuisines.map((cuisine) => {
-                  return (
-                    <Grid item>
-                      <h4 className={classes.cuisine}>{cuisine}</h4>
-                    </Grid>
-                  );
-                })}
+                <Grid item>
+                  <img
+                    src={profilePic}
+                    className={classes.profileImage}
+                    alt="profile pic"
+                  />
+                </Grid>
+                <Grid item container justify="center" xs={12}>
+                  <Grid item>
+                    <h2 className={classes.nameText}>{userData.name}</h2>
+                    <h3
+                      style={{ fontSize: "11px", opacity: 0.4 }}
+                      className={classes.nameText}
+                    >
+                      {userData.city}
+                    </h3>
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    size="large"
+                    className={classes.button}
+                  >
+                    Send message
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item container alignItems="center" xs={7}>
+              <Grid item xs={12}>
+                <h2 style={{ fontSize: "13px", paddingTop: "20px" }}>
+                  ABOUT ME:
+                </h2>
+                <p style={{ fontSize: "11px", opacity: 0.6 }}>
+                  {userData.about}
+                </p>
+              </Grid>
+              <Grid item container xs={12}>
+                <h2 style={{ fontSize: "13px" }}>FAVORITE CUISINES:</h2>
+                <Grid
+                  item
+                  container
+                  direction="row"
+                  justify="flex-start"
+                  alignItems="center"
+                  spacing={1}
+                  xs={12}
+                >
+                  {userData.favCuisines.map((cuisine) => {
+                    return (
+                      <Grid item>
+                        <h4 className={classes.cuisine}>{cuisine}</h4>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
-        <div style={{ height: "45%", width: "100%" }}>
-          <Map lat={userData.location.lat} lng={userData.location.lng}></Map>
-        </div>
-      </Paper>
-    </div>
+          <div style={{ height: "45%", width: "100%" }}>
+            <Map lat={userData.location.lat} lng={userData.location.lng}></Map>
+          </div>
+        </Paper>
+      </div>
+    </>
   );
 };
 
