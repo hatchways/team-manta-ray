@@ -31,8 +31,10 @@ const Signup = ({ history }) => {
 
   // check if user logged in
   useEffect(() => {
-    if (userInfo) {
+    if (userInfo && userInfo.isChef) {
       history.push("/chef");
+    } else if (userInfo) {
+      history.push("/profile");
     }
   }, [userInfo, history]);
 
@@ -71,7 +73,7 @@ const Signup = ({ history }) => {
       const user = await register(dispatch, payload); //Get data from backend API
 
       if (user) {
-        history.push("/chef");
+        history.push("/profile");
       } else setOpen(true);
     } catch (err) {
       console.log(err);
