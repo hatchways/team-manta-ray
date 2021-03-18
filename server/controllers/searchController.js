@@ -10,7 +10,7 @@ const ChefProfile = require("../models/chefProfileModel");
  * Parameter:      Expected:             Description:
  *
  * &cuisines=  eg. ["asian","japanese"]  The tags to use to filter recipes and chefs. Will include all chefs and recipes whose cuisineTags match at least one tag.
- * &chef=          true/false            True/false to determine whether to retrieve chefs or recipes. If true, will return chefs, if false or ommitted, will return recipes.
+ * &chefs=          true/false            True/false to determine whether to retrieve chefs or recipes. If true, will return chefs, if false or ommitted, will return recipes.
  * &location=      [lng,lat]             Array of coordinates that will be used in all filters relating to distance, such as max distance for chefs
  * &maxdistance=   eg. 30                A number in kilometers that will determine the maximum distance returned chefs can be from the user (requires &location to work)
  * &sortby=        eg. price             What metric to use to sort the results (if ommitted, they are not sorted).
@@ -72,17 +72,10 @@ const getFiltered = async (req, res) => {
     } else {
       //To sort or not to sort
       if (sortByParam === "price") {
-        if (orderParam === "asc") {
-          filteredOutput = await Recipe.find(mongoQuery)
-            .sort({ price: 1 })
-            .skip(skip)
-            .limit(limit);
-        } else if (orderParam === "desc") {
-          filteredOutput = await Recipe.find(mongoQuery)
-            .sort({ price: -1 })
-            .skip(skip)
-            .limit(limit);
-        }
+        filteredOutput = await Recipe.find(mongoQuery)
+          .sort({ price: orderParam === "asc" ? 1 : -1 })
+          .skip(skip)
+          .limit(limit);
       } else {
         filteredOutput = await Recipe.find(mongoQuery).skip(skip).limit(limit);
       }
