@@ -1,19 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
-import {
-  Grid,
-  CssBaseline,
-  Paper,
-  Typography,
-  Button,
-  Snackbar,
-} from "@material-ui/core";
+import { Grid, Paper, Typography, Button, Snackbar } from "@material-ui/core";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Banner from "../components/Banner";
 import FormikControl from "../components/Formik/FormikControl";
 import { makeStyles } from "@material-ui/core/styles";
 import { login } from "../actions/userActions";
-import logo from "../assets/logo.svg";
+import Logo from "../components/Logo";
 import Loader from "../components/Loader";
 
 import { UserContext, UserDispatchContext } from "../context/UserContext";
@@ -23,7 +16,7 @@ export const useStyles = makeStyles((theme) => ({
     height: "100vh",
   },
   paper: {
-    margin: theme.spacing(3, 8),
+    margin: theme.spacing(10, 8),
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
@@ -105,9 +98,8 @@ const Login = ({ history }) => {
 
   return (
     <Grid container component="main" className={classes.root}>
-      <CssBaseline />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <img src={logo} alt="logo" className={classes.margin} />
+        <Logo className={classes.margin} />
         <div className={classes.paper}>
           <Typography variant="h3">Login</Typography>
 
