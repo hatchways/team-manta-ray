@@ -25,7 +25,7 @@ const Signup = ({ history }) => {
   // check if user logged in
   useEffect(() => {
     if (userInfo && userInfo.isChef) {
-      history.push("/chef");
+      history.push("/chefprofile");
     } else if (userInfo) {
       history.push("/profile");
     }

@@ -50,7 +50,7 @@ const Login = ({ history }) => {
   useEffect(() => {
     console.log(userInfo);
     if (userInfo && userInfo.isChef) {
-      history.push("/chef"); // push to test component
+      history.push("/chefprofile"); // push to test component
       console.log("user from login", userInfo);
     } else if (userInfo) {
       history.push("/profile");
