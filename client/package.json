@@ -5,8 +5,11 @@
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
+<<<<<<< HEAD
+=======
     "@stripe/react-stripe-js": "^1.4.0",
     "@stripe/stripe-js": "^1.13.1",
+>>>>>>> Demo-Presentation
     "axios": "^0.21.1",
     "formik": "^2.2.6",
     "react": "^17.0.1",
