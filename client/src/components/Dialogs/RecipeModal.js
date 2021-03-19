@@ -1,4 +1,4 @@
-import { Button, DialogTitle, Fab } from "@material-ui/core";
+import { Button, DialogTitle, Fab, Snackbar } from "@material-ui/core";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import React, { useState, useContext } from "react";
 import { Formik, Form } from "formik";
@@ -42,6 +42,11 @@ const RecipeModal = ({ edit, id, recipe }) => {
 
   const [pictureKey, setPictureKey] = useState(edit ? recipe.pictureKey : "");
   const [srcData, setSrsData] = useState(edit ? recipe.srcData : "");
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
+
+  const handleSnackBarClose = () => {
+    setSnackBarOpen(false);
+  };
 
   const initialValues = {
     name: edit ? recipe.name : "",
@@ -65,6 +70,9 @@ const RecipeModal = ({ edit, id, recipe }) => {
   });
 
   const onSubmit = async (values) => {
+    if (!pictureKey) {
+      setSnackBarOpen(true);
+    }
     if (edit) {
       editRecipe(dispatch, { ...values, pictureKey, srcData, _id: recipe._id });
     } else {
@@ -158,6 +166,16 @@ const RecipeModal = ({ edit, id, recipe }) => {
             </Form>
           )}
         </Formik>
+        <Snackbar
+          open={snackBarOpen}
+          onClose={handleSnackBarClose}
+          message="Picture is required"
+          autoHideDuration={4000}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        />
       </div>
     </div>
   );
