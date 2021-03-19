@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import FormikControl from "../Formik/FormikControl";
 import { makeStyles } from "@material-ui/core/styles";
 import EditPicture from "./EditPicture";
-import { RecipeDispatchContext } from "../../context/recipe-context";
+import { RecipeDispatchContext } from "../../context/RecipeContext";
 import {
   createRecipe,
   deleteRecipe,

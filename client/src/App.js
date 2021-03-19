@@ -2,7 +2,7 @@ import React from "react";
 import { MuiThemeProvider } from "@material-ui/core";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import { theme } from "./themes/theme";
-import RecipeContextProvider from "./context/recipe-context";
+import RecipeContextProvider from "./context/RecipeContext";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";

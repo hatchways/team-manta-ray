@@ -2,10 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import defaultUserImage from "../assets/defaultUserImage.png";
 import DialogControl from "../components/Dialogs/DialogControl";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
-import {
-  RecipeContext,
-  RecipeDispatchContext,
-} from "../context/recipe-context";
+import { RecipeContext, RecipeDispatchContext } from "../context/RecipeContext";
 import { UserContext } from "../context/UserContext";
 import Recipe from "../components/Recipe";
 import axios from "axios";

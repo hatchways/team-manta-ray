@@ -26,7 +26,6 @@ export const createRecipe = async (dispatch, payload) => {
     };
     const res = await axios.post("/api/recipes", formData, config);
     if (res.status === 201) {
-      console.log(res.data.newRecipe);
       dispatch({
         type: CREATE_RECIPE,
         payload: { ...res.data.newRecipe, srcData: payload.srcData },
