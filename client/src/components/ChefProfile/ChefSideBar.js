@@ -1,17 +1,12 @@
 import React from "react";
-import {
-  Grid,
-  Box,
-  Avatar,
-  Typography,
-  Button,
-  useMediaQuery,
-} from "@material-ui/core";
+import { Grid, Box, Avatar, Typography, Button } from "@material-ui/core";
 import line from "../../assets/line.png";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 const ChefSideBar = (props) => {
   const { name, chefProfile } = props.chefInfosAndRecipes;
+
+  const isBrowser = props.isBrowser;
 
   const {
     bio,
@@ -21,11 +16,7 @@ const ChefSideBar = (props) => {
     cuisineTags,
   } = chefProfile;
 
-  const theme = useTheme();
-
   const isOwner = true;
-
-  const isBrowser = useMediaQuery(theme.breakpoints.up("md"));
 
   const useStyles = makeStyles((theme) => ({
     chefSideBarContainer: {

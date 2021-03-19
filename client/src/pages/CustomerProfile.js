@@ -5,6 +5,7 @@ import NavBar from "../components/NavBar";
 import Map from "../components/Map";
 
 import profilePic from "../assets/dummyavatar.png";
+import AuthGuard from "../hocs/AuthGuard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomerProfile = () => {
+const CustomerProfile = AuthGuard(() => {
   // const { userData } = useContext(AuthContext);
   //Dummy profile data for now
   const userData = {
@@ -77,8 +78,6 @@ const CustomerProfile = () => {
 
   return (
     <>
-      <NavBar />
-
       <div className={classes.root}>
         <Paper className={classes.paper} elevation={5} square>
           <Grid container className={classes.gridParent}>
@@ -166,6 +165,6 @@ const CustomerProfile = () => {
       </div>
     </>
   );
-};
+});
 
 export default CustomerProfile;

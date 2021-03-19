@@ -5,7 +5,7 @@ import ChefSideBar from "../components/ChefProfile/ChefSideBar";
 import ChefRecipes from "../components/ChefProfile/ChefRecipes";
 import { makeStyles } from "@material-ui/core/styles";
 
-const ChefProfile = AuthGuard(() => {
+const ChefProfile = AuthGuard((props) => {
   const useStyles = makeStyles((theme) => ({
     chefMenuName: {
       marginTop: theme.spacing(6),
@@ -97,7 +97,10 @@ const ChefProfile = AuthGuard(() => {
   return (
     <Grid container>
       {/* Chef infos */}
-      <ChefSideBar chefInfosAndRecipes={chefInfosAndRecipes} />
+      <ChefSideBar
+        isBrowser={props.isBrowser}
+        chefInfosAndRecipes={chefInfosAndRecipes}
+      />
 
       {/* Imaginary Grid for mdUp views*/}
       <Hidden smDown>

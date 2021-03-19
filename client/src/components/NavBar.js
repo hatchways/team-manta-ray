@@ -19,30 +19,31 @@ import plateLogo from "../assets/plate.svg";
 import { logout } from "../actions/userActions";
 import Logo from "./Logo";
 
-const useStyles = makeStyles((theme) => ({
-  toolBar: {
-    minHeight: 75,
-  },
+const NavBar = ({ history, isBrowser }) => {
+  const useStyles = makeStyles((theme) => ({
+    toolBar: {
+      minHeight: 75,
+      padding: isBrowser ? "0px 16px" : "0px",
+    },
 
-  flexGrow: {
-    flexGrow: 1,
-  },
-  appBar: {
-    boxShadow: "0px 10px 30px 0px rgba(204, 204, 204, 0.5)",
-  },
-  drawerDiv: {
-    width: 200,
-  },
-  plateIcon: {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: theme.spacing(1),
-    paddingBottom: theme.spacing(3),
-    minHeight: 60,
-  },
-}));
+    flexGrow: {
+      flexGrow: 1,
+    },
+    appBar: {
+      boxShadow: "0px 10px 30px 0px rgba(204, 204, 204, 0.5)",
+    },
+    drawerDiv: {
+      width: 200,
+    },
+    plateIcon: {
+      display: "flex",
+      justifyContent: "center",
+      marginTop: theme.spacing(1),
+      paddingBottom: theme.spacing(3),
+      minHeight: 60,
+    },
+  }));
 
-const NavBar = ({ history }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 

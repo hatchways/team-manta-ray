@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import NavBar from "../components/NavBar";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Button } from "@material-ui/core";
 // stripe
@@ -7,6 +6,7 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { UserContext } from "../context/UserContext";
 import Loader from "../components/Loader";
 import sushi from "../assets/sushi.png";
+import AuthGuard from "../hocs/AuthGuard";
 
 export const useStyles = makeStyles((theme) => ({
   root: {
@@ -151,7 +151,7 @@ const cardStyle = {
   },
 };
 
-const Payment = ({ history }) => {
+const Payment = AuthGuard(({ history }) => {
   const classes = useStyles();
 
   const [succeeded, setSucceeded] = useState(false);
@@ -222,7 +222,6 @@ const Payment = ({ history }) => {
 
   return (
     <div className={classes.root}>
-      <NavBar />
       <div className={classes.container}>
         <div className={classes.left__container}>
           <div className={classes.logo}>
@@ -289,6 +288,6 @@ const Payment = ({ history }) => {
       </div>
     </div>
   );
-};
+});
 
 export default Payment;
