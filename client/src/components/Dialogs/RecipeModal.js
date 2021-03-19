@@ -60,8 +60,14 @@ const RecipeModal = ({ edit, id, recipe }) => {
   const validationSchema = Yup.object({
     name: Yup.string().required("Name of the recipe is required"),
     price: Yup.number()
+      .typeError("Must be a number")
       .required("Price is required")
-      .positive("Price should be positive"),
+      .positive("Price should be positive")
+      .test(
+        "maxDigitsAfterDecimal",
+        "Only up to two decimals are allowed for price",
+        (price) => Number.isInteger(price * 10 ** 2)
+      ),
     ingredients: Yup.string().required("Ingredients of the recipe is required"),
     portionDescription: Yup.string().required(
       "Portion Description is required"
