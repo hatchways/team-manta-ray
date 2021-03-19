@@ -10,7 +10,7 @@ import { Button } from "@material-ui/core";
 import { getRecipesByChef } from "../actions/recipeActions";
 import NavBar from "../components/NavBar";
 
-const ChefProfile = () => {
+const ChefProfile = ({ history }) => {
   const [open, setOpen] = useState(false);
   const [control, setControl] = useState(null);
 
@@ -28,8 +28,13 @@ const ChefProfile = () => {
         getRecipesByChef(dispatch, res.data.chefProfile._id);
       }
     };
-    getProfileAndRecipes();
-  }, [dispatch, userInfo._id]);
+
+    if (!userInfo) {
+      history.replace("/login");
+    } else {
+      getProfileAndRecipes();
+    }
+  }, [dispatch, userInfo, history]);
 
   const handleClickOpen = (e) => {
     setOpen(true);
@@ -41,7 +46,7 @@ const ChefProfile = () => {
   };
   const handleNewChef = async () => {
     //make user a chef
-    await axios.put("/api/users/isChef");
+    await axios.put("/api/users/markChef");
     setControl("CreateProfile");
     setOpen(true);
   };
