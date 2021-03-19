@@ -31,18 +31,6 @@ export const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     textTransform: "capitalize",
   },
-  formGroup: {
-    marginBottom: 20,
-    height: theme.spacing(11),
-  },
-  label: {
-    fontWeight: 900,
-    fontSize: 12,
-  },
-  input: {
-    margin: "3px 0",
-    borderRadius: "0",
-  },
 }));
 
 const RecipeModal = ({ edit, id, recipe }) => {
