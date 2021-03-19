@@ -14,6 +14,7 @@ import TestComponent from "./pages/TestComponent";
 import SuccessPage from "./pages/SuccessPage";
 // import chefProfileTest from "./pages/ChefProfileTest";
 import TestChefProfile from "./pages/TestChefProfile";
+import ChefProfile from "./pages/ChefProfile";
 
 // stripe imports
 import { loadStripe } from "@stripe/stripe-js";
@@ -40,7 +41,7 @@ function App() {
                   path="/payment"
                   render={(props) => <Payment {...props} />}
                 />
-                <Route path="/chef" component={TestChefProfile} />
+                <Route path="/chef" component={ChefProfile} />
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={Signup} />
 
