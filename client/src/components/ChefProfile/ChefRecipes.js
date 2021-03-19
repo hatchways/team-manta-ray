@@ -1,17 +1,66 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Box, Grid, Typography, Chip, Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { RecipeContext } from "../../context/recipe-context";
+import { RecipeDispatchContext } from "../../context/recipe-context";
+import { setSrcDataToRecipe } from "../../actions/recipeActions";
+import plate from "../../assets/plate.svg";
+import useGetSrcData from "../../hooks/useGetSrcData";
+import DialogControl from "../Dialogs/DialogControl";
 
-const ChefProfile = (props) => {
+const ChefProfile = ({ id }) => {
+  const { recipes } = useContext(RecipeContext);
+  const recipe = recipes.filter((res) => res._id === id)[0];
   const {
     name,
-    pictureUrl,
     price,
     ingredients,
-    requiredStuffs,
+    requiredStuff,
     portionDescription,
     cuisineTags,
-  } = props.recipe;
+    pictureKey,
+    srcData,
+  } = recipe;
+
+  const dispatch = useContext(RecipeDispatchContext);
+
+  const [src, setSrc] = useState(srcData ? srcData : null);
+  const [open, setOpen] = useState(false);
+
+  const getSrcData = useGetSrcData();
+  useEffect(() => {
+    const getImageSrcData = async () => {
+      if (srcData || !pictureKey) return;
+      const response = await getSrcData(pictureKey);
+      if (response.srcData) {
+        // setSrc(response.srcData);
+        setSrcDataToRecipe(dispatch, recipe._id, response.srcData);
+      }
+    };
+    if (srcData) {
+      setSrc(srcData);
+    }
+
+    getImageSrcData();
+  }, [pictureKey, getSrcData, srcData, dispatch, recipe._id]);
+
+  const handleClickOpen = (e) => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+  };
+
+  // const {
+  //   name,
+  //   pictureUrl,
+  //   price,
+  //   ingredients,
+  //   requiredStuffs,
+  //   portionDescription,
+  //   cuisineTags,
+  // } = props.recipe;
 
   const useStyles = makeStyles((theme) => ({
     portionDesc: {
@@ -19,11 +68,12 @@ const ChefProfile = (props) => {
     },
 
     chefRecipeImage: {
-      backgroundImage: `url("${pictureUrl}")`,
+      backgroundImage: `url("${srcData ? srcData : plate}")`,
       backgroundRepeat: "no-repeat",
       backgroundSize: "contain",
       backgroundPosition: "center",
       height: "300px",
+      cursor: "pointer",
     },
   }));
 
@@ -46,30 +96,43 @@ const ChefProfile = (props) => {
               <Typography variant="h4">{name}</Typography>
             </Box>
             <Box marginBottom={2}>
-              <Typography color="secondary">{price}</Typography>
+              <Typography color="secondary">${price}</Typography>
             </Box>
             <Box marginBottom={1}>
               <Typography variant="body1">INGREDIENTS:</Typography>
             </Box>
             <Box marginBottom={2}>
               <Typography variant="body2">
-                {ingredients.map((ingredient) => `${ingredient}, `)}
+                {ingredients &&
+                  ingredients.map((ingredient) => `${ingredient}, `)}
               </Typography>
             </Box>
             <Box marginBottom={1}>
               <Typography variant="body1">REQUIRED STUFF:</Typography>
             </Box>
-            <Box marginBottom={2}>
-              <Typography variant="body2">
-                {requiredStuffs.map((requiredStuff) => `${requiredStuff}, `)}
-              </Typography>
-            </Box>
+            {requiredStuff && (
+              <Box marginBottom={2}>
+                <Typography variant="body2">
+                  {requiredStuff.map((requiredStuff) => `${requiredStuff}, `)}
+                </Typography>
+              </Box>
+            )}
           </Box>
         </Grid>
         <Grid item sm={6} xs={12}>
-          <Box m={5} className={classes.chefRecipeImage} />
+          <Box
+            m={5}
+            className={classes.chefRecipeImage}
+            onClick={handleClickOpen}
+          />
         </Grid>
       </Grid>
+      <DialogControl
+        open={open}
+        onClose={handleClose}
+        control="EditRecipe"
+        recipe={{ ...recipe, srcData }}
+      />
       <Divider />
     </>
   );

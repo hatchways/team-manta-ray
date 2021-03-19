@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Grid,
   Box,
@@ -9,9 +9,11 @@ import {
 } from "@material-ui/core";
 import line from "../../assets/line.png";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import DialogControl from "../Dialogs/DialogControl";
 
 const ChefSideBar = (props) => {
   const { name, chefProfile } = props.chefInfosAndRecipes;
+  const { userInfo, profile, setProfile } = props;
 
   const {
     bio,
@@ -82,6 +84,17 @@ const ChefSideBar = (props) => {
   }));
 
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
+  const [control, setControl] = useState(null);
+
+  const handleClickOpen = (ctl) => {
+    setOpen(true);
+    setControl(ctl);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+  };
 
   return (
     <Grid item md={3} xs={12} className={classes.chefSideBarContainer}>
@@ -101,7 +114,7 @@ const ChefSideBar = (props) => {
           </Box>
           <Box marginTop={-7} textAlign="center">
             <Box>
-              <Typography variant="h4">{name}</Typography>
+              <Typography variant="h4">{userInfo.name}</Typography>
             </Box>
             <Box>
               <Typography variant="body2">{location}</Typography>
@@ -110,7 +123,9 @@ const ChefSideBar = (props) => {
               <img src={line} alt="linebreak" />
             </Box>
             <Box className={classes.chefBio}>
-              <Typography variant="body1">{bio}</Typography>
+              <Typography variant="body1">
+                {profile ? profile.bio : bio}
+              </Typography>
             </Box>
           </Box>
         </Box>
@@ -123,6 +138,7 @@ const ChefSideBar = (props) => {
               variant="contained"
               fullWidth
               className={classes.chefReqBtn}
+              onClick={() => handleClickOpen("EditProfile")}
             >
               Edit profile
             </Button>
@@ -130,6 +146,7 @@ const ChefSideBar = (props) => {
               color="secondary"
               variant="contained"
               fullWidth
+              onClick={() => handleClickOpen("AddRecipe")}
               className={classes.chefReqBtn}
             >
               Add recipe
@@ -148,6 +165,13 @@ const ChefSideBar = (props) => {
           </Box>
         )}
       </Box>
+      <DialogControl
+        open={open}
+        onClose={handleClose}
+        control={control}
+        profile={profile}
+        setProfile={setProfile}
+      />
     </Grid>
   );
 };

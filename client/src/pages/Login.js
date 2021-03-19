@@ -16,7 +16,7 @@ export const useStyles = makeStyles((theme) => ({
     height: "100vh",
   },
   paper: {
-    margin: theme.spacing(10, 8),
+    margin: theme.spacing(5, 8),
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
@@ -26,7 +26,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: "100%",
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(0.5),
   },
   btn: {
     borderRadius: "0",

@@ -6,9 +6,7 @@ import EditProfile from "./EditProfile";
 const DialogControl = ({ open, onClose, selectedValue, control, ...rest }) => {
   const getComponent = () => {
     switch (control) {
-      case "image":
-      case "location":
-      case "name":
+      case "EditProfile":
         return <EditProfile {...rest} />;
       case "CreateProfile":
         return <EditProfile create={true} {...rest} />;
