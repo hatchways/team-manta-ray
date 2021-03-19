@@ -12,13 +12,12 @@ import "./App.css";
 import { ContextProvider } from "./context/UserContext";
 import TestComponent from "./pages/TestComponent";
 import SuccessPage from "./pages/SuccessPage";
-// import chefProfileTest from "./pages/ChefProfileTest";
-import TestChefProfile from "./pages/TestChefProfile";
 
 // stripe imports
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import Payment from "./pages/Payment";
+import ChefProfile from "./pages/ChefProfile";
 
 /** This will be moved once we have a parent component for payment */
 const promise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
@@ -40,7 +39,7 @@ function App() {
                   path="/payment"
                   render={(props) => <Payment {...props} />}
                 />
-                <Route path="/chef" component={TestChefProfile} />
+                <Route path="/chefprofile" component={ChefProfile} />
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={Signup} />
 

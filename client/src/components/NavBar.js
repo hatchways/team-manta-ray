@@ -1,40 +1,33 @@
 import React, { useState, useContext } from "react";
 import { UserDispatchContext } from "../context/UserContext";
+import { RecipeDispatchContext } from "../context/recipe-context";
 import { Link, withRouter } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
   IconButton,
-  Grid,
   Drawer,
   List,
   ListItem,
   ListItemText,
   // Avatar,
   makeStyles,
+  Box,
+  Container,
 } from "@material-ui/core";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
-import logo from "../assets/logo.svg";
 import plateLogo from "../assets/plate.svg";
 import { logout } from "../actions/userActions";
+import { resetRecipeContext } from "../actions/recipeActions";
+import Logo from "./Logo";
 
 const useStyles = makeStyles((theme) => ({
   toolBar: {
-    minHeight: 60,
-    display: "grid",
-    backgroundColor: "white",
+    minHeight: 75,
   },
-  menuButton: {
-    marginRight: theme.spacing(3),
-  },
-  logo: {
-    height: 25,
-    marginLeft: theme.spacing(2),
-  },
-  icon: {
-    fontSize: 40,
-    justifyContent: "end",
-    color: "black",
+
+  flexGrow: {
+    flexGrow: 1,
   },
   appBar: {
     boxShadow: "0px 10px 30px 0px rgba(204, 204, 204, 0.5)",
@@ -49,12 +42,6 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     minHeight: 60,
   },
-  navBarRight: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: 150,
-  },
 }));
 
 const NavBar = ({ history }) => {
@@ -63,6 +50,7 @@ const NavBar = ({ history }) => {
 
   // reducer dispatch function
   const dispatch = useContext(UserDispatchContext);
+  const RecipeDispatch = useContext(RecipeDispatchContext);
 
   const drawerHandler = () => {
     setOpen(true);
@@ -70,65 +58,56 @@ const NavBar = ({ history }) => {
 
   const logoutHandler = (e) => {
     e.preventDefault();
+    resetRecipeContext(RecipeDispatch);
     logout(dispatch);
     localStorage.removeItem("userInfo");
     history.replace("/login");
   };
 
   return (
-    <div>
-      <AppBar className={classes.appBar} position="static">
-        <Toolbar className={classes.toolBar}>
-          <Grid
-            container
-            direction="row"
-            justify="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <img src={logo} alt="logo" className={classes.logo} />
-            </Grid>
-            <div className={classes.navBarRight}>
-              {/* <Grid item>
+    <Box color="white">
+      <AppBar className={classes.appBar} color="inherit" position="fixed">
+        <Container maxWidth="xl">
+          <Toolbar className={classes.toolBar}>
+            <Logo />
+            {/* <Grid item>
                 <Avatar src={userData.avatar} alt="user profile pic" />
               </Grid> */}
 
-              <Grid item>
-                <IconButton
-                  edge="start"
-                  className={classes.menuButton}
-                  color="inherit"
-                  aria-label="menu"
-                  onClick={drawerHandler}
-                >
-                  <DragHandleIcon className={classes.icon} />
-                </IconButton>
-              </Grid>
+            <Box color="#000">
+              <IconButton
+                color="inherit"
+                aria-label="menu"
+                onClick={drawerHandler}
+              >
+                <DragHandleIcon fontSize="large" />
+              </IconButton>
+            </Box>
+          </Toolbar>
+
+          <Drawer
+            variant="temporary"
+            anchor="right"
+            open={open}
+            onClose={() => setOpen(false)}
+          >
+            <div className={classes.drawerDiv}>
+              <List component="nav" aria-label="navigation">
+                <ListItem divider className={classes.plateIcon}>
+                  <img src={plateLogo} alt="plate icon" />
+                </ListItem>
+                <ListItem button component={Link} to="/profile" divider>
+                  <ListItemText primary="Profile" />
+                </ListItem>
+                <ListItem button divider onClick={logoutHandler}>
+                  <ListItemText primary="Log Out" />
+                </ListItem>
+              </List>
             </div>
-          </Grid>
-        </Toolbar>
+          </Drawer>
+        </Container>
       </AppBar>
-      <Drawer
-        variant="temporary"
-        anchor="right"
-        open={open}
-        onClose={() => setOpen(false)}
-      >
-        <div className={classes.drawerDiv}>
-          <List component="nav" aria-label="navigation">
-            <ListItem divider className={classes.plateIcon}>
-              <img src={plateLogo} alt="plate icon" />
-            </ListItem>
-            <ListItem button component={Link} to="/profile" divider>
-              <ListItemText primary="Profile" />
-            </ListItem>
-            <ListItem button divider onClick={logoutHandler}>
-              <ListItemText primary="Log Out" />
-            </ListItem>
-          </List>
-        </div>
-      </Drawer>
-    </div>
+    </Box>
   );
 };
 

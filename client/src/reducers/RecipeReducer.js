@@ -5,6 +5,7 @@ import {
   GET_RECIPE,
   GET_RECIPES_BY_CHEF,
   SET_SRC_DATA,
+  RESET_RECIPES,
 } from "../constants/RecipeConstants";
 
 export const initialState = {
@@ -14,7 +15,6 @@ export const initialState = {
 
 export const RecipeReducer = (state, action) => {
   console.log(action.type);
-  console.log(action.payload);
   switch (action.type) {
     case CREATE_RECIPE:
       return { ...state, recipes: [action.payload, ...state.recipes] };
@@ -56,6 +56,11 @@ export const RecipeReducer = (state, action) => {
       return {
         ...state,
         recipes: action.payload,
+      };
+    case RESET_RECIPES:
+      return {
+        recipes: [],
+        recipe: {},
       };
     default:
       return state;

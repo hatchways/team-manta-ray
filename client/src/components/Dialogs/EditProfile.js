@@ -33,7 +33,7 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditProfile = ({ create, profile }) => {
+const EditProfile = ({ create, profile, setProfile }) => {
   const classes = useStyles();
 
   const [pictureKey, setPictureKey] = useState("");
@@ -43,8 +43,8 @@ const EditProfile = ({ create, profile }) => {
   const initialValues = {
     name: userInfo.name,
     location: "",
-    bio: create ? "" : profile.bio,
-    cuisineTags: "",
+    bio: profile.bio ? profile.bio : "",
+    cuisineTags: profile.cuisineTags ? profile.cuisineTags : "",
   };
 
   const validationSchema = Yup.object({
@@ -58,6 +58,12 @@ const EditProfile = ({ create, profile }) => {
         ...values,
         pictureKey,
       });
+    } else {
+      const profile = await axios.put(`/api/chefProfiles/${userInfo._id}`, {
+        ...values,
+        pictureKey,
+      });
+      setProfile(profile);
     }
     console.log({ ...values, pictureKey });
   };
