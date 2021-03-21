@@ -18,12 +18,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Input = ({ label, name, ...rest }) => {
+const Input = ({ label, name, helperText, ...rest }) => {
   const classes = useStyles();
 
   return (
     <Field name={name}>
       {({ field, form }) => {
+        const { touched, errors } = form;
         return (
           <div className={classes.formGroup}>
             <label htmlFor={name}>
@@ -39,7 +40,9 @@ const Input = ({ label, name, ...rest }) => {
               margin="normal"
               {...rest}
               {...field}
-              helperText={form.touched[name] ? form.errors[name] : ""}
+              helperText={
+                touched[name] ? errors[name] : helperText ? helperText : ""
+              }
               error={form.touched[name] && Boolean(form.errors[name])}
             />
           </div>

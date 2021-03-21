@@ -35,6 +35,7 @@ app.use("/", indexRouter);
 
 // Routes for users
 app.use("/api/users", userRoutes);
+//Routes for images
 app.use("/api/image", imageRoutes);
 // Routes for userProfiles
 app.use("/api/userProfiles", userProfileRoutes);
