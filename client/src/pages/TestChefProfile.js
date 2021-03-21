@@ -4,7 +4,7 @@ import DialogControl from "../components/Dialogs/DialogControl";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import { RecipeContext, RecipeDispatchContext } from "../context/RecipeContext";
 import { UserContext } from "../context/UserContext";
-import Recipe from "../components/Recipe";
+import TestRecipe from "../components/TestRecipe";
 import axios from "axios";
 import { Button } from "@material-ui/core";
 import { getRecipesByChef } from "../actions/recipeActions";
@@ -133,7 +133,7 @@ const ChefProfile = ({ history }) => {
           </label>
 
           {recipes.map((recipe) => (
-            <Recipe recipe={recipe} key={recipe._id} id={recipe._id} />
+            <TestRecipe recipe={recipe} key={recipe._id} id={recipe._id} />
           ))}
         </div>
 
