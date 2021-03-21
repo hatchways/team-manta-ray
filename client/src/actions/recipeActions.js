@@ -6,6 +6,7 @@ import {
   DELETE_RECIPE,
   GET_RECIPES_BY_CHEF,
   SET_SRC_DATA,
+  RESET_RECIPES,
 } from "../constants/RecipeConstants";
 
 export const createRecipe = async (dispatch, payload) => {
@@ -104,4 +105,7 @@ export const getRecipeById = async (dispatch, recipeId) => {
 
 export const setSrcDataToRecipe = (dispatch, recipeId, srcData) => {
   dispatch({ type: SET_SRC_DATA, payload: { recipeId, srcData } });
+};
+export const resetRecipes = (dispatch) => {
+  dispatch({ type: RESET_RECIPES });
 };
