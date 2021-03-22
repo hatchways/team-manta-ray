@@ -22,9 +22,6 @@ const getChefProfile = async (req, res, next) => {
         error: "Chef profile not found.",
       });
 
-    console.log("chef profile found");
-    console.log(chefProfile);
-
     // save the chefProfile inside the req.chefProfile
     req.chefProfile = chefProfile;
 

@@ -26,15 +26,14 @@ export const useStyles = makeStyles((theme) => ({
   form: {
     width: "30vw",
     alignSelf: "center",
-
     borderRadius: "7px",
-    padding: "40px",
+    padding: theme.spacing(4),
   },
 
   input: {
     borderRadius: "6px",
-    marginBottom: "6px",
-    padding: "12px",
+    marginBottom: theme.spacing(3),
+    padding: theme.spacing(2),
     border: "1px solid rgba(50, 50, 93, 0.1)",
     maxHeight: "44px",
     fontSize: "16px",
@@ -60,17 +59,15 @@ export const useStyles = makeStyles((theme) => ({
     flex: "0.4",
   },
   logo: {
-    margin: "20px",
-    padding: "20px",
+    margin: theme.spacing(2),
+    padding: theme.spacing(2),
     borderBottom: "1px solid lightgrey",
   },
 
   order: {
-    marginTop: "50px",
-    marginLeft: "50px",
-    marginRight: "50px",
+    margin: theme.spacing(5, 5, 0, 5),
     background: "white",
-    padding: "20px",
+    padding: theme.spacing(2),
 
     "& h4": {
       textAlign: "center",
@@ -80,7 +77,7 @@ export const useStyles = makeStyles((theme) => ({
   orderDetails: {
     display: "flex",
     "& p": {
-      marginTop: "30px",
+      marginTop: theme.spacing(3),
       textAlign: "left",
     },
   },
@@ -88,18 +85,17 @@ export const useStyles = makeStyles((theme) => ({
   btn: {
     borderRadius: "0",
     height: theme.spacing(7),
-    margin: "0 50px",
-    paddingLeft: "20px",
-    paddingRight: "20px",
+    margin: theme.spacing(0, 5, 0, 5),
+    padding: theme.spacing(0, 2, 0, 2),
     textTransform: "capitalize",
     fontWeight: "500",
   },
   cardError: {
-    margin: "20px",
+    margin: theme.spacing(2),
     color: "rgb(105, 115, 134)",
     fontSize: "16px",
     lineHeight: "20px",
-    marginTop: "12px",
+    marginTop: theme.spacing(8),
     textAlign: "center",
   },
 
@@ -115,12 +111,12 @@ export const useStyles = makeStyles((theme) => ({
   },
 
   paymentDetails: {
-    marginLeft: "12px ",
+    marginLeft: theme.spacing(2),
     marginBottom: "20px ",
   },
 
   title: {
-    paddingLeft: "60px",
+    paddingLeft: theme.spacing(6),
   },
 
   resultMessage: {
@@ -171,19 +167,17 @@ const Payment = ({ history }) => {
     }
 
     // Create PaymentIntent as soon as the page loads
+    fetch("/payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        items: [{ id: "xl-tshirt" }],
 
-    window
-      .fetch("/payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          items: [{ id: "xl-tshirt" }],
-
-          userInfo,
-        }),
-      })
+        userInfo,
+      }),
+    })
       .then((res) => {
         return res.json();
       })
@@ -231,11 +225,7 @@ const Payment = ({ history }) => {
             </Typography>
           </div>
 
-          <form
-            className={classes.form}
-            id="payment-form"
-            // onSubmit={handleSubmit}
-          >
+          <form className={classes.form} id="payment-form">
             <div className={classes.paymentDetails}>
               <Typography variant="h6">Enter your payment details:</Typography>
             </div>

@@ -27,7 +27,6 @@ export const createRecipe = async (dispatch, payload) => {
     };
     const res = await axios.post("/api/recipes", formData, config);
     if (res.status === 201) {
-      console.log(res.data.newRecipe);
       dispatch({
         type: CREATE_RECIPE,
         payload: { ...res.data.newRecipe, srcData: payload.srcData },
@@ -107,6 +106,6 @@ export const getRecipeById = async (dispatch, recipeId) => {
 export const setSrcDataToRecipe = (dispatch, recipeId, srcData) => {
   dispatch({ type: SET_SRC_DATA, payload: { recipeId, srcData } });
 };
-export const resetRecipeContext = (dispatch) => {
+export const resetRecipes = (dispatch) => {
   dispatch({ type: RESET_RECIPES });
 };

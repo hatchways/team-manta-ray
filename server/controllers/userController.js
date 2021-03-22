@@ -109,16 +109,12 @@ const makeUserAChef = AsyncHandler(async (req, res) => {
   res.json({ currentUser });
 });
 
-const logoutUser = async (req, res) => {
+const logoutUser = AsyncHandler(async (req, res) => {
   // Set token to none and expire after 5 seconds
-  console.log("we are in controller");
-  res.cookie("token", "none", {
-    maxAge: 1000,
-    httpOnly: true,
-  });
+  res.clearCookie("token");
   res
     .status(200)
     .json({ success: true, message: "User logged out successfully" });
-};
+});
 
 module.exports = { registerUser, loginUser, makeUserAChef, logoutUser };

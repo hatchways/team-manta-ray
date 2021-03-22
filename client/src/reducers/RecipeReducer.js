@@ -4,6 +4,7 @@ import {
   EDIT_RECIPE,
   GET_RECIPE,
   GET_RECIPES_BY_CHEF,
+  RESET_RECIPES,
   SET_SRC_DATA,
   RESET_RECIPES,
 } from "../constants/RecipeConstants";
@@ -40,6 +41,12 @@ export const RecipeReducer = (state, action) => {
       return {
         ...state,
         recipe: action.payload,
+      };
+    case RESET_RECIPES:
+      return {
+        ...state,
+        recipes: [],
+        recipe: {},
       };
     case SET_SRC_DATA:
       return {

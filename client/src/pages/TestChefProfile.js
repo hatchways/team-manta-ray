@@ -2,18 +2,15 @@ import React, { useState, useContext, useEffect } from "react";
 import defaultUserImage from "../assets/defaultUserImage.png";
 import DialogControl from "../components/Dialogs/DialogControl";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
-import {
-  RecipeContext,
-  RecipeDispatchContext,
-} from "../context/recipe-context";
+import { RecipeContext, RecipeDispatchContext } from "../context/RecipeContext";
 import { UserContext } from "../context/UserContext";
-import Recipe from "../components/Recipe";
+import TestRecipe from "../components/TestRecipe";
 import axios from "axios";
 import { Button } from "@material-ui/core";
 import { getRecipesByChef } from "../actions/recipeActions";
 import NavBar from "../components/NavBar";
 
-const ChefProfile = () => {
+const ChefProfile = ({ history }) => {
   const [open, setOpen] = useState(false);
   const [control, setControl] = useState(null);
 
@@ -31,8 +28,13 @@ const ChefProfile = () => {
         getRecipesByChef(dispatch, res.data.chefProfile._id);
       }
     };
-    getProfileAndRecipes();
-  }, [dispatch, userInfo._id]);
+
+    if (!userInfo) {
+      history.replace("/login");
+    } else {
+      getProfileAndRecipes();
+    }
+  }, [dispatch, userInfo, history]);
 
   const handleClickOpen = (e) => {
     setOpen(true);
@@ -44,7 +46,7 @@ const ChefProfile = () => {
   };
   const handleNewChef = async () => {
     //make user a chef
-    await axios.put("/api/users/isChef");
+    await axios.put("/api/users/markChef");
     setControl("CreateProfile");
     setOpen(true);
   };
@@ -131,7 +133,7 @@ const ChefProfile = () => {
           </label>
 
           {recipes.map((recipe) => (
-            <Recipe recipe={recipe} key={recipe._id} id={recipe._id} />
+            <TestRecipe recipe={recipe} key={recipe._id} id={recipe._id} />
           ))}
         </div>
 

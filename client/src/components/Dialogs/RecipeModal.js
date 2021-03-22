@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import FormikControl from "../Formik/FormikControl";
 import { makeStyles } from "@material-ui/core/styles";
 import EditPicture from "./EditPicture";
-import { RecipeDispatchContext } from "../../context/recipe-context";
+import { RecipeDispatchContext } from "../../context/RecipeContext";
 import {
   createRecipe,
   deleteRecipe,
@@ -30,18 +30,6 @@ export const useStyles = makeStyles((theme) => ({
     margin: "0 3px",
     marginTop: theme.spacing(3),
     textTransform: "capitalize",
-  },
-  formGroup: {
-    marginBottom: 20,
-    height: theme.spacing(11),
-  },
-  label: {
-    fontWeight: 900,
-    fontSize: 12,
-  },
-  input: {
-    margin: "3px 0",
-    borderRadius: "0",
   },
 }));
 
@@ -90,7 +78,6 @@ const RecipeModal = ({ edit, id, recipe }) => {
   const onSubmit = async (values) => {
     if (!pictureKey) {
       setSnackBarOpen(true);
-      return;
     }
     if (edit) {
       editRecipe(dispatch, { ...values, pictureKey, srcData, _id: recipe._id });
@@ -188,7 +175,7 @@ const RecipeModal = ({ edit, id, recipe }) => {
         <Snackbar
           open={snackBarOpen}
           onClose={handleSnackBarClose}
-          message="Picture is Required"
+          message="Picture is required"
           autoHideDuration={4000}
           anchorOrigin={{
             vertical: "bottom",

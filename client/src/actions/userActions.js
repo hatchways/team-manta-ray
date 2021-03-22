@@ -100,9 +100,11 @@ export const register = async (dispatch, registerPayload) => {
 
 // User logout action
 export const logout = async (dispatch) => {
-  localStorage.removeItem("userInfo");
-  dispatch({
-    type: USER_LOGOUT,
-  });
-  await axios.get("/api/users/logout");
+  const res = await axios.get("/api/users/logout");
+  if (res.status === 200) {
+    localStorage.removeItem("userInfo");
+    dispatch({
+      type: USER_LOGOUT,
+    });
+  }
 };
