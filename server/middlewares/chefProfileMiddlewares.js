@@ -3,6 +3,7 @@ const ChefProfile = require("../models/chefProfileModel");
 const getChefProfile = async (req, res, next) => {
   try {
     //get userId from params
+
     const { userId } = req.params;
 
     // find profile by user._id
@@ -20,9 +21,6 @@ const getChefProfile = async (req, res, next) => {
         success: false,
         error: "Chef profile not found.",
       });
-
-    console.log("chef profile found");
-    console.log(chefProfile);
 
     // save the chefProfile inside the req.chefProfile
     req.chefProfile = chefProfile;

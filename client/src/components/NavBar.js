@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { UserDispatchContext } from "../context/UserContext";
+import { RecipeDispatchContext } from "../context/RecipeContext";
 import { Link, withRouter } from "react-router-dom";
 import {
   AppBar,
@@ -17,6 +18,7 @@ import DragHandleIcon from "@material-ui/icons/DragHandle";
 import logo from "../assets/logo.svg";
 import plateLogo from "../assets/plate.svg";
 import { logout } from "../actions/userActions";
+import { resetRecipes } from "../actions/recipeActions";
 
 const useStyles = makeStyles((theme) => ({
   toolBar: {
@@ -63,6 +65,7 @@ const NavBar = ({ history }) => {
 
   // reducer dispatch function
   const dispatch = useContext(UserDispatchContext);
+  const RecipeDispatch = useContext(RecipeDispatchContext);
 
   const drawerHandler = () => {
     setOpen(true);
@@ -71,6 +74,7 @@ const NavBar = ({ history }) => {
   const logoutHandler = (e) => {
     e.preventDefault();
     logout(dispatch);
+    resetRecipes(RecipeDispatch);
     localStorage.removeItem("userInfo");
     history.replace("/login");
   };
