@@ -45,6 +45,7 @@ const Signup = ({ history }) => {
     email: "",
     password: "",
     confirmPassword: "",
+    isChef: false,
   };
 
   const validationSchema = Yup.object({
@@ -66,6 +67,7 @@ const Signup = ({ history }) => {
     payload.name = values.name;
     payload.email = values.email;
     payload.password = values.password;
+    payload.isChef = values.isChef;
 
     try {
       const user = await register(dispatch, payload); //Get data from backend API
@@ -126,6 +128,12 @@ const Signup = ({ history }) => {
                     label="CONFIRM PASSWORD"
                     name="confirmPassword"
                     placeholder="Confirm password"
+                  />
+                  <FormikControl
+                    control="checkbox"
+                    type="checkbox"
+                    label="I'M A CHEF"
+                    name="isChef"
                   />
                   <Button
                     type="submit"
