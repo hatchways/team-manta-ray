@@ -5,9 +5,8 @@ import {
   GET_RECIPE,
   DELETE_RECIPE,
   GET_RECIPES_BY_CHEF,
-  SET_SRC_DATA,
   RESET_RECIPES,
-} from "../constants/RecipeConstants";
+} from "../constants/recipeConstants";
 
 export const createRecipe = async (dispatch, payload) => {
   try {
@@ -16,20 +15,11 @@ export const createRecipe = async (dispatch, payload) => {
         "Content-Type": "application/json",
       },
     };
-    const formData = {
-      name: payload.name,
-      price: payload.price,
-      ingredients: payload.ingredients,
-      requiredStuff: payload.requiredStuff,
-      portionDescription: payload.portionDescription,
-      cuisineTags: payload.cuisineTags,
-      pictureKey: payload.pictureKey,
-    };
-    const res = await axios.post("/api/recipes", formData, config);
+    const res = await axios.post("/api/recipes", payload, config);
     if (res.status === 201) {
       dispatch({
         type: CREATE_RECIPE,
-        payload: { ...res.data.newRecipe, srcData: payload.srcData },
+        payload: { ...res.data.newRecipe },
       });
     }
   } catch (err) {
@@ -44,24 +34,12 @@ export const editRecipe = async (dispatch, payload) => {
         "Content-Type": "application/json",
       },
     };
-    const formData = {
-      name: payload.name,
-      price: payload.price,
-      ingredients: payload.ingredients,
-      requiredStuff: payload.requiredStuff,
-      portionDescription: payload.portionDescription,
-      cuisineTags: payload.cuisineTags,
-      pictureKey: payload.pictureKey,
-    };
-    const res = await axios.put(
-      `/api/recipes/${payload._id}`,
-      formData,
-      config
-    );
+
+    const res = await axios.put(`/api/recipes/${payload._id}`, payload, config);
     if (res.status === 200) {
       dispatch({
         type: EDIT_RECIPE,
-        payload: { ...res.data.updatedRecipe, srcData: payload.srcData },
+        payload: res.data.updatedRecipe,
       });
     }
   } catch (error) {
@@ -103,9 +81,6 @@ export const getRecipeById = async (dispatch, recipeId) => {
   } catch (error) {}
 };
 
-export const setSrcDataToRecipe = (dispatch, recipeId, srcData) => {
-  dispatch({ type: SET_SRC_DATA, payload: { recipeId, srcData } });
-};
 export const resetRecipes = (dispatch) => {
   dispatch({ type: RESET_RECIPES });
 };

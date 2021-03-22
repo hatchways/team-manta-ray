@@ -36,42 +36,4 @@ const uploadImage = AsyncHandler(async (req, res) => {
   });
 });
 
-const getImageSrc = AsyncHandler(async (req, res) => {
-  const key = req.params.key;
-  if (imgCache.has(key)) {
-    console.log("Dont worry, it's coming from cache");
-    return res.json(imgCache.get(key));
-  }
-  AWS.config.update({
-    accessKeyId: process.env.AWS_ID,
-    secretAccessKey: process.env.AWS_SECRET,
-  });
-  async function getImage() {
-    const data = s3
-      .getObject({
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: `${key}`,
-      })
-      .promise();
-
-    return data;
-  }
-  function encode(data) {
-    let buf = Buffer.from(data);
-    let base64 = buf.toString("base64");
-    return base64;
-  }
-  getImage()
-    .then((img) => {
-      imgCache.set(key, {
-        srcData: "data:image/jpeg;base64," + encode(img.Body),
-      });
-      res.json({ srcData: "data:image/jpeg;base64," + encode(img.Body) });
-    })
-    .catch((e) => {
-      console.log(e);
-      res.send(e);
-    });
-});
-
-module.exports = { upload, getImageSrc, uploadImage };
+module.exports = { upload, uploadImage };
