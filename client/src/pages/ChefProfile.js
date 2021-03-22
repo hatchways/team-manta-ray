@@ -9,7 +9,6 @@ import { UserContext } from "../context/UserContext";
 import axios from "axios";
 import { getRecipesByChef } from "../actions/recipeActions";
 // import DialogControl from "../components/Dialogs/DialogControl";
-import NavBar from "../components/NavBar";
 
 const ChefProfile = ({ history }) => {
   const useStyles = makeStyles((theme) => ({
@@ -69,48 +68,40 @@ const ChefProfile = ({ history }) => {
   };
 
   return (
-    <>
-      <NavBar />
+    <Grid container>
+      {/* Chef infos */}
+      <ChefSideBar
+        chefInfosAndRecipes={chefInfosAndRecipes}
+        profile={profile}
+        userInfo={userInfo}
+        setProfile={setProfile}
+      />
 
-      <Grid container>
-        {/* Chef infos */}
-        <ChefSideBar
-          chefInfosAndRecipes={chefInfosAndRecipes}
-          profile={profile}
-          userInfo={userInfo}
-          setProfile={setProfile}
-        />
+      {/* Imaginary Grid for mdUp views*/}
+      <Hidden smDown>
+        <Grid item md={3} xs={12} />
+      </Hidden>
 
-        {/* Imaginary Grid for mdUp views*/}
-        <Hidden smDown>
-          <Grid item md={3} xs={12} />
-        </Hidden>
-
-        {/* Recipes */}
-        <Grid item md={9} xs={12}>
-          <Grid container justify="center">
-            <Grid item xl={8} lg={9} md={10} sm={11} xs={12}>
-              <Box textAlign="center" className={classes.chefMenuName}>
-                {userInfo && (
-                  <Typography variant="h4">{`${
-                    userInfo.name.split(" ")[0]
-                  }'s Menu`}</Typography>
-                )}
-              </Box>
-              <Paper elevation={3}>
-                {recipes.map((recipe) => (
-                  <ChefRecipes
-                    recipe={recipe}
-                    key={recipe._id}
-                    id={recipe._id}
-                  />
-                ))}
-              </Paper>
-            </Grid>
+      {/* Recipes */}
+      <Grid item md={9} xs={12}>
+        <Grid container justify="center">
+          <Grid item xl={8} lg={9} md={10} sm={11} xs={12}>
+            <Box textAlign="center" className={classes.chefMenuName}>
+              {userInfo && (
+                <Typography variant="h4">{`${
+                  userInfo.name.split(" ")[0]
+                }'s Menu`}</Typography>
+              )}
+            </Box>
+            <Paper elevation={3}>
+              {recipes.map((recipe) => (
+                <ChefRecipes recipe={recipe} key={recipe._id} id={recipe._id} />
+              ))}
+            </Paper>
           </Grid>
         </Grid>
       </Grid>
-    </>
+    </Grid>
   );
 };
 

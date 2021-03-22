@@ -16,7 +16,7 @@ export const useStyles = makeStyles((theme) => ({
     height: "100vh",
   },
   paper: {
-    margin: theme.spacing(5, 8),
+    margin: theme.spacing(6, 8),
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
@@ -86,8 +86,8 @@ const Login = ({ history }) => {
     try {
       const user = await login(dispatch, payload); // Get data from backend API using User Actions
 
-      if (user) {
-        // history.push("/chef");
+      if (user && user.isChef) {
+        history.push("/chefprofile");
         console.log("user after req", userInfo);
       } else setOpen(true);
     } catch (err) {

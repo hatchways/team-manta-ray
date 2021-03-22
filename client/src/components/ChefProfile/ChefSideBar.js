@@ -32,6 +32,7 @@ const ChefSideBar = (props) => {
   const useStyles = makeStyles((theme) => ({
     chefSideBarContainer: {
       position: isBrowser ? "fixed" : "relative",
+      marginTop: theme.spacing(8),
     },
 
     chefSideBar: {

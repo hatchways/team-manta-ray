@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import NavBar from "../components/NavBar";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Button } from "@material-ui/core";
 // stripe
@@ -12,6 +11,7 @@ export const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
     scrollY: "hidden",
+    marginTop: theme.spacing(8),
   },
   paper: {
     margin: theme.spacing(3, 8),
@@ -20,7 +20,7 @@ export const useStyles = makeStyles((theme) => ({
     alignItems: "flex-start",
   },
   margin: {
-    margin: theme.spacing(4, 4),
+    margin: theme.spacing(5),
   },
 
   form: {
@@ -216,7 +216,6 @@ const Payment = ({ history }) => {
 
   return (
     <div className={classes.root}>
-      <NavBar />
       <div className={classes.container}>
         <div className={classes.left__container}>
           <div className={classes.logo}>
