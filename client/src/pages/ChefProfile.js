@@ -1,22 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Grid, Hidden, Box, Typography, Paper } from "@material-ui/core";
-import AuthGuard from "../hocs/AuthGuard";
+// import AuthGuard from "../hocs/AuthGuard";
 import ChefSideBar from "../components/ChefProfile/ChefSideBar";
 import ChefRecipes from "../components/ChefProfile/ChefRecipes";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  RecipeContext,
-  RecipeDispatchContext,
-} from "../context/recipe-context";
+import { RecipeContext, RecipeDispatchContext } from "../context/RecipeContext";
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
 import { getRecipesByChef } from "../actions/recipeActions";
-import DialogControl from "../components/Dialogs/DialogControl";
+// import DialogControl from "../components/Dialogs/DialogControl";
+import NavBar from "../components/NavBar";
 
-const ChefProfile = AuthGuard(() => {
+const ChefProfile = ({ history }) => {
   const useStyles = makeStyles((theme) => ({
     chefMenuName: {
-      marginTop: theme.spacing(6),
+      marginTop: theme.spacing(10),
       marginBottom: theme.spacing(6),
     },
   }));
@@ -29,16 +27,32 @@ const ChefProfile = AuthGuard(() => {
   const { userInfo } = useContext(UserContext);
   const [profile, setProfile] = useState(null);
 
+  /**Original useEffect */
+  // useEffect(() => {
+  //   const getProfileAndRecipes = async () => {
+  //     const res = await axios.get(`/api/chefProfiles/${userInfo._id}`);
+  //     if (res.data) {
+  //       setProfile(res.data.chefProfile);
+  //       getRecipesByChef(dispatch, res.data.chefProfile._id);
+  //     }
+  //   };
+  //   getProfileAndRecipes();
+  // }, [dispatch, userInfo._id]);
+
   useEffect(() => {
-    const getProfileAndRecipes = async () => {
-      const res = await axios.get(`/api/chefProfiles/${userInfo._id}`);
-      if (res.data) {
-        setProfile(res.data.chefProfile);
-        getRecipesByChef(dispatch, res.data.chefProfile._id);
-      }
-    };
-    getProfileAndRecipes();
-  }, [dispatch, userInfo._id]);
+    if (userInfo && userInfo.isChef) {
+      const getProfileAndRecipes = async () => {
+        const res = await axios.get(`/api/chefProfiles/${userInfo._id}`);
+        if (res.data) {
+          setProfile(res.data.chefProfile);
+          getRecipesByChef(dispatch, res.data.chefProfile._id);
+        }
+      };
+      getProfileAndRecipes();
+    } else if (!userInfo) {
+      history.replace("/login");
+    }
+  }, [dispatch, userInfo, history]);
 
   const chefInfosAndRecipes = {
     name: "Gordon Ramsey",
@@ -55,39 +69,49 @@ const ChefProfile = AuthGuard(() => {
   };
 
   return (
-    <Grid container>
-      {/* Chef infos */}
-      <ChefSideBar
-        chefInfosAndRecipes={chefInfosAndRecipes}
-        profile={profile}
-        userInfo={userInfo}
-        setProfile={setProfile}
-      />
+    <>
+      <NavBar />
 
-      {/* Imaginary Grid for mdUp views*/}
-      <Hidden smDown>
-        <Grid item md={3} xs={12} />
-      </Hidden>
+      <Grid container>
+        {/* Chef infos */}
+        <ChefSideBar
+          chefInfosAndRecipes={chefInfosAndRecipes}
+          profile={profile}
+          userInfo={userInfo}
+          setProfile={setProfile}
+        />
 
-      {/* Recipes */}
-      <Grid item md={9} xs={12}>
-        <Grid container justify="center">
-          <Grid item xl={8} lg={9} md={10} sm={11} xs={12}>
-            <Box textAlign="center" className={classes.chefMenuName}>
-              <Typography variant="h4">{`${
-                userInfo.name.split(" ")[0]
-              }'s Menu`}</Typography>
-            </Box>
-            <Paper elevation={3}>
-              {recipes.map((recipe) => (
-                <ChefRecipes recipe={recipe} key={recipe._id} id={recipe._id} />
-              ))}
-            </Paper>
+        {/* Imaginary Grid for mdUp views*/}
+        <Hidden smDown>
+          <Grid item md={3} xs={12} />
+        </Hidden>
+
+        {/* Recipes */}
+        <Grid item md={9} xs={12}>
+          <Grid container justify="center">
+            <Grid item xl={8} lg={9} md={10} sm={11} xs={12}>
+              <Box textAlign="center" className={classes.chefMenuName}>
+                {userInfo && (
+                  <Typography variant="h4">{`${
+                    userInfo.name.split(" ")[0]
+                  }'s Menu`}</Typography>
+                )}
+              </Box>
+              <Paper elevation={3}>
+                {recipes.map((recipe) => (
+                  <ChefRecipes
+                    recipe={recipe}
+                    key={recipe._id}
+                    id={recipe._id}
+                  />
+                ))}
+              </Paper>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </>
   );
-});
+};
 
 export default ChefProfile;

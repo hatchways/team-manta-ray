@@ -56,12 +56,12 @@ const NavBar = ({ history }) => {
     setOpen(true);
   };
 
-  const logoutHandler = (e) => {
+  const logoutHandler = async (e) => {
     e.preventDefault();
-    logout(dispatch);
-    resetRecipes(RecipeDispatch);
+    await logout(dispatch);
     localStorage.removeItem("userInfo");
     history.replace("/login");
+    await resetRecipes(RecipeDispatch);
   };
 
   return (

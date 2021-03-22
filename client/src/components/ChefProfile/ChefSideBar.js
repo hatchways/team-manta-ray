@@ -114,7 +114,9 @@ const ChefSideBar = (props) => {
           </Box>
           <Box marginTop={-7} textAlign="center">
             <Box>
-              <Typography variant="h4">{userInfo.name}</Typography>
+              {userInfo && (
+                <Typography variant="h4">{userInfo.name}</Typography>
+              )}
             </Box>
             <Box>
               <Typography variant="body2">{location}</Typography>

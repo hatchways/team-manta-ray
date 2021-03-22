@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Box, Grid, Typography, Chip, Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { RecipeContext } from "../../context/recipe-context";
-import { RecipeDispatchContext } from "../../context/recipe-context";
+import { RecipeContext } from "../../context/RecipeContext";
+import { RecipeDispatchContext } from "../../context/RecipeContext";
 import { setSrcDataToRecipe } from "../../actions/recipeActions";
 import plate from "../../assets/plate.svg";
 import useGetSrcData from "../../hooks/useGetSrcData";

@@ -48,7 +48,6 @@ const Login = ({ history }) => {
 
   // check if userInfo is present (user logged in)
   useEffect(() => {
-    console.log(userInfo);
     if (userInfo && userInfo.isChef) {
       history.push("/chefprofile"); // push to test component
       console.log("user from login", userInfo);
