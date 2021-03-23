@@ -22,7 +22,7 @@ const userProfileSchema = new Schema({
   favCuisines: {
     type: [String],
   },
-  profileKey: {
+  profilePictureUrl: {
     type: String,
   },
 });
