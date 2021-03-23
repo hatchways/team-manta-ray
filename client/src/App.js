@@ -13,6 +13,7 @@ import { ContextProvider } from "./context/UserContext";
 import TestComponent from "./pages/TestComponent";
 import SuccessPage from "./pages/SuccessPage";
 import TestChefProfile from "./pages/TestChefProfile";
+import BrowseChefs from "./pages/BrowseChefs";
 
 // stripe imports
 import { loadStripe } from "@stripe/stripe-js";
@@ -43,7 +44,7 @@ function App() {
                 <Route path="/chef" component={TestChefProfile} />
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={Signup} />
-
+                <Route path="/browsechefs" component={BrowseChefs} />
                 <Route path="/" component={Login} exact>
                   <Redirect to="/login" />
                 </Route>
