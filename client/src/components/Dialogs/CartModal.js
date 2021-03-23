@@ -27,6 +27,7 @@ import {
   removeFromCart,
   decreaseCount,
   increaseCount,
+  clearCart,
 } from "../../actions/cartActions";
 
 const useStyles = makeStyles((theme) => ({
@@ -55,6 +56,10 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: "0",
       textTransform: "capitalize",
     },
+  },
+  clearBtn: {
+    borderRadius: "0",
+    textTransform: "capitalize",
   },
   btnSection: {
     marginTop: theme.spacing(3),
@@ -96,7 +101,17 @@ const CartModal = ({ chef }) => {
         </Typography>
       ) : (
         <List dense>
-          <ListItem>Chef:{``}</ListItem>
+          <ListItem>
+            <ListItemText>{`chef:`}</ListItemText>
+            <Button
+              startIcon
+              variant="contained"
+              className={classes.clearBtn}
+              onClick={() => clearCart(dispatch)}
+            >
+              clear cart
+            </Button>
+          </ListItem>
           <ListItem>
             <img
               src={defaultUserImage}

@@ -6,7 +6,7 @@ import { RecipeContext, RecipeDispatchContext } from "../context/RecipeContext";
 import { UserContext } from "../context/UserContext";
 import TestRecipe from "../components/TestRecipe";
 import axios from "axios";
-import { Button, IconButton, Badge } from "@material-ui/core";
+import { Button, IconButton, Badge, Snackbar } from "@material-ui/core";
 import { getRecipesByChef } from "../actions/recipeActions";
 import NavBar from "../components/NavBar";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
@@ -31,7 +31,7 @@ const ChefProfile = ({ history, match }) => {
   const { recipes } = useContext(RecipeContext);
   const dispatch = useContext(RecipeDispatchContext);
 
-  const { userInfo, cart } = useContext(UserContext);
+  const { userInfo, cart, chefConflictErr } = useContext(UserContext);
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
@@ -193,6 +193,12 @@ const ChefProfile = ({ history, match }) => {
           onClose={handleClose}
           control={control}
           profile={profile}
+        />
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          open={chefConflictErr ? true : false}
+          autoHideDuration={6000}
+          message={chefConflictErr}
         />
       </div>
     </>

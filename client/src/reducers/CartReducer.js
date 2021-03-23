@@ -8,14 +8,25 @@ import {
 
 export const cartInitialState = {
   cart: [],
+  chosenChef: null,
+  chefConflictErr: null,
 };
 
 export const CartReducer = (state, action) => {
   const { type, payload } = action;
   console.log(type);
-  console.log(state.cart);
+  console.log(payload);
   switch (type) {
     case ADD_TO_CART:
+      const isSelectingFromADifferentChef =
+        state.chosenChef && state.chosenChef !== payload.user;
+      if (isSelectingFromADifferentChef) {
+        return {
+          ...state,
+          chefConflictErr:
+            "You have menu selected from another chef.If you want to change your chef clear your cart first.",
+        };
+      }
       const itemExist = state.cart.find((item) => item._id === payload._id);
       if (itemExist) {
         const newCart = state.cart.map((item) =>
@@ -29,6 +40,8 @@ export const CartReducer = (state, action) => {
         return {
           ...state,
           cart: [{ ...payload, count: 1 }, ...state.cart],
+          chosenChef: payload.user,
+          chefConflictErr: null,
         };
       }
     case INCREASE_COUNT:
@@ -58,6 +71,8 @@ export const CartReducer = (state, action) => {
       return {
         ...state,
         cart: [],
+        chosenChef: null,
+        chefConflictErr: null,
       };
     default:
       return state;

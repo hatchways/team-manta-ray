@@ -1,4 +1,4 @@
-// import axios from "axios";
+import axios from "axios";
 import {
   ADD_TO_CART,
   DELETE_FROM_CART,
@@ -23,6 +23,13 @@ export const increaseCount = async (dispatch, payload) => {
   dispatch({ type: INCREASE_COUNT, payload });
 };
 
-export const resetCart = (dispatch) => {
+export const getChefProfile = async (dispatch, chefUserId) => {
+  try {
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const clearCart = (dispatch) => {
   dispatch({ type: RESET_CART });
 };
