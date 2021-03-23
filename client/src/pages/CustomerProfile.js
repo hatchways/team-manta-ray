@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-// import { AuthContext } from "../context/auth-context";
 import { Paper, Grid, Button, makeStyles } from "@material-ui/core";
 import Map from "../components/Map";
 import { UserContext } from "../context/UserContext";
@@ -60,9 +59,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CustomerProfile = () => {
-  // const { userData } = useContext(AuthContext);
   //Dummy profile data for now
-  const { loading, error, userInfo } = useContext(UserContext);
+  const { userInfo } = useContext(UserContext);
 
   const userData = {
     name: "Christine Wilson",

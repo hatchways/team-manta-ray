@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Grid, Hidden, Box, Typography, Paper } from "@material-ui/core";
-// import AuthGuard from "../hocs/AuthGuard";
 import ChefSideBar from "../components/ChefProfile/ChefSideBar";
 import ChefRecipes from "../components/ChefProfile/ChefRecipes";
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,7 +7,6 @@ import { RecipeContext, RecipeDispatchContext } from "../context/RecipeContext";
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
 import { getRecipesByChef } from "../actions/recipeActions";
-// import DialogControl from "../components/Dialogs/DialogControl";
 
 const ChefProfile = ({ history }) => {
   const useStyles = makeStyles((theme) => ({
@@ -25,18 +23,6 @@ const ChefProfile = ({ history }) => {
 
   const { userInfo } = useContext(UserContext);
   const [profile, setProfile] = useState(null);
-
-  /**Original useEffect */
-  // useEffect(() => {
-  //   const getProfileAndRecipes = async () => {
-  //     const res = await axios.get(`/api/chefProfiles/${userInfo._id}`);
-  //     if (res.data) {
-  //       setProfile(res.data.chefProfile);
-  //       getRecipesByChef(dispatch, res.data.chefProfile._id);
-  //     }
-  //   };
-  //   getProfileAndRecipes();
-  // }, [dispatch, userInfo._id]);
 
   useEffect(() => {
     if (userInfo && userInfo.isChef) {

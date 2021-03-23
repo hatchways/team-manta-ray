@@ -41,7 +41,7 @@ export const RecipeReducer = (state, action) => {
       };
     case RESET_RECIPES:
       return {
-        // ...state,
+        ...state,
         recipes: [],
         recipe: {},
       };

@@ -35,11 +35,6 @@ const Signup = ({ history }) => {
     setOpen(false);
   };
 
-  // const isChefOptions = [
-  //   { key: "isChef", value: "true" },
-  //   { key: "isChef", value: "false" },
-  // ];
-
   const initialValues = {
     name: "",
     email: "",

@@ -22,11 +22,6 @@ const Input = ({ label, name, helperText, ...rest }) => {
       {({ field, form }) => {
         return (
           <div className={classes.isChef}>
-            {/* <label htmlFor={name}>
-              <Typography variant="h6" className={classes.label}>
-                {label}
-              </Typography>
-            </label> */}
             <FormControlLabel
               control={<Switch checked={field.name.value} name={name} />}
               label={label}
@@ -34,25 +29,6 @@ const Input = ({ label, name, helperText, ...rest }) => {
               {...rest}
               {...field}
             />
-            {/* <Checkbox
-              name={name}
-              className={classes.input}
-              // variant="outlined"
-              label={label}
-              labelPlacement="end"
-              fullWidth
-              margin="normal"
-              {...rest}
-              {...field}
-              helperText={
-                form.touched[name]
-                  ? form.errors[name]
-                  : helperText
-                  ? helperText
-                  : ""
-              }
-              error={form.touched[name] && Boolean(form.errors[name])}
-            /> */}
           </div>
         );
       }}

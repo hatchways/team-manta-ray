@@ -2,8 +2,6 @@ import React, { useContext, useState } from "react";
 import { Box, Grid, Typography, Chip, Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { RecipeContext } from "../../context/RecipeContext";
-import { RecipeDispatchContext } from "../../context/RecipeContext";
-
 import plate from "../../assets/plate.svg";
 
 import DialogControl from "../Dialogs/DialogControl";
@@ -17,10 +15,9 @@ const ChefProfile = ({ id }) => {
     ingredients,
     requiredStuff,
     portionDescription,
-    cuisineTags,
+    recipePictureUrl,
   } = recipe;
 
-  const dispatch = useContext(RecipeDispatchContext);
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = (e) => {
@@ -31,23 +28,13 @@ const ChefProfile = ({ id }) => {
     setOpen(false);
   };
 
-  // const {
-  //   name,
-  //   pictureUrl,
-  //   price,
-  //   ingredients,
-  //   requiredStuffs,
-  //   portionDescription,
-  //   cuisineTags,
-  // } = props.recipe;
-
   const useStyles = makeStyles((theme) => ({
     portionDesc: {
       borderRadius: "0",
     },
 
     chefRecipeImage: {
-      backgroundImage: `url("${plate}")`,
+      backgroundImage: `url("${recipePictureUrl ? recipePictureUrl : plate}")`,
       backgroundRepeat: "no-repeat",
       backgroundSize: "contain",
       backgroundPosition: "center",

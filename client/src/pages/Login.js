@@ -88,7 +88,6 @@ const Login = ({ history }) => {
 
       if (user && user.isChef) {
         history.push("/chefprofile");
-        console.log("user after req", userInfo);
       } else setOpen(true);
     } catch (err) {
       console.log(err);
