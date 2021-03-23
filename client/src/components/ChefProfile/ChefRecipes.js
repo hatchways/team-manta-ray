@@ -1,11 +1,11 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { Box, Grid, Typography, Chip, Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { RecipeContext } from "../../context/RecipeContext";
 import { RecipeDispatchContext } from "../../context/RecipeContext";
-import { setSrcDataToRecipe } from "../../actions/recipeActions";
+
 import plate from "../../assets/plate.svg";
-import useGetSrcData from "../../hooks/useGetSrcData";
+
 import DialogControl from "../Dialogs/DialogControl";
 
 const ChefProfile = ({ id }) => {
@@ -18,31 +18,10 @@ const ChefProfile = ({ id }) => {
     requiredStuff,
     portionDescription,
     cuisineTags,
-    pictureKey,
-    srcData,
   } = recipe;
 
   const dispatch = useContext(RecipeDispatchContext);
-
-  const [src, setSrc] = useState(srcData ? srcData : null);
   const [open, setOpen] = useState(false);
-
-  const getSrcData = useGetSrcData();
-  useEffect(() => {
-    const getImageSrcData = async () => {
-      if (srcData || !pictureKey) return;
-      const response = await getSrcData(pictureKey);
-      if (response.srcData) {
-        // setSrc(response.srcData);
-        setSrcDataToRecipe(dispatch, recipe._id, response.srcData);
-      }
-    };
-    if (srcData) {
-      setSrc(srcData);
-    }
-
-    getImageSrcData();
-  }, [pictureKey, getSrcData, srcData, dispatch, recipe._id]);
 
   const handleClickOpen = (e) => {
     setOpen(true);
@@ -68,7 +47,7 @@ const ChefProfile = ({ id }) => {
     },
 
     chefRecipeImage: {
-      backgroundImage: `url("${srcData ? srcData : plate}")`,
+      backgroundImage: `url("${plate}")`,
       backgroundRepeat: "no-repeat",
       backgroundSize: "contain",
       backgroundPosition: "center",
@@ -131,7 +110,7 @@ const ChefProfile = ({ id }) => {
         open={open}
         onClose={handleClose}
         control="EditRecipe"
-        recipe={{ ...recipe, srcData }}
+        recipe={{ ...recipe }}
       />
       <Divider />
     </>

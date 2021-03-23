@@ -4,4 +4,3 @@ export const DELETE_RECIPE = "DELETE_RECIPE";
 export const GET_RECIPE = "GET_RECIPE";
 export const RESET_RECIPES = "RESET_RECIPES";
 export const GET_RECIPES_BY_CHEF = "GET_RECIPES_BY_CHEF";
-export const SET_SRC_DATA = "SET_SRC_DATA";

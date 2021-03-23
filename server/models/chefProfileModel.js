@@ -19,7 +19,7 @@ const chefProfileSchema = new Schema({
     },
   },
   bio: String,
-  profileKey: {
+  profilePictureUrl: {
     type: String,
   },
   cuisineTags: {

@@ -9,7 +9,7 @@ const createRecipe = async (req, res) => {
 
     let {
       name,
-      pictureKey,
+      recipePictureUrl,
       price,
       ingredients,
       requiredStuff,
@@ -44,7 +44,7 @@ const createRecipe = async (req, res) => {
     const newRecipe = new Recipe({
       user: chefProfile._id,
       name,
-      pictureKey,
+      recipePictureUrl,
       price,
       ingredients,
       requiredStuff,
@@ -105,7 +105,7 @@ const updateRecipe = async (req, res) => {
 
     const {
       name,
-      pictureKey,
+      recipePictureUrl,
       price,
       ingredients,
       requiredStuff,
@@ -115,7 +115,7 @@ const updateRecipe = async (req, res) => {
 
     // update recipe
     recipe.name = name;
-    recipe.pictureKey = pictureKey;
+    recipe.recipePictureUrl = recipePictureUrl;
     recipe.price = price;
     recipe.ingredients = ingredients;
     recipe.requiredStuff = requiredStuff;

@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import useUploadImage from "../../hooks/useUplaodImage";
-import useGetSrcData from "../../hooks/useGetSrcData";
 import { List, ListItem, Snackbar } from "@material-ui/core";
 import defaultUserImage from "../../assets/defaultUserImage.png";
 import plate from "../../assets/plate.svg";
@@ -34,7 +33,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const EditPicture = ({ profile, setPictureKey, srcData, setSrcData }) => {
+const EditPicture = ({ profile, srcData, setSrcData }) => {
   const classes = useStyles();
 
   const [src, setSrc] = useState(srcData ? srcData : null);
@@ -42,7 +41,6 @@ const EditPicture = ({ profile, setPictureKey, srcData, setSrcData }) => {
   const [snackBarOpen, setSnackBarOpen] = useState(false);
 
   const uploadImage = useUploadImage();
-  const getSrcData = useGetSrcData();
 
   const handleSnackBarClose = () => {
     setSnackBarOpen(false);
@@ -57,18 +55,14 @@ const EditPicture = ({ profile, setPictureKey, srcData, setSrcData }) => {
       }
       const res = await uploadImage(acceptedFiles[0]);
       if (res.key) {
-        setPictureKey(res.key);
-        const response = await getSrcData(res.key);
-        if (response.srcData) {
-          setSrc(response.srcData);
-          setSrcData(response.srcData);
-        } else setErr(response);
+        setSrcData(res.Location);
+        setSrc(res.Location);
       } else {
         setErr(res);
         setSnackBarOpen(true);
       }
     },
-    [uploadImage, getSrcData, setPictureKey, setSrcData]
+    [uploadImage, setSrcData]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
