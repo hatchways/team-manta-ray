@@ -3,6 +3,7 @@
  */
 
 import axios from "axios";
+import { RESET_RECIPES } from "../constants/RecipeConstants";
 import {
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
@@ -105,6 +106,10 @@ export const logout = async (dispatch) => {
     localStorage.removeItem("userInfo");
     dispatch({
       type: USER_LOGOUT,
+    });
+
+    dispatch({
+      type: RESET_RECIPES,
     });
   }
 };
