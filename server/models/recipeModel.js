@@ -13,7 +13,7 @@ const recipeSchema = new Schema(
       type: String,
       required: true,
     },
-    pictureKey: {
+    recipePictureUrl: {
       type: String,
       required: true,
     },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -16,12 +16,10 @@ import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import plate from "../assets/plate.svg";
-import useGetSrcData from "../hooks/useGetSrcData";
 import DialogControl from "./Dialogs/DialogControl";
 import { RecipeContext } from "../context/RecipeContext";
 import { UserDispatchContext } from "../context/UserContext";
-import { RecipeDispatchContext } from "../context/RecipeContext";
-import { setSrcDataToRecipe } from "../actions/recipeActions";
+// import { RecipeDispatchContext } from "../context/RecipeContext";
 import { addToCart, removeFromCart } from "../actions/cartActions";
 
 const useStyles = makeStyles((theme) => ({
@@ -57,31 +55,13 @@ export default function RecipeReviewCard({ id, isOwner }) {
     requiredStuff,
     portionDescription,
     cuisineTags,
-    pictureKey,
-    srcData,
+    recipePictureUrl,
   } = recipe;
 
-  const dispatch = useContext(RecipeDispatchContext);
+  // const dispatch = useContext(RecipeDispatchContext);
   const globalDispatch = useContext(UserDispatchContext);
 
-  const [src, setSrc] = useState(srcData ? srcData : null);
   const [open, setOpen] = useState(false);
-
-  const getSrcData = useGetSrcData();
-  useEffect(() => {
-    const getImageSrcData = async () => {
-      if (srcData || !pictureKey) return;
-      const response = await getSrcData(pictureKey);
-      if (response.srcData) {
-        setSrcDataToRecipe(dispatch, recipe._id, response.srcData);
-      }
-    };
-    if (srcData) {
-      setSrc(srcData);
-    }
-
-    getImageSrcData();
-  }, [pictureKey, getSrcData, srcData, dispatch, recipe._id]);
 
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -120,7 +100,7 @@ export default function RecipeReviewCard({ id, isOwner }) {
       />
       <CardMedia
         className={classes.media}
-        image={src ? src : plate}
+        image={recipePictureUrl ? recipePictureUrl : plate}
         title="Paella dish"
       />
       <CardContent>
@@ -162,7 +142,7 @@ export default function RecipeReviewCard({ id, isOwner }) {
         open={open}
         onClose={handleClose}
         control="EditRecipe"
-        recipe={{ ...recipe, srcData }}
+        recipe={recipe}
       />
     </Card>
   );
