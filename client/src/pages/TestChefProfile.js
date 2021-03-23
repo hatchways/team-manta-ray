@@ -6,24 +6,42 @@ import { RecipeContext, RecipeDispatchContext } from "../context/RecipeContext";
 import { UserContext } from "../context/UserContext";
 import TestRecipe from "../components/TestRecipe";
 import axios from "axios";
-import { Button } from "@material-ui/core";
+import { Button, IconButton, Badge } from "@material-ui/core";
 import { getRecipesByChef } from "../actions/recipeActions";
 import NavBar from "../components/NavBar";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import { withStyles } from "@material-ui/core/styles";
 
-const ChefProfile = ({ history }) => {
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+  },
+}))(Badge);
+
+const ChefProfile = ({ history, match }) => {
+  const { recipeId, userId } = match.params;
+
   const [open, setOpen] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
   const [control, setControl] = useState(null);
 
   const { recipes } = useContext(RecipeContext);
   const dispatch = useContext(RecipeDispatchContext);
 
-  const { userInfo } = useContext(UserContext);
+  const { userInfo, cart } = useContext(UserContext);
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const getProfileAndRecipes = async () => {
-      const res = await axios.get(`/api/chefProfiles/${userInfo._id}`);
+      const idToFetchProfile = userId ? userId : userInfo._id;
+      console.log(userId);
+      console.log(idToFetchProfile);
+      const res = await axios.get(`/api/chefProfiles/${idToFetchProfile}`);
       if (res.data) {
+        console.log(res.data);
         setProfile(res.data.chefProfile);
         getRecipesByChef(dispatch, res.data.chefProfile._id);
       }
@@ -34,11 +52,16 @@ const ChefProfile = ({ history }) => {
     } else {
       getProfileAndRecipes();
     }
-  }, [dispatch, userInfo, history]);
+    setIsOwner(userId ? false : true);
+  }, [dispatch, userInfo, history, userId]);
 
   const handleClickOpen = (e) => {
+    if (e === "cart") {
+      setControl(e);
+    } else {
+      setControl(e.target.name);
+    }
     setOpen(true);
-    setControl(e.target.name);
   };
 
   const handleClose = (value) => {
@@ -133,9 +156,37 @@ const ChefProfile = ({ history }) => {
           </label>
 
           {recipes.map((recipe) => (
-            <TestRecipe recipe={recipe} key={recipe._id} id={recipe._id} />
+            <TestRecipe
+              recipe={recipe}
+              key={recipe._id}
+              id={recipe._id}
+              isOwner={isOwner}
+              focus={recipe._id === recipeId}
+            />
           ))}
         </div>
+
+        <div>
+          <IconButton aria-label="cart" onClick={() => handleClickOpen("cart")}>
+            <StyledBadge
+              badgeContent={
+                cart && cart.reduce((acc, cur) => acc + cur.count, 0)
+              }
+              color="secondary"
+            >
+              <ShoppingCartIcon />
+            </StyledBadge>
+          </IconButton>
+        </div>
+
+        {/* <h1>Cart</h1>
+          {cart.map((item) => (
+            <div key={item._id}>
+              <p>{item.name}</p>
+              <span>{item.count}</span>
+            </div>
+          ))}
+        */}
 
         <DialogControl
           open={open}

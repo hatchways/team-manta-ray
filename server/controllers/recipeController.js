@@ -113,6 +113,8 @@ const updateRecipe = async (req, res) => {
       cuisineTags,
     } = req.body;
 
+    //--------needs to make arrays here as well-------------//
+
     // update recipe
     recipe.name = name;
     recipe.pictureKey = pictureKey;

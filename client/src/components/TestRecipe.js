@@ -19,8 +19,10 @@ import plate from "../assets/plate.svg";
 import useGetSrcData from "../hooks/useGetSrcData";
 import DialogControl from "./Dialogs/DialogControl";
 import { RecipeContext } from "../context/RecipeContext";
+import { UserDispatchContext } from "../context/UserContext";
 import { RecipeDispatchContext } from "../context/RecipeContext";
 import { setSrcDataToRecipe } from "../actions/recipeActions";
+import { addToCart, removeFromCart } from "../actions/cartActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RecipeReviewCard({ id }) {
+export default function RecipeReviewCard({ id, isOwner }) {
   const { recipes } = useContext(RecipeContext);
   const recipe = recipes.filter((res) => res._id === id)[0];
   const {
@@ -60,6 +62,7 @@ export default function RecipeReviewCard({ id }) {
   } = recipe;
 
   const dispatch = useContext(RecipeDispatchContext);
+  const globalDispatch = useContext(UserDispatchContext);
 
   const [src, setSrc] = useState(srcData ? srcData : null);
   const [open, setOpen] = useState(false);
@@ -88,7 +91,11 @@ export default function RecipeReviewCard({ id }) {
   };
 
   const handleClickOpen = (e) => {
-    setOpen(true);
+    if (isOwner) {
+      setOpen(true);
+    } else {
+      addToCart(globalDispatch, recipe);
+    }
   };
   const handleClose = (value) => {
     setOpen(false);

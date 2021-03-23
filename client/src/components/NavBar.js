@@ -11,6 +11,7 @@ import {
   List,
   ListItem,
   ListItemText,
+
   // Avatar,
   makeStyles,
 } from "@material-ui/core";
@@ -19,6 +20,7 @@ import logo from "../assets/logo.svg";
 import plateLogo from "../assets/plate.svg";
 import { logout } from "../actions/userActions";
 import { resetRecipes } from "../actions/recipeActions";
+import CartIcon from "./CartIcon";
 
 const useStyles = makeStyles((theme) => ({
   toolBar: {
@@ -98,6 +100,7 @@ const NavBar = ({ history }) => {
               </Grid> */}
 
               <Grid item>
+                <CartIcon />
                 <IconButton
                   edge="start"
                   className={classes.menuButton}
@@ -112,6 +115,7 @@ const NavBar = ({ history }) => {
           </Grid>
         </Toolbar>
       </AppBar>
+
       <Drawer
         variant="temporary"
         anchor="right"

@@ -40,7 +40,10 @@ function App() {
                   path="/payment"
                   render={(props) => <Payment {...props} />}
                 />
-                <Route path="/chef" component={TestChefProfile} />
+                <Route
+                  path="/chef/:userId?/:recipeId?"
+                  component={TestChefProfile}
+                />
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={Signup} />
 
