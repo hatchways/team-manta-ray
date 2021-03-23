@@ -20,6 +20,10 @@ const conversationSchema = new Schema({
         ref: "User",
       },
       createdAt: { type: Date },
+      seen: {
+        type: Boolean,
+        default: false,
+      },
     },
   ],
 });
