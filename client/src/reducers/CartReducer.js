@@ -5,6 +5,8 @@ import {
   INCREASE_COUNT,
   RESET_CART,
   GET_CHOSEN_CHEF_PROFILE,
+  SET_CONFLICT_ERR,
+  CLEAR_CONFLICT_ERR,
 } from "../constants/userConstants";
 
 export const cartInitialState = {
@@ -21,15 +23,6 @@ export const CartReducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
     case ADD_TO_CART:
-      const isSelectingFromADifferentChef =
-        state.chosenChefProfile && state.chosenChefProfile._id !== payload.user;
-      if (isSelectingFromADifferentChef) {
-        return {
-          ...state,
-          chefConflictErr:
-            "You have menu selected from another chef.If you want to change your chef clear your cart first.",
-        };
-      }
       const itemExist = state.cart.find((item) => item._id === payload._id);
       if (itemExist) {
         const newCart = state.cart.map((item) =>
@@ -51,6 +44,17 @@ export const CartReducer = (state, action) => {
           chefConflictErr: null,
         };
       }
+    case SET_CONFLICT_ERR:
+      return {
+        ...state,
+        chefConflictErr:
+          "You have menu selected from another chef.If you want to change your chef clear your cart first.",
+      };
+    case CLEAR_CONFLICT_ERR:
+      return {
+        ...state,
+        chefConflictErr: null,
+      };
     case INCREASE_COUNT:
       const newCart = state.cart.map((item) =>
         item._id === payload ? { ...item, count: item.count + 1 } : item

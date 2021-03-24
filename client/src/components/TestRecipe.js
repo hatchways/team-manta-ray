@@ -18,7 +18,11 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import plate from "../assets/plate.svg";
 import DialogControl from "./Dialogs/DialogControl";
 import { UserDispatchContext, UserContext } from "../context/UserContext";
-import { addToCart, getChosenChefProfile } from "../actions/cartActions";
+import {
+  addToCart,
+  getChosenChefProfile,
+  setChefConflictError,
+} from "../actions/cartActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +61,7 @@ export default function RecipeReviewCard({ id, isOwner }) {
   } = recipe;
 
   const globalDispatch = useContext(UserDispatchContext);
-  const { cart } = useContext(UserContext);
+  const { cart, chosenChefProfile } = useContext(UserContext);
 
   const [open, setOpen] = useState(false);
 
@@ -69,11 +73,23 @@ export default function RecipeReviewCard({ id, isOwner }) {
   };
 
   const handleClickOpen = (e) => {
+    // if the user is its own profile open add recipe
     if (isOwner) {
       setOpen(true);
+      //if user is visiting other chef's profile add item to cart
     } else {
-      if (cart.length === 0) getChosenChefProfile(globalDispatch, recipe.user);
-      addToCart(globalDispatch, recipe);
+      if (cart.length === 0) {
+        getChosenChefProfile(globalDispatch, recipe.user);
+        addToCart(globalDispatch, recipe);
+      } else {
+        const isSelectingFromADifferentChef =
+          chosenChefProfile && chosenChefProfile._id !== recipe.user;
+        if (isSelectingFromADifferentChef) {
+          setChefConflictError(globalDispatch);
+        } else {
+          addToCart(globalDispatch, recipe);
+        }
+      }
     }
   };
   const handleClose = (value) => {

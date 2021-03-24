@@ -6,6 +6,8 @@ import {
   DECREASE_COUNT,
   INCREASE_COUNT,
   GET_CHOSEN_CHEF_PROFILE,
+  SET_CONFLICT_ERR,
+  CLEAR_CONFLICT_ERR,
 } from "../constants/userConstants";
 
 export const addToCart = async (dispatch, payload) => {
@@ -33,7 +35,12 @@ export const getChosenChefProfile = async (dispatch, chefProfileId) => {
     console.log(err);
   }
 };
-
+export const setChefConflictError = (dispatch) => {
+  dispatch({ type: SET_CONFLICT_ERR });
+  setTimeout(() => {
+    dispatch({ type: CLEAR_CONFLICT_ERR });
+  }, 6000);
+};
 export const clearCart = (dispatch) => {
   dispatch({ type: RESET_CART });
 };
