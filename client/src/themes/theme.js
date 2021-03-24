@@ -19,8 +19,7 @@ export const theme = createMuiTheme({
       lineHeight: "1.6",
     },
     body2: {
-      color: "#000",
-      opacity: "0.403921568627451",
+      color: "#a3a3a3",
       fontWeight: "bold",
       fontSize: "14px",
       lineHeight: "1.6",
