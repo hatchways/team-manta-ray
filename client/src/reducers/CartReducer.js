@@ -44,6 +44,7 @@ export const CartReducer = (state, action) => {
           chefConflictErr: null,
         };
       }
+
     case SET_CONFLICT_ERR:
       return {
         ...state,

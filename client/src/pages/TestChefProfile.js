@@ -171,14 +171,21 @@ const ChefProfile = ({ history, match }) => {
             />
           </label>
 
-          {recipes.map((recipe) => (
-            <TestRecipe
-              recipe={recipe}
-              key={recipe._id}
-              id={recipe._id}
-              isOwner={isOwner}
-            />
-          ))}
+          {recipes &&
+            recipes.map((recipe) => (
+              <div
+                id={recipe._id}
+                onClick={() => console.log(recipe._id + "/n" + recipe.user)}
+              >
+                <TestRecipe
+                  recipe={recipe}
+                  key={recipe._id}
+                  id={recipe._id}
+                  isOwner={isOwner}
+                  onClick={() => console.log(recipe._id)}
+                />
+              </div>
+            ))}
         </div>
 
         <DialogControl

@@ -28,13 +28,13 @@ export const increaseCount = async (dispatch, payload) => {
 
 export const getChosenChefProfile = async (dispatch, chefProfileId) => {
   try {
-    //write backend first
     const res = await axios.get(`/api/chefProfiles/chefId/${chefProfileId}`);
     dispatch({ type: GET_CHOSEN_CHEF_PROFILE, payload: res.data.chefProfile });
   } catch (err) {
     console.log(err);
   }
 };
+
 export const setChefConflictError = (dispatch) => {
   dispatch({ type: SET_CONFLICT_ERR });
   setTimeout(() => {

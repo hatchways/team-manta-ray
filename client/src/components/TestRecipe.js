@@ -92,6 +92,7 @@ export default function RecipeReviewCard({ id, isOwner }) {
       }
     }
   };
+
   const handleClose = (value) => {
     setOpen(false);
   };
