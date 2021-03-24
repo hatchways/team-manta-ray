@@ -18,7 +18,6 @@ import Payment from "./pages/Payment";
 import ChefProfile from "./pages/ChefProfile";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import NavBar from "./components/NavBar";
-import Shipping from "./pages/Shipping";
 
 /** This will be moved once we have a parent component for payment */
 const promise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
@@ -29,7 +28,6 @@ const Private = () => {
       <NavBar />
       <Switch>
         <Route path="/success" component={SuccessPage} />
-        <Route path="/shipping" component={Shipping} />
         <Route path="/payment" render={(props) => <Payment {...props} />} />
         <Route path="/test" component={TestComponent} />
         <Route path="/profile" component={CustomerProfile} />
