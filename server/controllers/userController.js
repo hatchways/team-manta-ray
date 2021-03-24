@@ -108,25 +108,31 @@ const logoutUser = AsyncHandler(async (req, res) => {
 const getUserCart = AsyncHandler(async (req, res) => {
   //get user from middleWare
   const { user } = req;
-  const cartInfo = await User.findById(user._id)
-    .select("cart")
-    .populate({
-      path: "cart",
-      populate: {
-        path: "chef",
-      },
-    })
-    .populate({
-      path: "cart",
-      populate: {
-        path: "items",
+  try {
+    const cartInfo = await User.findById(user._id)
+      .select("cart")
+      .populate({
+        path: "cart",
         populate: {
-          path: "recipe",
+          path: "chef",
         },
-      },
-    })
-    .exec();
-  res.status(200).json(cartInfo);
+      })
+      .populate({
+        path: "cart",
+        populate: {
+          path: "items",
+          populate: {
+            path: "recipe",
+          },
+        },
+      })
+      .exec();
+    res.status(200).json(cartInfo);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    throw new Error("Server Error");
+  }
 });
 
 const deleteUserCart = AsyncHandler(async (req, res) => {
@@ -141,7 +147,7 @@ const deleteUserCart = AsyncHandler(async (req, res) => {
 
     //find the user based on chef and remove the instance
 
-    const updatedUser = await User.update(
+    const updatedUser = await User.updateOne(
       { _id: user._id },
       { $unset: { cart: "" } }
     );
@@ -225,7 +231,9 @@ const deleteAnItemFromCart = AsyncHandler(async (req, res) => {
     currentUser.cart.items = currentUser.cart.items.filter(
       (item) => item.recipe.toString() !== recipeId
     );
+
     await currentUser.save();
+
     res.status(200).json(currentUser.cart);
   } catch (error) {
     console.log(error);
