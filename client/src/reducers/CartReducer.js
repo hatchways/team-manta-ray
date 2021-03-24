@@ -4,22 +4,25 @@ import {
   DELETE_FROM_CART,
   INCREASE_COUNT,
   RESET_CART,
+  GET_CHOSEN_CHEF_PROFILE,
 } from "../constants/userConstants";
 
 export const cartInitialState = {
-  cart: [],
-  chosenChef: null,
+  cart: localStorage.getItem("cart")
+    ? JSON.parse(localStorage.getItem("cart"))
+    : [],
+  chosenChefProfile: localStorage.getItem("chosenChefProfile")
+    ? JSON.parse(localStorage.getItem("chosenChefProfile"))
+    : null,
   chefConflictErr: null,
 };
 
 export const CartReducer = (state, action) => {
   const { type, payload } = action;
-  console.log(type);
-  console.log(payload);
   switch (type) {
     case ADD_TO_CART:
       const isSelectingFromADifferentChef =
-        state.chosenChef && state.chosenChef !== payload.user;
+        state.chosenChefProfile && state.chosenChefProfile._id !== payload.user;
       if (isSelectingFromADifferentChef) {
         return {
           ...state,
@@ -32,15 +35,19 @@ export const CartReducer = (state, action) => {
         const newCart = state.cart.map((item) =>
           item._id === payload._id ? { ...item, count: item.count + 1 } : item
         );
+        localStorage.setItem("cart", JSON.stringify(newCart));
         return {
           ...state,
           cart: newCart,
         };
       } else {
+        localStorage.setItem(
+          "cart",
+          JSON.stringify([{ ...payload, count: 1 }, ...state.cart])
+        );
         return {
           ...state,
           cart: [{ ...payload, count: 1 }, ...state.cart],
-          chosenChef: payload.user,
           chefConflictErr: null,
         };
       }
@@ -48,6 +55,7 @@ export const CartReducer = (state, action) => {
       const newCart = state.cart.map((item) =>
         item._id === payload ? { ...item, count: item.count + 1 } : item
       );
+      localStorage.setItem("cart", JSON.stringify(newCart));
       return {
         ...state,
         cart: newCart,
@@ -58,16 +66,41 @@ export const CartReducer = (state, action) => {
           ? { ...item, count: item.count - 1 > 0 ? item.count - 1 : 0 }
           : item
       );
+      localStorage.setItem("cart", JSON.stringify(NewCart));
       return {
         ...state,
         cart: NewCart,
       };
     case DELETE_FROM_CART:
+      const filteredCart = state.cart.filter(
+        (recipe) => recipe._id !== payload
+      );
+      if (filteredCart.length === 0) {
+        localStorage.removeItem("cart");
+        localStorage.removeItem("chosenChefProfile");
+        return {
+          ...state,
+          cart: [],
+          chosenChefProfile: null,
+        };
+      } else {
+        localStorage.setItem("cart", JSON.stringify(filteredCart));
+
+        return {
+          ...state,
+          cart: filteredCart,
+        };
+      }
+    case GET_CHOSEN_CHEF_PROFILE:
+      localStorage.setItem("chosenChefProfile", JSON.stringify(payload));
+
       return {
         ...state,
-        cart: state.cart.filter((recipe) => recipe._id !== payload),
+        chosenChefProfile: payload,
       };
     case RESET_CART:
+      localStorage.removeItem("cart");
+      localStorage.removeItem("chosenChefProfile");
       return {
         ...state,
         cart: [],

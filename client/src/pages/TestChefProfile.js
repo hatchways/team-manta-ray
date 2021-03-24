@@ -1,47 +1,48 @@
 import React, { useState, useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
 import defaultUserImage from "../assets/defaultUserImage.png";
 import DialogControl from "../components/Dialogs/DialogControl";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
-import { RecipeContext, RecipeDispatchContext } from "../context/RecipeContext";
-import { UserContext } from "../context/UserContext";
+import { UserContext, UserDispatchContext } from "../context/UserContext";
 import TestRecipe from "../components/TestRecipe";
 import axios from "axios";
-import { Button, IconButton, Badge, Snackbar } from "@material-ui/core";
+import { Button, Snackbar } from "@material-ui/core";
 import { getRecipesByChef } from "../actions/recipeActions";
 import NavBar from "../components/NavBar";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import { withStyles } from "@material-ui/core/styles";
 
-const StyledBadge = withStyles((theme) => ({
-  badge: {
-    right: -3,
-    top: 13,
-    border: `2px solid ${theme.palette.background.paper}`,
-    padding: "0 4px",
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  btn: {
+    borderRadius: "0",
+    marginLeft: theme.spacing(3),
+    textDecoration: "none",
+    "& button": {
+      borderRadius: "0",
+      textTransform: "capitalize",
+    },
   },
-}))(Badge);
+}));
 
 const ChefProfile = ({ history, match }) => {
+  const classes = useStyles();
+
   const { recipeId, userId } = match.params;
 
   const [open, setOpen] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [control, setControl] = useState(null);
 
-  const { recipes } = useContext(RecipeContext);
-  const dispatch = useContext(RecipeDispatchContext);
+  const dispatch = useContext(UserDispatchContext);
 
-  const { userInfo, cart, chefConflictErr } = useContext(UserContext);
+  const { userInfo, cart, chefConflictErr, recipes } = useContext(UserContext);
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const getProfileAndRecipes = async () => {
       const idToFetchProfile = userId ? userId : userInfo._id;
-      console.log(userId);
-      console.log(idToFetchProfile);
       const res = await axios.get(`/api/chefProfiles/${idToFetchProfile}`);
       if (res.data) {
-        console.log(res.data);
         setProfile(res.data.chefProfile);
         getRecipesByChef(dispatch, res.data.chefProfile._id);
       }
@@ -52,8 +53,9 @@ const ChefProfile = ({ history, match }) => {
     } else {
       getProfileAndRecipes();
     }
-    setIsOwner(userId ? false : true);
-  }, [dispatch, userInfo, history, userId]);
+
+    setIsOwner(userId && userId !== userInfo._id ? false : true);
+  }, [dispatch, userInfo, history, userId, recipeId]);
 
   const handleClickOpen = (e) => {
     if (e === "cart") {
@@ -139,6 +141,20 @@ const ChefProfile = ({ history, match }) => {
           value={profile.user.name}
           readOnly
         />
+        {!isOwner && (
+          <Link to="/messages" className={classes.btn}>
+            <Button variant="contained" color="secondary">
+              Contact Chef
+            </Button>
+          </Link>
+        )}
+        {!isOwner && cart.length > 0 && (
+          <Link to="/payment" className={classes.btn}>
+            <Button variant="contained" color="secondary">
+              Proceed to checkout
+            </Button>
+          </Link>
+        )}
 
         <div style={{ float: "right" }}>
           <h1>Recipes</h1>
@@ -161,32 +177,9 @@ const ChefProfile = ({ history, match }) => {
               key={recipe._id}
               id={recipe._id}
               isOwner={isOwner}
-              focus={recipe._id === recipeId}
             />
           ))}
         </div>
-
-        <div>
-          <IconButton aria-label="cart" onClick={() => handleClickOpen("cart")}>
-            <StyledBadge
-              badgeContent={
-                cart && cart.reduce((acc, cur) => acc + cur.count, 0)
-              }
-              color="secondary"
-            >
-              <ShoppingCartIcon />
-            </StyledBadge>
-          </IconButton>
-        </div>
-
-        {/* <h1>Cart</h1>
-          {cart.map((item) => (
-            <div key={item._id}>
-              <p>{item.name}</p>
-              <span>{item.count}</span>
-            </div>
-          ))}
-        */}
 
         <DialogControl
           open={open}

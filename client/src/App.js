@@ -2,7 +2,6 @@ import React from "react";
 import { MuiThemeProvider } from "@material-ui/core";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import { theme } from "./themes/theme";
-import RecipeContextProvider from "./context/RecipeContext";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -27,32 +26,30 @@ function App() {
     <BrowserRouter>
       <MuiThemeProvider theme={theme}>
         <ContextProvider>
-          <RecipeContextProvider>
-            <Elements stripe={promise}>
-              <Switch>
-                <Route path="/profile" component={CustomerProfile}>
-                  <NavBar />
-                </Route>
-                <Route path="/test" component={TestComponent} />
-                <Route path="/success" component={SuccessPage} />
-                {/** This will be moved once we have a parent component for payment */}
-                <Route
-                  path="/payment"
-                  render={(props) => <Payment {...props} />}
-                />
-                <Route
-                  path="/chef/:userId?/:recipeId?"
-                  component={TestChefProfile}
-                />
-                <Route path="/login" component={Login} />
-                <Route path="/signup" component={Signup} />
+          <Elements stripe={promise}>
+            <Switch>
+              <Route path="/profile" component={CustomerProfile}>
+                <NavBar />
+              </Route>
+              <Route path="/test" component={TestComponent} />
+              <Route path="/success" component={SuccessPage} />
+              {/** This will be moved once we have a parent component for payment */}
+              <Route
+                path="/payment"
+                render={(props) => <Payment {...props} />}
+              />
+              <Route
+                path="/chef/:userId?/:recipeId?"
+                component={TestChefProfile}
+              />
+              <Route path="/login" component={Login} />
+              <Route path="/signup" component={Signup} />
 
-                <Route path="/" component={Login} exact>
-                  <Redirect to="/login" />
-                </Route>
-              </Switch>
-            </Elements>
-          </RecipeContextProvider>
+              <Route path="/" component={Login} exact>
+                <Redirect to="/login" />
+              </Route>
+            </Switch>
+          </Elements>
         </ContextProvider>
       </MuiThemeProvider>
     </BrowserRouter>

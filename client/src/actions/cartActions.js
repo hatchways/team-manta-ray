@@ -5,6 +5,7 @@ import {
   RESET_CART,
   DECREASE_COUNT,
   INCREASE_COUNT,
+  GET_CHOSEN_CHEF_PROFILE,
 } from "../constants/userConstants";
 
 export const addToCart = async (dispatch, payload) => {
@@ -23,8 +24,11 @@ export const increaseCount = async (dispatch, payload) => {
   dispatch({ type: INCREASE_COUNT, payload });
 };
 
-export const getChefProfile = async (dispatch, chefUserId) => {
+export const getChosenChefProfile = async (dispatch, chefProfileId) => {
   try {
+    //write backend first
+    const res = await axios.get(`/api/chefProfiles/chefId/${chefProfileId}`);
+    dispatch({ type: GET_CHOSEN_CHEF_PROFILE, payload: res.data.chefProfile });
   } catch (err) {
     console.log(err);
   }

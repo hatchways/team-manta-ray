@@ -70,6 +70,27 @@ const retrieveChefProfile = async (req, res) => {
   }
 };
 
+//get chef profile by chefProfileId
+const getChefProfileById = async (req, res) => {
+  try {
+    const chefProfile = await ChefProfile.findById(
+      req.params.chefProfileId
+    ).populate("user", ["name", "email"]);
+
+    return res.status(200).json({
+      success: true,
+      chefProfile,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
 const updateChefProfile = async (req, res) => {
   try {
     // get profile and user from middleware
@@ -148,6 +169,7 @@ const deleteChefProfile = async (req, res) => {
 module.exports = {
   createChefProfile,
   retrieveChefProfile,
+  getChefProfileById,
   updateChefProfile,
   deleteChefProfile,
 };

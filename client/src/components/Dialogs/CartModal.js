@@ -44,9 +44,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(20, 10),
   },
   btn: {
-    // padding: theme.spacing(1, 4),
     borderRadius: "0",
-    marginLeft: theme.spacing(3),
+    margin: "auto",
     width: "40%",
     height: theme.spacing(6),
     textDecoration: "none",
@@ -61,10 +60,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "0",
     textTransform: "capitalize",
   },
-  btnSection: {
-    marginTop: theme.spacing(3),
-    marginRight: theme.spacing(0.5),
-  },
+
   btnGroup: {
     "& button": {
       borderRadius: theme.spacing(3),
@@ -73,10 +69,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CartModal = ({ chef }) => {
+const CartModal = () => {
   const classes = useStyles();
 
-  const { cart } = useContext(UserContext);
+  const { cart, chosenChefProfile } = useContext(UserContext);
   const dispatch = useContext(UserDispatchContext);
 
   const addDecimals = (num) => (Math.round(num * 100) / 100).toFixed(2);
@@ -101,8 +97,7 @@ const CartModal = ({ chef }) => {
         </Typography>
       ) : (
         <List dense>
-          <ListItem>
-            <ListItemText>{`chef:`}</ListItemText>
+          <ListItem dense>
             <Button
               startIcon
               variant="contained"
@@ -112,12 +107,35 @@ const CartModal = ({ chef }) => {
               clear cart
             </Button>
           </ListItem>
+          <ListItem alignItems="center">
+            <ListItemText>
+              <Typography variant="h5" align="center">{`chef: ${
+                chosenChefProfile && chosenChefProfile.user.name
+              }`}</Typography>
+            </ListItemText>
+          </ListItem>
           <ListItem>
             <img
-              src={defaultUserImage}
+              src={
+                chosenChefProfile
+                  ? chosenChefProfile.profilePictureUrl
+                  : defaultUserImage
+              }
               alt="profileImage"
               className={classes.img}
             />
+          </ListItem>
+          <ListItem divider>
+            <ListItemText>
+              <Typography variant="h6">Bio</Typography>
+              <span>{chosenChefProfile && chosenChefProfile.bio}</span>
+            </ListItemText>
+            <ListItemText>
+              <Typography variant="h6">Experts In:</Typography>
+              <span>
+                {chosenChefProfile && chosenChefProfile.cuisineTags.join(",")}
+              </span>
+            </ListItemText>
           </ListItem>
           <ListItem dense>
             <TableContainer>
@@ -129,20 +147,20 @@ const CartModal = ({ chef }) => {
                 <TableHead>
                   <TableRow>
                     <TableCell></TableCell>
-                    <TableCell align="right">Menu</TableCell>
+                    <TableCell align="center">Menu</TableCell>
 
                     <Hidden smDown>
                       <TableCell align="left">Qty</TableCell>
                     </Hidden>
                     <Hidden smDown>
-                      <TableCell align="right">Price</TableCell>
+                      <TableCell align="center">Price</TableCell>
                     </Hidden>
 
                     <TableCell align="right"></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {cart.map((item, idx) => (
+                  {cart.map((item) => (
                     <TableRow key={item._id}>
                       <TableCell component="th" scope="item">
                         <Avatar
@@ -150,7 +168,7 @@ const CartModal = ({ chef }) => {
                           src={item.recipePictureUrl || plate}
                         />
                       </TableCell>
-                      <TableCell align="right">{item.name}</TableCell>
+                      <TableCell align="justify">{item.name}</TableCell>
                       <Hidden smDown>
                         <TableCell align="justify" nowrap="nowrap">
                           <span>{item.count}</span>{" "}

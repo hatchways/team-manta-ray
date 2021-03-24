@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { UserDispatchContext } from "../context/UserContext";
-import { RecipeDispatchContext } from "../context/RecipeContext";
 import { Link, withRouter } from "react-router-dom";
 import {
   AppBar,
@@ -67,7 +66,6 @@ const NavBar = ({ history }) => {
 
   // reducer dispatch function
   const dispatch = useContext(UserDispatchContext);
-  const RecipeDispatch = useContext(RecipeDispatchContext);
 
   const drawerHandler = () => {
     setOpen(true);
@@ -76,7 +74,7 @@ const NavBar = ({ history }) => {
   const logoutHandler = (e) => {
     e.preventDefault();
     logout(dispatch);
-    resetRecipes(RecipeDispatch);
+    resetRecipes(dispatch);
     localStorage.removeItem("userInfo");
     history.replace("/login");
   };

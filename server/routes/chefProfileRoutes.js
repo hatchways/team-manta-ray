@@ -9,13 +9,16 @@ const { getChefProfile } = require("../middlewares/chefProfileMiddlewares");
 const {
   createChefProfile,
   retrieveChefProfile,
+  getChefProfileById,
   updateChefProfile,
   deleteChefProfile,
 } = require("../controllers/chefProfileController");
 
 router.route("/").post(auth, createChefProfile); // create chef profile
 
-router.route("/:userId").get(auth, getChefProfile, retrieveChefProfile); // get chef profile
+router.route("/:userId").get(auth, getChefProfile, retrieveChefProfile); // get chef profile by userId
+
+router.route("/chefId/:chefProfileId").get(auth, getChefProfileById); // get chef profile by chefProfileId
 
 router.route("/:userId").put(auth, getChefProfile, updateChefProfile); // update chef profile by user._id
 

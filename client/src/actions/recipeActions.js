@@ -6,7 +6,7 @@ import {
   DELETE_RECIPE,
   GET_RECIPES_BY_CHEF,
   RESET_RECIPES,
-} from "../constants/RecipeConstants";
+} from "../constants/userConstants";
 
 export const createRecipe = async (dispatch, payload) => {
   try {

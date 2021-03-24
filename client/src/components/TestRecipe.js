@@ -17,10 +17,8 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import plate from "../assets/plate.svg";
 import DialogControl from "./Dialogs/DialogControl";
-import { RecipeContext } from "../context/RecipeContext";
-import { UserDispatchContext } from "../context/UserContext";
-// import { RecipeDispatchContext } from "../context/RecipeContext";
-import { addToCart, removeFromCart } from "../actions/cartActions";
+import { UserDispatchContext, UserContext } from "../context/UserContext";
+import { addToCart, getChosenChefProfile } from "../actions/cartActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function RecipeReviewCard({ id, isOwner }) {
-  const { recipes } = useContext(RecipeContext);
+  const { recipes } = useContext(UserContext);
   const recipe = recipes.filter((res) => res._id === id)[0];
   const {
     name,
@@ -58,8 +56,8 @@ export default function RecipeReviewCard({ id, isOwner }) {
     recipePictureUrl,
   } = recipe;
 
-  // const dispatch = useContext(RecipeDispatchContext);
   const globalDispatch = useContext(UserDispatchContext);
+  const { cart } = useContext(UserContext);
 
   const [open, setOpen] = useState(false);
 
@@ -74,6 +72,7 @@ export default function RecipeReviewCard({ id, isOwner }) {
     if (isOwner) {
       setOpen(true);
     } else {
+      if (cart.length === 0) getChosenChefProfile(globalDispatch, recipe.user);
       addToCart(globalDispatch, recipe);
     }
   };
