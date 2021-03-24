@@ -100,7 +100,6 @@ const BrowseChefs = (props) => {
               ) : (
                 <Box>No chefs found</Box>
               )}
-              )
             </Grid>
           </Grid>
         </Grid>

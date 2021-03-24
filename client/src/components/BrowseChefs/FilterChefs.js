@@ -49,21 +49,21 @@ const FilterChefs = (props) => {
   const addActiveCuisineTag = (cuisineTag) => {
     if (activeCuisineTags.includes(cuisineTag)) return;
 
-    setActiveCuisineTags((activeCuisineTags) => {
+    setActiveCuisineTags((prevCuisineTags) => {
       if (cuisineTag === "ALL") return ["ALL"];
 
-      if (activeCuisineTags[0] === "ALL") return [cuisineTag];
+      if (prevCuisineTags[0] === "ALL") return [cuisineTag];
 
-      return [...activeCuisineTags, cuisineTag];
+      return [...prevCuisineTags, cuisineTag];
     });
   };
 
   const deleteActiveCuisineTags = (cuisineTag) => {
-    setActiveCuisineTags((activeCuisineTags) => {
-      if (activeCuisineTags.length === 1) return ["ALL"];
+    setActiveCuisineTags((prevCuisineTags) => {
+      if (prevCuisineTags.length === 1) return ["ALL"];
 
-      return activeCuisineTags.filter(
-        (activeCuisineTag) => activeCuisineTag !== cuisineTag
+      return prevCuisineTags.filter(
+        (prevCuisineTag) => prevCuisineTag !== cuisineTag
       );
     });
   };

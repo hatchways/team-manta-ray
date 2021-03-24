@@ -1,12 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import {
-  Grid,
-  CssBaseline,
-  Paper,
-  Typography,
-  Button,
-  Snackbar,
-} from "@material-ui/core";
+import { Grid, Paper, Typography, Button, Snackbar } from "@material-ui/core";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Banner from "../components/Banner";
@@ -100,7 +93,6 @@ const Login = ({ history }) => {
 
   return (
     <Grid container component="main" className={classes.root}>
-      <CssBaseline />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <img src={logo} alt="logo" className={classes.margin} />
         <div className={classes.paper}>
