@@ -18,6 +18,7 @@ import TestChefProfile from "./pages/TestChefProfile";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import Payment from "./pages/Payment";
+import Messages from "./pages/Messages";
 
 /** This will be moved once we have a parent component for payment */
 const promise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
@@ -43,7 +44,7 @@ function App() {
                 <Route path="/chef" component={TestChefProfile} />
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={Signup} />
-
+                <Route path="/messages" component={Messages} />
                 <Route path="/" component={Login} exact>
                   <Redirect to="/login" />
                 </Route>
