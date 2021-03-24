@@ -27,6 +27,23 @@ const userSchema = new Schema(
       type: String,
       required: false,
     },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+      },
+      coordinates: {
+        type: [Number],
+        index: "2dsphere",
+      },
+    },
+    bio: String,
+    profilePictureUrl: {
+      type: String,
+    },
+    cuisines: {
+      type: [String],
+    },
   },
   {
     timestamps: true,

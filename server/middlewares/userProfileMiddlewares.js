@@ -1,4 +1,4 @@
-const UserProfile = require("../models/userProfileModel");
+const User = require("../models/userModel");
 
 const getUserProfile = async (req, res, next) => {
   try {
@@ -6,13 +6,10 @@ const getUserProfile = async (req, res, next) => {
     const { userId } = req.params;
 
     // find profile by user._id
-    const userProfile = await UserProfile.findOne({
-      user: userId,
+    const userProfile = await User.findOne({
+      _id: userId,
     })
-      .populate({
-        path: "user",
-        select: "-password", // DO NOT INCLUDE PASSWORD
-      })
+      .select("-password")
       .exec();
 
     if (!userProfile)
@@ -22,7 +19,6 @@ const getUserProfile = async (req, res, next) => {
       });
 
     console.log("user profile found");
-    console.log(userProfile);
 
     // save the userProfile inside the req.userProfile
     req.userProfile = userProfile;

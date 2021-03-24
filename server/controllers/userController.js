@@ -1,8 +1,8 @@
 const User = require("../models/userModel.js");
-const ChefProfile = require("../models/chefProfileModel");
-const UserProfile = require("../models/userProfileModel");
 const AsyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
+const getCoordsFromAddress = require("../utils/geocoding");
+const bcrypt = require("bcryptjs");
 
 /**
  * @description Register a new user
@@ -42,15 +42,15 @@ const registerUser = AsyncHandler(async (req, res) => {
     });
 
     //------/Temporary for Demo/-----Create a profile-------
-    if (user.isChef) {
-      const profile = await ChefProfile.create({
-        user: user._id,
-      });
-    } else {
-      const profile = await UserProfile.create({
-        user: user._id,
-      });
-    }
+    // if (user.isChef) {
+    //   const profile = await ChefProfile.create({
+    //     user: user._id,
+    //   });
+    // } else {
+    //   const profile = await UserProfile.create({
+    //     user: user._id,
+    //   });
+    // }
 
     res.status(201).json({
       _id: user._id,
@@ -117,4 +117,60 @@ const logoutUser = AsyncHandler(async (req, res) => {
     .json({ success: true, message: "User logged out successfully" });
 });
 
-module.exports = { registerUser, loginUser, makeUserAChef, logoutUser };
+const updateUser = async (req, res) => {
+  try {
+    // get user from middleware
+    const { user } = req;
+
+    console.log(user);
+
+    const fields = req.body;
+
+    // I think we need new routes for these fields
+    if (fields.email) throw new Error("Cannot update email.");
+    if (fields.stripeCustomer) throw new Error("Cannot update stripe.");
+    if (fields.password) throw new Error("Cannot update password.");
+
+    // Convert req.body to an array to loop all given field props
+    // use await Promise.all to await
+    await Promise.all(
+      Object.keys(fields).map(async (key) => {
+        // if the field's name === 'location'
+        if (key === "location") {
+          // pass the location value
+          const coordinates = await getCoordsFromAddress(fields[key]);
+
+          user[key] = {
+            type: "Point",
+            coordinates,
+          };
+        } else {
+          user[key] = fields[key];
+        }
+      })
+    );
+
+    // save the user
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      updatedUser: user,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  makeUserAChef,
+  logoutUser,
+  updateUser,
+};

@@ -1,5 +1,4 @@
 const Recipe = require("../models/recipeModel");
-const ChefProfile = require("../models/chefProfileModel");
 
 const createRecipe = async (req, res) => {
   try {
@@ -17,15 +16,6 @@ const createRecipe = async (req, res) => {
       cuisineTags,
     } = req.body;
 
-    // we need userProfile for user objects not user
-    // make sure there is chef has profile as this will throws an error
-    const chefProfile = await ChefProfile.findOne({
-      user: req.user._id,
-    }).exec();
-
-    if (!chefProfile)
-      throw new Error("You need a chef profile first to create a recipe");
-
     //Make array for fields that need to be an array
     if (ingredients)
       ingredients = ingredients
@@ -42,7 +32,7 @@ const createRecipe = async (req, res) => {
 
     // Create a recipe
     const newRecipe = new Recipe({
-      user: chefProfile._id,
+      user: req.user._id,
       name,
       recipePictureUrl,
       price,
@@ -93,17 +83,11 @@ const updateRecipe = async (req, res) => {
     // get user and recipe from middleware
     const { recipe, user } = req;
 
-    // check if user is not a chef or he is not owner of the recipe
-    // For some reasons user._id === recipe.user._id return false even if they are same
-    // I think they differ on dataTypes on mongoose schema
-    // I convert it toString() and condition works
-    const chef = await ChefProfile.findOne({ user: user._id });
-    const chefId = chef._id;
+    // check if authenticated user owns the recipe
+    if (user._id.toString() !== recipe.user.toString())
+      throw new Error("Cannot update someones recipe");
 
-    if (!user.isChef || chefId.toString() !== recipe.user.toString())
-      throw new Error("Must be a chef and owner of the recipe");
-
-    const {
+    let {
       name,
       recipePictureUrl,
       price,
@@ -112,6 +96,20 @@ const updateRecipe = async (req, res) => {
       portionDescription,
       cuisineTags,
     } = req.body;
+
+    //Make array for fields that need to be an array
+    if (ingredients)
+      ingredients = ingredients
+        .split(",")
+        .map((ingredient) => ingredient.trim().toLowerCase());
+    if (requiredStuff)
+      requiredStuff = requiredStuff
+        .split(",")
+        .map((stuff) => stuff.trim().toLowerCase());
+    if (cuisineTags)
+      cuisineTags = cuisineTags
+        .split(",")
+        .map((tag) => tag.trim().toLowerCase());
 
     // update recipe
     recipe.name = name;
@@ -142,15 +140,9 @@ const deleteRecipe = async (req, res) => {
     // get user and recipe from middleware
     const { recipe, user } = req;
 
-    // check if user is not a chef or he is not owner of the recipe
-    // For some reasons (user._id === recipe.user._id) || (user._id == recipe.user) return false even if they are same
-    // I think they differ on dataTypes on mongoose schema
-    // I convert it toString() and condition works
-    const chef = await ChefProfile.findOne({ user: user._id });
-    const chefId = chef._id;
-
-    if (!user.isChef || chefId.toString() !== recipe.user.toString())
-      throw new Error("Must be a chef and owner of the recipe");
+    // check if authenticated user owns the recipe
+    if (user._id.toString() !== recipe.user.toString())
+      throw new Error("Cannot delete someones recipe");
 
     const recipeId = recipe._id;
 
