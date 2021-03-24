@@ -222,8 +222,7 @@ const MessageItem = (props) => {
                 isOnline={true}
                 lastMessage={chat.lastMessage.body}
                 profilePictureUrl={chat.chattingWith.user.profilePictureUrl}
-                key={i}
-                i={i}
+                key={`${chat.chattingWith.user._id}chat${i}`}
                 handleSelectedMessageItem={handleSelectedMessageItem}
                 isSelected={activeMessageItem.i === i}
               />
@@ -289,7 +288,7 @@ const MessageItem = (props) => {
                       {messages.length > 0 ? (
                         messages.reverse().map((message, i) => (
                           <Chat
-                            key={i}
+                            key={`${message.sentBy}chat${i}`}
                             profilePictureUrl={message.sentBy.profilePictureUrl}
                             body={message.body}
                             // CHANGE THIS! must be authenticated.user._id

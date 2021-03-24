@@ -22,9 +22,7 @@ const Chat = ({ profilePictureUrl, body, isOwner }) => {
 
   return (
     <ListItem className={classes.chatContainer}>
-      {isOwner ? (
-        <></>
-      ) : (
+      {!isOwner && (
         <ListItemAvatar>
           <Avatar alt="dp" src={profilePictureUrl} />
         </ListItemAvatar>
