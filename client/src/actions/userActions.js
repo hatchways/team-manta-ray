@@ -105,6 +105,7 @@ export const logout = async (dispatch) => {
   if (res.status === 200) {
     localStorage.removeItem("userInfo");
     localStorage.removeItem("shippingAddress");
+    localStorage.removeItem("bookingDate");
     dispatch({
       type: USER_LOGOUT,
     });
