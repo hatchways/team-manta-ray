@@ -4,10 +4,17 @@
 
 import { createContext, useReducer } from "react";
 import {
-  initialState,
+  userInitialState,
   UserLoginReducer,
   UserRegisterReducer,
 } from "../reducers/userReducers";
+
+import { cartInitialState, CartReducer } from "../reducers/cartReducers";
+
+const initialState = {
+  ...userInitialState,
+  ...cartInitialState,
+};
 
 // initial user context
 export const UserContext = createContext(null);
@@ -24,7 +31,7 @@ const combineReducers = (...reducers) => (state = initialState, action) => {
 // Context
 export const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(
-    combineReducers(UserLoginReducer, UserRegisterReducer),
+    combineReducers(UserLoginReducer, UserRegisterReducer, CartReducer),
     initialState
   ); // User reducer function
 

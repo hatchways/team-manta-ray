@@ -104,6 +104,7 @@ export const logout = async (dispatch) => {
   const res = await axios.get("/api/users/logout");
   if (res.status === 200) {
     localStorage.removeItem("userInfo");
+    localStorage.removeItem("shippingAddress");
     dispatch({
       type: USER_LOGOUT,
     });
