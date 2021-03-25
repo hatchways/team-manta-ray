@@ -158,7 +158,7 @@ const ChefSideBar = (props) => {
           </Box>
         ) : (
           <Box className={classes.chefReqBtnContainer}>
-            <Link to="/checkout" className={classes.chefReqBtn}>
+            <Link to="/messages" className={classes.chefReqBtn}>
               <Button
                 variant="contained"
                 color="secondary"
@@ -168,7 +168,7 @@ const ChefSideBar = (props) => {
               </Button>
             </Link>
             {!isOwner && cart.length > 0 && (
-              <Link to="/checkout" className={classes.chefReqBtn}>
+              <Link to="/payment" className={classes.chefReqBtn}>
                 <Button
                   variant="contained"
                   color="secondary"

@@ -256,7 +256,7 @@ const CartModal = () => {
                 Contact Chef
               </Button>
             </Link>
-            <Link to="/checkout" className={classes.btn}>
+            <Link to="/payment" className={classes.btn}>
               <Button variant="contained" color="secondary">
                 Proceed to checkout
               </Button>

@@ -158,7 +158,7 @@ const deleteUserCart = AsyncHandler(async (req, res) => {
       throw new Error("User Not Found");
     }
 
-    //find the user based on chef and remove the instance
+    //find the user and remove the instance of cart
 
     const updatedUser = await User.updateOne(
       { _id: user._id },
