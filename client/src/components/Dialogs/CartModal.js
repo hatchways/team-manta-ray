@@ -81,6 +81,22 @@ const CartModal = () => {
     removeFromCart(dispatch, id);
   };
 
+  const handleIncrease = (id, qty, chef) => {
+    increaseCount(dispatch, {
+      id,
+      qty: qty + 1,
+      chef,
+    });
+  };
+  const handleDecrease = (id, qty, chef) => {
+    qty > 1
+      ? decreaseCount(dispatch, {
+          id,
+          qty: qty - 1,
+          chef,
+        })
+      : removeFromCart(dispatch, id);
+  };
   return (
     <>
       <DialogTitle id="simple-dialog-title">Cart Items</DialogTitle>
@@ -108,7 +124,7 @@ const CartModal = () => {
           </ListItem>
           <ListItem alignItems="center">
             <ListItemText>
-              <Typography variant="h5" align="center">{`chef: ${
+              <Typography variant="h5" align="center">{`${
                 chosenChefProfile && chosenChefProfile.user.name
               }`}</Typography>
             </ListItemText>
@@ -130,7 +146,7 @@ const CartModal = () => {
               <span>{chosenChefProfile && chosenChefProfile.bio}</span>
             </ListItemText>
             <ListItemText>
-              <Typography variant="h6">Experts In:</Typography>
+              <Typography variant="h6">Specialties:</Typography>
               <span>
                 {chosenChefProfile && chosenChefProfile.cuisineTags.join(",")}
               </span>
@@ -163,7 +179,7 @@ const CartModal = () => {
                     <TableRow key={recipe._id}>
                       <TableCell component="th" scope="item">
                         <Avatar
-                          alt="Remy Sharp"
+                          alt="recipe"
                           src={recipe.recipePictureUrl || plate}
                         />
                       </TableCell>
@@ -178,24 +194,14 @@ const CartModal = () => {
                           >
                             <Button
                               onClick={() =>
-                                qty > 1
-                                  ? decreaseCount(dispatch, {
-                                      id: recipe._id,
-                                      qty: qty - 1,
-                                      chef: recipe.user,
-                                    })
-                                  : removeFromCart(dispatch, recipe._id)
+                                handleDecrease(recipe._id, qty, recipe.user)
                               }
                             >
                               -
                             </Button>
                             <Button
                               onClick={() =>
-                                increaseCount(dispatch, {
-                                  id: recipe._id,
-                                  qty: qty + 1,
-                                  chef: recipe.user,
-                                })
+                                handleIncrease(recipe._id, qty, recipe.user)
                               }
                             >
                               +
@@ -204,9 +210,9 @@ const CartModal = () => {
                         </TableCell>
                       </Hidden>
                       <Hidden smDown>
-                        <TableCell align="right">{`${
+                        <TableCell align="right" nowrap="nowrap">{`${
                           recipe.price
-                        }x${qty}=${addDecimals(
+                        } x ${qty} = ${addDecimals(
                           qty * recipe.price
                         )}`}</TableCell>
                       </Hidden>
@@ -233,6 +239,7 @@ const CartModal = () => {
             <ListItemText>
               <Typography gutterBottom variant="h6">
                 {" "}
+                $
                 {addDecimals(
                   cart.reduce(
                     (acc, cur) => acc + cur.recipe.price * cur.qty,

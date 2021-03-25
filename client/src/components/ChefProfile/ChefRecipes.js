@@ -20,8 +20,6 @@ import {
 import { UserContext, UserDispatchContext } from "../../context/UserContext";
 
 const ChefProfile = ({ recipe, isOwner }) => {
-  // const { recipes } = useContext(RecipeContext);
-  // const recipe = recipes.filter((res) => res._id === id)[0];
   const {
     name,
     price,
