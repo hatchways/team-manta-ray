@@ -7,17 +7,17 @@ const SERVER = "http://localhost:3001";
 const ChatTest = () => {
   const { userInfo } = useContext(UserContext);
   console.log(userInfo);
-  console.log(document.cookie);
+  console.log("HELLL");
+
   var socket = socketIOClient(SERVER, {
     withCredentials: true,
   });
 
   useEffect(() => {
-    console.log(userInfo);
     socket.on("connection", () => {
       console.log("I'm connected with the back-end");
     });
-  }, []);
+  });
 
   return (
     <>

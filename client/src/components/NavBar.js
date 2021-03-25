@@ -1,31 +1,43 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { UserDispatchContext } from "../context/UserContext";
+import { RecipeDispatchContext } from "../context/RecipeContext";
 import { Link, withRouter } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
   IconButton,
+  Grid,
   Drawer,
   List,
   ListItem,
   ListItemText,
   // Avatar,
   makeStyles,
-  Box,
-  Container,
 } from "@material-ui/core";
+import socketIOClient from "socket.io-client";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
+import logo from "../assets/logo.svg";
 import plateLogo from "../assets/plate.svg";
 import { logout } from "../actions/userActions";
-import Logo from "./Logo";
+import { resetRecipes } from "../actions/recipeActions";
 
 const useStyles = makeStyles((theme) => ({
   toolBar: {
-    minHeight: 75,
+    minHeight: 60,
+    display: "grid",
+    backgroundColor: "white",
   },
-
-  flexGrow: {
-    flexGrow: 1,
+  menuButton: {
+    marginRight: theme.spacing(3),
+  },
+  logo: {
+    height: 25,
+    marginLeft: theme.spacing(2),
+  },
+  icon: {
+    fontSize: 40,
+    justifyContent: "end",
+    color: "black",
   },
   appBar: {
     boxShadow: "0px 10px 30px 0px rgba(204, 204, 204, 0.5)",
@@ -40,7 +52,15 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     minHeight: 60,
   },
+  navBarRight: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: 150,
+  },
 }));
+
+const SERVER = "http://localhost:3001";
 
 const NavBar = ({ history }) => {
   const classes = useStyles();
@@ -48,61 +68,90 @@ const NavBar = ({ history }) => {
 
   // reducer dispatch function
   const dispatch = useContext(UserDispatchContext);
+  const RecipeDispatch = useContext(RecipeDispatchContext);
 
   const drawerHandler = () => {
     setOpen(true);
   };
 
-  const logoutHandler = async (e) => {
+  const [connected, setConnected] = useState(false);
+  const socket = useRef();
+
+  useEffect(() => {
+    if (!connected) {
+      socket.current = socketIOClient(SERVER, {
+        withCredentials: true,
+      });
+      socket.current.on("connection", () => {
+        console.log("Connected to the socket");
+      });
+      setConnected(true);
+    }
+  }, [connected]);
+
+  const logoutHandler = (e) => {
+    socket.current.disconnect();
     e.preventDefault();
-    await logout(dispatch);
+    logout(dispatch);
+    resetRecipes(RecipeDispatch);
+    localStorage.removeItem("userInfo");
     history.replace("/login");
   };
 
   return (
-    <Box color="white">
-      <AppBar className={classes.appBar} color="inherit" position="fixed">
-        <Container maxWidth="xl">
-          <Toolbar className={classes.toolBar}>
-            <Logo />
-            {/* <Grid item>
+    <div>
+      <AppBar className={classes.appBar} position="static">
+        <Toolbar className={classes.toolBar}>
+          <Grid
+            container
+            direction="row"
+            justify="space-between"
+            alignItems="center"
+          >
+            <Grid item>
+              <img src={logo} alt="logo" className={classes.logo} />
+            </Grid>
+            <div className={classes.navBarRight}>
+              {/* <Grid item>
                 <Avatar src={userData.avatar} alt="user profile pic" />
               </Grid> */}
 
-            <Box color="#000">
-              <IconButton
-                color="inherit"
-                aria-label="menu"
-                onClick={drawerHandler}
-              >
-                <DragHandleIcon fontSize="large" />
-              </IconButton>
-            </Box>
-          </Toolbar>
-
-          <Drawer
-            variant="temporary"
-            anchor="right"
-            open={open}
-            onClose={() => setOpen(false)}
-          >
-            <div className={classes.drawerDiv}>
-              <List component="nav" aria-label="navigation">
-                <ListItem divider className={classes.plateIcon}>
-                  <img src={plateLogo} alt="plate icon" />
-                </ListItem>
-                <ListItem button component={Link} to="/profile" divider>
-                  <ListItemText primary="Profile" />
-                </ListItem>
-                <ListItem button divider onClick={logoutHandler}>
-                  <ListItemText primary="Log Out" />
-                </ListItem>
-              </List>
+              <Grid item>
+                <IconButton
+                  edge="start"
+                  className={classes.menuButton}
+                  color="inherit"
+                  aria-label="menu"
+                  onClick={drawerHandler}
+                >
+                  <DragHandleIcon className={classes.icon} />
+                </IconButton>
+              </Grid>
             </div>
-          </Drawer>
-        </Container>
+          </Grid>
+        </Toolbar>
       </AppBar>
-    </Box>
+      <Drawer
+        variant="temporary"
+        anchor="right"
+        open={open}
+        onClose={() => setOpen(false)}
+      >
+        <div className={classes.drawerDiv}>
+          <List component="nav" aria-label="navigation">
+            <ListItem divider className={classes.plateIcon}>
+              <img src={plateLogo} alt="plate icon" />
+            </ListItem>
+            <ListItem button component={Link} to="/profile" divider>
+              <ListItemText primary="Profile" />
+            </ListItem>
+            <ListItem button divider onClick={logoutHandler}>
+              <ListItemText primary="Log Out" />
+            </ListItem>
+          </List>
+        </div>
+      </Drawer>
+    </div>
   );
 };
 

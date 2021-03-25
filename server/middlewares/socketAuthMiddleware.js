@@ -1,8 +1,7 @@
 const jwt = require("jsonwebtoken");
-const dotnev = require("dotenv").config();
 const User = require("../models/userModel");
 
-const socketAuth = (req, res, next) => {
+const socketAuth = async (req, res, next) => {
   // Read the token from the cookie
   let token = null;
 
@@ -11,9 +10,8 @@ const socketAuth = (req, res, next) => {
   if (!token) console.log("Access denied...No token provided...");
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
-    req.user = decoded;
-    console.log(req.user);
+    const user = await User.findById(decoded.id).select(["-password"]).exec();
+    req.user = user;
     next();
   } catch (er) {
     next(new Error(er.message));

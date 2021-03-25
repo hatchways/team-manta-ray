@@ -9,7 +9,7 @@ require("dotenv").config();
 
 var app = require("../app");
 var http = require("http");
-var socketApi = require("../socketAPI");
+var { socketApi } = require("../socketAPI");
 var io = socketApi.io;
 
 /**

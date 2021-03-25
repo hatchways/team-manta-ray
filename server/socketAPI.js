@@ -13,8 +13,18 @@ io.use(wrap(socketAuth));
 
 const connectedUsers = [];
 
+//Socket logic here
 io.on("connection", (socket) => {
-  console.log("A user has connected");
+  const user = socket.request.user;
+  console.log(user.name + " has connected");
+  connectedUsers.push(user);
+  console.log("Currently connected users: \n" + connectedUsers);
+
+  socket.on("disconnect", () => {
+    console.log(user.name + " has disconnected");
+    connectedUsers.splice(connectedUsers.indexOf(user), 1);
+    console.log("Currently connected users:" + connectedUsers);
+  });
 });
 
-module.exports = socketApi;
+module.exports = { socketApi, connectedUsers };
