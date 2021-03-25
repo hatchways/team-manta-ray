@@ -184,6 +184,28 @@ const updateUser = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId)
+      .select("-password -stripeCustomer")
+      .exec();
+
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -191,4 +213,5 @@ module.exports = {
   logoutUser,
   retrieveUser,
   updateUser,
+  getUserById,
 };

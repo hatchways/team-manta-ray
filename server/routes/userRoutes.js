@@ -8,6 +8,7 @@ const {
   makeUserAChef,
   updateUser,
   retrieveUser,
+  getUserById,
 } = require("../controllers/userController");
 const { auth } = require("../middlewares/authMiddlewares");
 
@@ -16,6 +17,7 @@ router.route("/login").post(loginUser);
 router.route("/logout").get(logoutUser);
 router.route("/markChef").put(auth, makeUserAChef);
 router.route("/").get(auth, retrieveUser);
+router.route("/:userId").get(auth, getUserById);
 router.route("/").put(auth, updateUser);
 
 module.exports = router;
