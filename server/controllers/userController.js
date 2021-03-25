@@ -117,12 +117,29 @@ const logoutUser = AsyncHandler(async (req, res) => {
     .json({ success: true, message: "User logged out successfully" });
 });
 
-const updateUser = async (req, res) => {
+const retrieveUser = async (req, res) => {
   try {
     // get user from middleware
     const { user } = req;
 
-    console.log(user);
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+const updateUser = async (req, res) => {
+  try {
+    // get user from middleware
+    const { user } = req;
 
     const fields = req.body;
 
@@ -172,5 +189,6 @@ module.exports = {
   loginUser,
   makeUserAChef,
   logoutUser,
+  retrieveUser,
   updateUser,
 };
