@@ -1,17 +1,15 @@
 import { Dialog } from "@material-ui/core";
 import React from "react";
 import RecipeModal from "./RecipeModal";
-import EditProfile from "./EditProfile";
+import TestEditProfile from "./TestEditProfile";
 
 const DialogControl = ({ open, onClose, selectedValue, control, ...rest }) => {
   const getComponent = () => {
     switch (control) {
-      case "image":
-      case "location":
-      case "name":
-        return <EditProfile {...rest} />;
+      case "EditProfile":
+        return <TestEditProfile {...rest} />;
       case "CreateProfile":
-        return <EditProfile create={true} {...rest} />;
+        return <TestEditProfile create={true} {...rest} />;
       case "AddRecipe":
         return <RecipeModal {...rest} />;
       case "EditRecipe":
