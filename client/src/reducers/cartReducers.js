@@ -8,8 +8,8 @@ export const cartInitialState = {
     ? JSON.parse(localStorage.getItem("shippingAddress"))
     : {},
 
-  bookingDate: localStorage.getItem("bookingDate")
-    ? JSON.parse(localStorage.getItem("bookingDate"))
+  bookingDetails: localStorage.getItem("bookingDetails")
+    ? JSON.parse(localStorage.getItem("bookingDetails"))
     : {},
 };
 
@@ -22,9 +22,10 @@ export const CartReducer = (state, action) => {
       };
 
     case CART_SAVE_BOOKING_DATE:
+      console.log("payload:", action.payload);
       return {
         ...state,
-        bookingDate: action.payload,
+        bookingDetails: action.payload,
       };
 
     default:

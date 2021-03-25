@@ -16,6 +16,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { saveShippingAddress, saveBooking } from "../actions/cartActions";
 import { createOrder } from "../actions/orderActions";
 //MUI date time picker
+import { format } from "date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -244,7 +245,7 @@ const Payment = ({ history }) => {
   const classes = useStyles();
   // dispatch function from reducer
   const dispatch = useContext(UserDispatchContext);
-  const { shippingAddress, bookingDate } = useContext(UserContext);
+  const { shippingAddress, bookingDetails } = useContext(UserContext);
 
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
@@ -258,11 +259,20 @@ const Payment = ({ history }) => {
   const [open, setOpen] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [selectedDate, setSelectedDate] = useState(
-    bookingDate.selectedDate || new Date(Date.now())
+    bookingDetails.selectedDate || new Date("2021-03-26T21:11:54")
   );
   const [instructions, setInstructions] = useState(
-    bookingDate.instructions || ""
+    bookingDetails.instructions || ""
   );
+
+  // stripe
+  const [succeeded, setSucceeded] = useState(false);
+  const [error, setError] = useState(null);
+  const [processing, setProcessing] = useState("");
+  const [disabled, setDisabled] = useState(true);
+  const [clientSecret, setClientSecret] = useState("");
+  const stripe = useStripe();
+  const elements = useElements();
 
   const handleNext = () => {
     if (activeStep === 0) {
@@ -298,7 +308,7 @@ const Payment = ({ history }) => {
 
   // Date change handler
   const handleDateChange = (date) => {
-    setSelectedDate(date);
+    setSelectedDate(format(new Date(date), "eee PPpp"));
   };
 
   function getStepContent(stepIndex) {
@@ -319,15 +329,6 @@ const Payment = ({ history }) => {
   function getSteps() {
     return ["Shipping", "Pick Date and Time", "Review", "Pay"];
   }
-
-  // stripe
-  const [succeeded, setSucceeded] = useState(false);
-  const [error, setError] = useState(null);
-  const [processing, setProcessing] = useState("");
-  const [disabled, setDisabled] = useState(true);
-  const [clientSecret, setClientSecret] = useState("");
-  const stripe = useStripe();
-  const elements = useElements();
 
   // data from context
   const { userInfo } = useContext(UserContext);
@@ -395,7 +396,8 @@ const Payment = ({ history }) => {
         price: 23.98,
       },
       shippingAddress: shippingAddress,
-      bookingDate: bookingDate.selectedDate,
+      bookingDate: bookingDetails.selectedDate,
+      instructions: bookingDetails.instructions,
       totalPrice: 65.12,
     });
   };
@@ -480,6 +482,7 @@ const Payment = ({ history }) => {
                       <KeyboardTimePicker
                         margin="normal"
                         required
+                        format="hh:mm"
                         label="Time picker"
                         value={selectedDate}
                         onChange={handleDateChange}
@@ -526,7 +529,9 @@ const Payment = ({ history }) => {
                         <Typography className={classes.heading} variant="h5">
                           ORDER DATE
                         </Typography>
-                        <Typography>Date: {" " + selectedDate} </Typography>
+                        <Typography>
+                          Date: {" " + bookingDetails.selectedDate}{" "}
+                        </Typography>
                       </div>
 
                       {instructions && (

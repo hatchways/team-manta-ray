@@ -13,10 +13,11 @@ export const saveShippingAddress = async (dispatch, data) => {
 };
 
 export const saveBooking = async (dispatch, data) => {
+  console.log(JSON.stringify(data));
   dispatch({
     type: CART_SAVE_BOOKING_DATE,
     payload: data,
   });
 
-  localStorage.setItem("bookingDate", JSON.stringify(data));
+  localStorage.setItem("bookingDetails", JSON.stringify(data));
 };
