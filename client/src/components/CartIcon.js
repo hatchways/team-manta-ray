@@ -1,27 +1,16 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Badge, IconButton } from "@material-ui/core";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import DialogControl from "./Dialogs/DialogControl";
 import { UserContext, UserDispatchContext } from "../context/UserContext";
 import { getCartInfo } from "../actions/cartActions";
-
-const StyledBadge = withStyles((theme) => ({
-  badge: {
-    right: -3,
-    top: 13,
-    border: `2px solid ${theme.palette.background.paper}`,
-    padding: "0 4px",
-  },
-}))(Badge);
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(3),
   },
   icon: {
-    fontSize: 40,
-    justifyContent: "end",
     color: "black",
   },
 }));
@@ -31,7 +20,6 @@ const CartIcon = () => {
 
   const { cart } = useContext(UserContext);
   const dispatch = useContext(UserDispatchContext);
-
   const [cartOpen, setCartOpen] = useState(false);
 
   useEffect(() => {
@@ -52,13 +40,17 @@ const CartIcon = () => {
         className={classes.menuButton}
         onClick={() => handleClickOpen("cart")}
       >
-        <StyledBadge
+        <Badge
           badgeContent={cart && cart.reduce((acc, cur) => acc + cur.qty, 0)}
           color="secondary"
           className={classes.icon}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
         >
           <ShoppingCartIcon />
-        </StyledBadge>
+        </Badge>
       </IconButton>
       <DialogControl open={cartOpen} onClose={handleCartClose} control="cart" />
     </>
