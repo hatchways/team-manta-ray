@@ -18,12 +18,8 @@ import {
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 import plateLogo from "../assets/plate.svg";
 import { logout } from "../actions/userActions";
-<<<<<<< HEAD
-import { resetRecipes } from "../actions/recipeActions";
 import CartIcon from "./CartIcon";
-=======
 import Logo from "./Logo";
->>>>>>> dev
 
 const useStyles = makeStyles((theme) => ({
   toolBar: {
@@ -61,13 +57,7 @@ const NavBar = ({ history }) => {
 
   const logoutHandler = async (e) => {
     e.preventDefault();
-<<<<<<< HEAD
-    logout(dispatch);
-    resetRecipes(dispatch);
-    localStorage.removeItem("userInfo");
-=======
     await logout(dispatch);
->>>>>>> dev
     history.replace("/login");
   };
 
@@ -81,21 +71,8 @@ const NavBar = ({ history }) => {
                 <Avatar src={userData.avatar} alt="user profile pic" />
               </Grid> */}
 
-<<<<<<< HEAD
-              <Grid item>
-                <CartIcon />
-                <IconButton
-                  edge="start"
-                  className={classes.menuButton}
-                  color="inherit"
-                  aria-label="menu"
-                  onClick={drawerHandler}
-                >
-                  <DragHandleIcon className={classes.icon} />
-                </IconButton>
-              </Grid>
-=======
             <Box color="#000">
+              <CartIcon />
               <IconButton
                 color="inherit"
                 aria-label="menu"
@@ -124,37 +101,11 @@ const NavBar = ({ history }) => {
                   <ListItemText primary="Log Out" />
                 </ListItem>
               </List>
->>>>>>> dev
             </div>
           </Drawer>
         </Container>
       </AppBar>
-<<<<<<< HEAD
-
-      <Drawer
-        variant="temporary"
-        anchor="right"
-        open={open}
-        onClose={() => setOpen(false)}
-      >
-        <div className={classes.drawerDiv}>
-          <List component="nav" aria-label="navigation">
-            <ListItem divider className={classes.plateIcon}>
-              <img src={plateLogo} alt="plate icon" />
-            </ListItem>
-            <ListItem button component={Link} to="/profile" divider>
-              <ListItemText primary="Profile" />
-            </ListItem>
-            <ListItem button divider onClick={logoutHandler}>
-              <ListItemText primary="Log Out" />
-            </ListItem>
-          </List>
-        </div>
-      </Drawer>
-    </div>
-=======
     </Box>
->>>>>>> dev
   );
 };
 

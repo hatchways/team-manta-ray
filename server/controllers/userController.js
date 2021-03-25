@@ -176,7 +176,7 @@ const editUserCart = AsyncHandler(async (req, res) => {
   //get user from middleWare
   const { user } = req;
 
-  //recipeId && chefId will be in body
+  //recipeId && chefId will be in body and qty is optional-only from frontend, it is a required field in model
   const { recipe, chef, qty } = req.body;
 
   try {
@@ -273,6 +273,16 @@ const deleteAnItemFromCart = AsyncHandler(async (req, res) => {
     );
 
     await currentUser.save();
+
+    //check if the is no items in the cart reset the cart
+    if (currentUser.cart.items.length === 0) {
+      const updatedUser = await User.updateOne(
+        { _id: user._id },
+        { $unset: { cart: "" } }
+      );
+    }
+
+    //return all the info needed for a smooth context workflow in frontend-aka items of the cart for this route
 
     const updatedCart = await User.findById(user._id)
       .select("cart")

@@ -1,9 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Badge, IconButton } from "@material-ui/core";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import DialogControl from "./Dialogs/DialogControl";
-import { UserContext } from "../context/UserContext";
+import { UserContext, UserDispatchContext } from "../context/UserContext";
+import { getCartInfo } from "../actions/cartActions";
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -29,8 +30,13 @@ const CartIcon = () => {
   const classes = useStyles();
 
   const { cart } = useContext(UserContext);
-  console.log(cart);
+  const dispatch = useContext(UserDispatchContext);
+
   const [cartOpen, setCartOpen] = useState(false);
+
+  useEffect(() => {
+    getCartInfo(dispatch);
+  }, [dispatch]);
 
   const handleCartClose = (value) => {
     setCartOpen(false);

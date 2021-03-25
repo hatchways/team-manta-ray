@@ -31,7 +31,7 @@ const Private = () => {
         <Route path="/payment" render={(props) => <Payment {...props} />} />
         <Route path="/test" component={TestComponent} />
         <Route path="/profile" component={CustomerProfile} />
-        <Route path="/chefprofile" component={ChefProfile} />
+        <Route path="/chefprofile/:userId?" component={ChefProfile} />
         <Route path="/chef/:userId?/recipeId?" component={TestChefProfile} />
       </Switch>
     </>

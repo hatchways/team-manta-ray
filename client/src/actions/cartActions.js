@@ -17,7 +17,7 @@ export const getCartInfo = async (dispatch) => {
     const res = await axios.get("/api/users/cart");
     if (res.status === 200) {
       dispatch({ type: SET_CART_ITEMS, payload: res.data.cart.items });
-      //-----------Temporary-------//
+      //-----------Temporary------- when we change the models and have only user model, we will not need this second call. I have it here because I need the name of the chef//
       const chefRes = await axios.get(
         `/api/chefProfiles/chefId/${res.data.cart.chef._id}`
       );

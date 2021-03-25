@@ -99,7 +99,6 @@ const CartModal = () => {
         <List dense>
           <ListItem dense>
             <Button
-              startIcon
               variant="contained"
               className={classes.clearBtn}
               onClick={() => clearCart(dispatch)}
@@ -250,7 +249,7 @@ const CartModal = () => {
                 Contact Chef
               </Button>
             </Link>
-            <Link to="/payment" className={classes.btn}>
+            <Link to="/checkout" className={classes.btn}>
               <Button variant="contained" color="secondary">
                 Proceed to checkout
               </Button>
