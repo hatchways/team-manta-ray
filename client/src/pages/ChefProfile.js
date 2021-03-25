@@ -34,8 +34,6 @@ const ChefProfile = ({ history }) => {
         }
       };
       getProfileAndRecipes();
-    } else if (!userInfo) {
-      history.replace("/login");
     }
   }, [dispatch, userInfo, history]);
 
