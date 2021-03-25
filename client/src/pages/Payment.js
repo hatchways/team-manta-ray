@@ -14,6 +14,7 @@ import StepLabel from "@material-ui/core/StepLabel";
 import { FormControl, Snackbar, TextField } from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
 import { saveShippingAddress, saveBooking } from "../actions/cartActions";
+import { createOrder } from "../actions/orderActions";
 //MUI date time picker
 import {
   MuiPickersUtilsProvider,
@@ -380,7 +381,23 @@ const Payment = ({ history }) => {
       setProcessing(false);
       setSucceeded(true);
       history.replace("/success");
+      placeOrder();
     }
+  };
+
+  const placeOrder = () => {
+    createOrder(dispatch, {
+      orderItems: {
+        id: "605a05d716942757f1ea8b2b",
+        name: "xyz",
+        quantity: 1,
+        image: "image url",
+        price: 23.98,
+      },
+      shippingAddress: shippingAddress,
+      bookingDate: bookingDate.selectedDate,
+      totalPrice: 65.12,
+    });
   };
 
   return (
