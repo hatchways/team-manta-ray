@@ -1,4 +1,6 @@
 const User = require("../models/userModel.js");
+const ChefProfile = require("../models/chefProfileModel");
+const UserProfile = require("../models/userProfileModel");
 const AsyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
 
@@ -38,6 +40,17 @@ const registerUser = AsyncHandler(async (req, res) => {
       maxAge: 86400000, // 24hrs
       httpOnly: true,
     });
+
+    //------/Temporary for Demo/-----Create a profile-------
+    if (user.isChef) {
+      const profile = await ChefProfile.create({
+        user: user._id,
+      });
+    } else {
+      const profile = await UserProfile.create({
+        user: user._id,
+      });
+    }
 
     res.status(201).json({
       _id: user._id,

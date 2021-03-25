@@ -50,6 +50,7 @@ export const RecipeReducer = (state, action) => {
         ...state,
         recipes: action.payload,
       };
+
     default:
       return state;
   }
