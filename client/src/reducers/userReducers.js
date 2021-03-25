@@ -17,7 +17,7 @@ const userData = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
-export const initialState = {
+export const userInitialState = {
   userInfo: "" || userData,
   loading: false,
   error: null,
