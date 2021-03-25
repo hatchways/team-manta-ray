@@ -11,6 +11,7 @@ import { getRecipesByChef } from "../actions/recipeActions";
 import NavBar from "../components/NavBar";
 
 import { makeStyles } from "@material-ui/core/styles";
+import { getCartInfo } from "../actions/cartActions";
 
 const useStyles = makeStyles((theme) => ({
   btn: {
@@ -53,7 +54,7 @@ const ChefProfile = ({ history, match }) => {
     } else {
       getProfileAndRecipes();
     }
-
+    getCartInfo(dispatch);
     setIsOwner(userId && userId !== userInfo._id ? false : true);
   }, [dispatch, userInfo, history, userId, recipeId]);
 
@@ -173,18 +174,13 @@ const ChefProfile = ({ history, match }) => {
 
           {recipes &&
             recipes.map((recipe) => (
-              <div
+              <TestRecipe
+                recipe={recipe}
+                key={recipe._id}
                 id={recipe._id}
-                onClick={() => console.log(recipe._id + "/n" + recipe.user)}
-              >
-                <TestRecipe
-                  recipe={recipe}
-                  key={recipe._id}
-                  id={recipe._id}
-                  isOwner={isOwner}
-                  onClick={() => console.log(recipe._id)}
-                />
-              </div>
+                isOwner={isOwner}
+                onClick={() => console.log(recipe._id)}
+              />
             ))}
         </div>
 

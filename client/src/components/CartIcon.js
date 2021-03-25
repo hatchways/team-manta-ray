@@ -29,7 +29,7 @@ const CartIcon = () => {
   const classes = useStyles();
 
   const { cart } = useContext(UserContext);
-
+  console.log(cart);
   const [cartOpen, setCartOpen] = useState(false);
 
   const handleCartClose = (value) => {
@@ -47,7 +47,7 @@ const CartIcon = () => {
         onClick={() => handleClickOpen("cart")}
       >
         <StyledBadge
-          badgeContent={cart && cart.reduce((acc, cur) => acc + cur.count, 0)}
+          badgeContent={cart && cart.reduce((acc, cur) => acc + cur.qty, 0)}
           color="secondary"
           className={classes.icon}
         >

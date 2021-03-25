@@ -7,43 +7,36 @@ import {
   GET_CHOSEN_CHEF_PROFILE,
   SET_CONFLICT_ERR,
   CLEAR_CONFLICT_ERR,
+  SET_CART_ITEMS,
+  SET_CHEF,
 } from "../constants/userConstants";
 
 export const cartInitialState = {
-  cart: localStorage.getItem("cart")
-    ? JSON.parse(localStorage.getItem("cart"))
-    : [],
-  chosenChefProfile: localStorage.getItem("chosenChefProfile")
-    ? JSON.parse(localStorage.getItem("chosenChefProfile"))
-    : null,
+  cart: [],
+  chosenChefProfile: null,
   chefConflictErr: null,
 };
 
 export const CartReducer = (state, action) => {
   const { type, payload } = action;
+  console.log(type);
+  console.log(payload);
   switch (type) {
+    case SET_CART_ITEMS:
+      return {
+        ...state,
+        cart: payload,
+      };
+    case SET_CHEF:
+      return {
+        ...state,
+        chosenChefProfile: payload,
+      };
     case ADD_TO_CART:
-      const itemExist = state.cart.find((item) => item._id === payload._id);
-      if (itemExist) {
-        const newCart = state.cart.map((item) =>
-          item._id === payload._id ? { ...item, count: item.count + 1 } : item
-        );
-        localStorage.setItem("cart", JSON.stringify(newCart));
-        return {
-          ...state,
-          cart: newCart,
-        };
-      } else {
-        localStorage.setItem(
-          "cart",
-          JSON.stringify([{ ...payload, count: 1 }, ...state.cart])
-        );
-        return {
-          ...state,
-          cart: [{ ...payload, count: 1 }, ...state.cart],
-          chefConflictErr: null,
-        };
-      }
+      return {
+        ...state,
+        cart: payload,
+      };
 
     case SET_CONFLICT_ERR:
       return {
@@ -57,55 +50,26 @@ export const CartReducer = (state, action) => {
         chefConflictErr: null,
       };
     case INCREASE_COUNT:
-      const newCart = state.cart.map((item) =>
-        item._id === payload ? { ...item, count: item.count + 1 } : item
-      );
-      localStorage.setItem("cart", JSON.stringify(newCart));
       return {
         ...state,
-        cart: newCart,
+        cart: payload,
       };
     case DECREASE_COUNT:
-      const NewCart = state.cart.map((item) =>
-        item._id === payload
-          ? { ...item, count: item.count - 1 > 0 ? item.count - 1 : 0 }
-          : item
-      );
-      localStorage.setItem("cart", JSON.stringify(NewCart));
       return {
         ...state,
-        cart: NewCart,
+        cart: payload,
       };
     case DELETE_FROM_CART:
-      const filteredCart = state.cart.filter(
-        (recipe) => recipe._id !== payload
-      );
-      if (filteredCart.length === 0) {
-        localStorage.removeItem("cart");
-        localStorage.removeItem("chosenChefProfile");
-        return {
-          ...state,
-          cart: [],
-          chosenChefProfile: null,
-        };
-      } else {
-        localStorage.setItem("cart", JSON.stringify(filteredCart));
-
-        return {
-          ...state,
-          cart: filteredCart,
-        };
-      }
+      return {
+        ...state,
+        cart: payload,
+      };
     case GET_CHOSEN_CHEF_PROFILE:
-      localStorage.setItem("chosenChefProfile", JSON.stringify(payload));
-
       return {
         ...state,
         chosenChefProfile: payload,
       };
     case RESET_CART:
-      localStorage.removeItem("cart");
-      localStorage.removeItem("chosenChefProfile");
       return {
         ...state,
         cart: [],

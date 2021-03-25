@@ -164,7 +164,7 @@ const editUserCart = AsyncHandler(async (req, res) => {
   const { user } = req;
 
   //recipeId && chefId will be in body
-  const { recipe, qty, chef } = req.body;
+  const { recipe, chef, qty } = req.body;
 
   try {
     const currentUser = await User.findById(user._id);
@@ -176,9 +176,21 @@ const editUserCart = AsyncHandler(async (req, res) => {
 
     const cartIsEmpty = currentUser.cart.items.length === 0;
     if (cartIsEmpty) {
-      currentUser.cart = { chef, items: [{ recipe, qty }] };
+      currentUser.cart = { chef, items: [{ recipe, qty: 1 }] };
       await currentUser.save();
-      res.status(200).json(currentUser.cart);
+      const updatedCart = await User.findById(user._id)
+        .select("cart")
+        .populate({
+          path: "cart",
+          populate: {
+            path: "items",
+            populate: {
+              path: "recipe",
+            },
+          },
+        })
+        .exec();
+      res.status(200).json(updatedCart.cart.items);
       return;
     }
 
@@ -202,15 +214,30 @@ const editUserCart = AsyncHandler(async (req, res) => {
     );
 
     if (isItemAlreadyInCart) {
+      //if qty provided in body set to that, otherwise just add the qty by 1
       currentUser.cart.items = currentUser.cart.items.map((item) =>
-        item.recipe.toString() === recipe ? { recipe, qty } : item
+        item.recipe.toString() === recipe
+          ? { recipe, qty: qty ? qty : item.qty + 1 }
+          : item
       );
     } else {
-      currentUser.cart.items.unshift({ recipe, qty });
+      currentUser.cart.items.unshift({ recipe, qty: 1 });
     }
 
     await currentUser.save();
-    res.status(200).json(currentUser.cart);
+    const updatedCart = await User.findById(user._id)
+      .select("cart")
+      .populate({
+        path: "cart",
+        populate: {
+          path: "items",
+          populate: {
+            path: "recipe",
+          },
+        },
+      })
+      .exec();
+    res.status(200).json(updatedCart.cart.items);
   } catch (error) {
     console.log(error);
     res.status(500);
@@ -234,7 +261,20 @@ const deleteAnItemFromCart = AsyncHandler(async (req, res) => {
 
     await currentUser.save();
 
-    res.status(200).json(currentUser.cart);
+    const updatedCart = await User.findById(user._id)
+      .select("cart")
+      .populate({
+        path: "cart",
+        populate: {
+          path: "items",
+          populate: {
+            path: "recipe",
+          },
+        },
+      })
+      .exec();
+
+    res.status(200).json(updatedCart.cart.items);
   } catch (error) {
     console.log(error);
     res.status(500);

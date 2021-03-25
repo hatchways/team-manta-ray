@@ -160,18 +160,18 @@ const CartModal = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {cart.map((item) => (
-                    <TableRow key={item._id}>
+                  {cart.map(({ qty, recipe }) => (
+                    <TableRow key={recipe._id}>
                       <TableCell component="th" scope="item">
                         <Avatar
                           alt="Remy Sharp"
-                          src={item.recipePictureUrl || plate}
+                          src={recipe.recipePictureUrl || plate}
                         />
                       </TableCell>
-                      <TableCell align="justify">{item.name}</TableCell>
+                      <TableCell align="justify">{recipe.name}</TableCell>
                       <Hidden smDown>
                         <TableCell align="justify" nowrap="nowrap">
-                          <span>{item.count}</span>{" "}
+                          <span>{qty}</span>{" "}
                           <ButtonGroup
                             disableElevation
                             variant="contained"
@@ -179,15 +179,25 @@ const CartModal = () => {
                           >
                             <Button
                               onClick={() =>
-                                item.count > 1
-                                  ? decreaseCount(dispatch, item._id)
-                                  : removeFromCart(dispatch, item._id)
+                                qty > 1
+                                  ? decreaseCount(dispatch, {
+                                      id: recipe._id,
+                                      qty: qty - 1,
+                                      chef: recipe.user,
+                                    })
+                                  : removeFromCart(dispatch, recipe._id)
                               }
                             >
                               -
                             </Button>
                             <Button
-                              onClick={() => increaseCount(dispatch, item._id)}
+                              onClick={() =>
+                                increaseCount(dispatch, {
+                                  id: recipe._id,
+                                  qty: qty + 1,
+                                  chef: recipe.user,
+                                })
+                              }
                             >
                               +
                             </Button>
@@ -195,13 +205,15 @@ const CartModal = () => {
                         </TableCell>
                       </Hidden>
                       <Hidden smDown>
-                        <TableCell align="right">{`${item.price}x${
-                          item.count
-                        }=${addDecimals(item.count * item.price)}`}</TableCell>
+                        <TableCell align="right">{`${
+                          recipe.price
+                        }x${qty}=${addDecimals(
+                          qty * recipe.price
+                        )}`}</TableCell>
                       </Hidden>
                       <TableCell
                         align="right"
-                        onClick={(e) => handleDelete(item._id)}
+                        onClick={(e) => handleDelete(recipe._id)}
                       >
                         <IconButton edge="end" aria-label="delete">
                           <DeleteForeverIcon />
@@ -223,7 +235,10 @@ const CartModal = () => {
               <Typography gutterBottom variant="h6">
                 {" "}
                 {addDecimals(
-                  cart.reduce((acc, cur) => acc + cur.price * cur.count, 0),
+                  cart.reduce(
+                    (acc, cur) => acc + cur.recipe.price * cur.qty,
+                    0
+                  ),
                   2
                 )}
               </Typography>
