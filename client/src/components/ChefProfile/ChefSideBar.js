@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import {
   Grid,
   Box,
@@ -6,7 +7,6 @@ import {
   Typography,
   Button,
   useMediaQuery,
-  Link,
 } from "@material-ui/core";
 import line from "../../assets/line.png";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -74,6 +74,7 @@ const ChefSideBar = (props) => {
       height: "100%",
       borderRadius: "0",
       width: "100%",
+      textDecoration: "none",
     },
 
     chefInfoContainer: {
@@ -157,11 +158,7 @@ const ChefSideBar = (props) => {
           </Box>
         ) : (
           <Box className={classes.chefReqBtnContainer}>
-            <Link
-              to="/checkout"
-              className={classes.chefReqBtn}
-              style={{ textDecoration: "none" }}
-            >
+            <Link to="/checkout" className={classes.chefReqBtn}>
               <Button
                 variant="contained"
                 color="secondary"
@@ -171,11 +168,7 @@ const ChefSideBar = (props) => {
               </Button>
             </Link>
             {!isOwner && cart.length > 0 && (
-              <Link
-                to="/checkout"
-                className={classes.chefReqBtn}
-                style={{ textDecoration: "none" }}
-              >
+              <Link to="/checkout" className={classes.chefReqBtn}>
                 <Button
                   variant="contained"
                   color="secondary"
