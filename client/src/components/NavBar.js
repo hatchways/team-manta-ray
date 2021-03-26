@@ -9,6 +9,7 @@ import {
   List,
   ListItem,
   ListItemText,
+
   // Avatar,
   makeStyles,
   Box,
@@ -17,6 +18,7 @@ import {
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 import plateLogo from "../assets/plate.svg";
 import { logout } from "../actions/userActions";
+import CartIcon from "./CartIcon";
 import Logo from "./Logo";
 
 const useStyles = makeStyles((theme) => ({
@@ -70,6 +72,7 @@ const NavBar = ({ history }) => {
               </Grid> */}
 
             <Box color="#000">
+              <CartIcon />
               <IconButton
                 color="inherit"
                 aria-label="menu"
