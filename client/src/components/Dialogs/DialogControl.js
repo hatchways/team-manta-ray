@@ -1,6 +1,7 @@
 import { Dialog } from "@material-ui/core";
 import React from "react";
 import RecipeModal from "./RecipeModal";
+import CartModal from "./CartModal";
 import TestEditProfile from "./TestEditProfile";
 import OrderDetails from "./OrderDetails";
 
@@ -18,6 +19,8 @@ const DialogControl = ({ open, onClose, selectedValue, control, ...rest }) => {
       case "OrderDetails":
         return <OrderDetails {...rest} />;
 
+      case "cart":
+        return <CartModal />;
       default:
         return null;
     }
