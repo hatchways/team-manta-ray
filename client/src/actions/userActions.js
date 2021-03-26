@@ -3,7 +3,6 @@
  */
 
 import axios from "axios";
-import { RESET_RECIPES } from "../constants/RecipeConstants";
 import {
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
@@ -12,6 +11,7 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
+  RESET_RECIPES,
 } from "../constants/userConstants";
 
 // User login action

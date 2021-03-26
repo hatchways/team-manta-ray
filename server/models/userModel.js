@@ -27,6 +27,26 @@ const userSchema = new Schema(
       type: String,
       required: false,
     },
+    cart: {
+      chef: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ChefProfile",
+        required: true,
+      },
+      items: [
+        {
+          recipe: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Recipe",
+            required: true,
+          },
+          qty: {
+            type: Number,
+            required: true,
+          },
+        },
+      ],
+    },
   },
   {
     timestamps: true,

@@ -9,13 +9,14 @@ import {
   UserRegisterReducer,
 } from "../reducers/userReducers";
 
-import { cartInitialState, CartReducer } from "../reducers/cartReducers";
+import { recipeInitialState, RecipeReducer } from "../reducers/RecipeReducer";
+import { cartInitialState, CartReducer } from "../reducers/CartReducer";
 
 const initialState = {
   ...userInitialState,
   ...cartInitialState,
+  ...recipeInitialState,
 };
-
 // initial user context
 export const UserContext = createContext(null);
 
@@ -31,7 +32,12 @@ const combineReducers = (...reducers) => (state = initialState, action) => {
 // Context
 export const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(
-    combineReducers(UserLoginReducer, UserRegisterReducer, CartReducer),
+    combineReducers(
+      UserLoginReducer,
+      UserRegisterReducer,
+      CartReducer,
+      RecipeReducer
+    ),
     initialState
   ); // User reducer function
 
