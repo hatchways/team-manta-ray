@@ -33,7 +33,7 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditProfile = ({ create, profile }) => {
+const EditProfile = ({ create, profile, setProfile }) => {
   const classes = useStyles();
 
   const [profileInfo, setProfileInfo] = useState(profile ? profile : null);

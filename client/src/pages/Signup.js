@@ -6,7 +6,7 @@ import { useStyles } from "./Login";
 import Banner from "../components/Banner";
 import FormikControl from "../components/Formik/FormikControl";
 
-import logo from "../assets/logo.svg";
+import Logo from "../components/Logo";
 import { UserContext, UserDispatchContext } from "../context/UserContext";
 import { register } from "../actions/userActions";
 import Loader from "../components/Loader";
@@ -24,8 +24,10 @@ const Signup = ({ history }) => {
 
   // check if user logged in
   useEffect(() => {
-    if (userInfo) {
-      history.push("/chef");
+    if (userInfo && userInfo.isChef) {
+      history.push("/chefprofile");
+    } else if (userInfo) {
+      history.push("/profile");
     }
   }, [userInfo, history]);
 
@@ -38,6 +40,7 @@ const Signup = ({ history }) => {
     email: "",
     password: "",
     confirmPassword: "",
+    isChef: false,
   };
 
   const validationSchema = Yup.object({
@@ -59,12 +62,13 @@ const Signup = ({ history }) => {
     payload.name = values.name;
     payload.email = values.email;
     payload.password = values.password;
+    payload.isChef = values.isChef;
 
     try {
       const user = await register(dispatch, payload); //Get data from backend API
 
       if (user) {
-        history.push("/chef");
+        history.push("/profile");
       } else setOpen(true);
     } catch (err) {
       console.log(err);
@@ -76,7 +80,7 @@ const Signup = ({ history }) => {
   return (
     <Grid container component="main" className={classes.root}>
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <img src={logo} alt="logo" className={classes.margin} />
+        <Logo className={classes.margin} />
         <div className={classes.paper}>
           <Typography component="h3" variant="h3">
             Create an account
@@ -118,6 +122,12 @@ const Signup = ({ history }) => {
                     label="CONFIRM PASSWORD"
                     name="confirmPassword"
                     placeholder="Confirm password"
+                  />
+                  <FormikControl
+                    control="checkbox"
+                    type="checkbox"
+                    label="I AM A CHEF"
+                    name="isChef"
                   />
                   <Button
                     type="submit"

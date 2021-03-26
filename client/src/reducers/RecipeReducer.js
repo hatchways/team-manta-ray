@@ -5,9 +5,9 @@ import {
   GET_RECIPE,
   GET_RECIPES_BY_CHEF,
   RESET_RECIPES,
-} from "../constants/RecipeConstants";
+} from "../constants/userConstants";
 
-export const initialState = {
+export const recipeInitialState = {
   recipes: [],
   recipe: {},
 };
@@ -50,6 +50,7 @@ export const RecipeReducer = (state, action) => {
         ...state,
         recipes: action.payload,
       };
+
     default:
       return state;
   }
