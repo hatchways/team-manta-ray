@@ -6,6 +6,9 @@ const {
   loginUser,
   logoutUser,
   makeUserAChef,
+  updateUser,
+  retrieveUser,
+  getUserById,
   getUserCart,
   editUserCart,
   deleteUserCart,
@@ -17,6 +20,9 @@ router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
 router.route("/logout").get(logoutUser);
 router.route("/markChef").put(auth, makeUserAChef);
+router.route("/").get(auth, retrieveUser); // get authenticated user
+router.route("/:userId").get(auth, getUserById); //get user by id param
+router.route("/").put(auth, updateUser); //update user
 router
   .route("/cart")
   .get(auth, getUserCart)

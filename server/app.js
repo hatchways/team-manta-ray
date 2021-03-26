@@ -15,8 +15,6 @@ const userRoutes = require("./routes/userRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const imageRoutes = require("./routes/imageRoutes");
 const recipeRoutes = require("./routes/recipeRoutes");
-const userProfileRoutes = require("./routes/userProfileRoutes");
-const chefProfileRoutes = require("./routes/chefProfileRoutes");
 const searchRoutes = require("./routes/searchRoutes");
 
 connectDB();
@@ -38,10 +36,6 @@ app.use("/", indexRouter);
 app.use("/api/users", userRoutes);
 //Routes for images
 app.use("/api/image", imageRoutes);
-// Routes for userProfiles
-app.use("/api/userProfiles", userProfileRoutes);
-// // Routes for chefProfiles
-app.use("/api/chefProfiles", chefProfileRoutes);
 // Routes for recipes
 app.use("/api/recipes", recipeRoutes);
 // Routes for searching recipes and chefs
