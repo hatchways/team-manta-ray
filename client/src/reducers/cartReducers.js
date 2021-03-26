@@ -4,13 +4,8 @@ import {
 } from "../constants/cartConstants";
 
 export const cartInitialState = {
-  shippingAddress: localStorage.getItem("shippingAddress")
-    ? JSON.parse(localStorage.getItem("shippingAddress"))
-    : {},
-
-  bookingDetails: localStorage.getItem("bookingDetails")
-    ? JSON.parse(localStorage.getItem("bookingDetails"))
-    : {},
+  shippingAddress: "",
+  bookingDetails: "",
 };
 
 export const CartReducer = (state, action) => {
