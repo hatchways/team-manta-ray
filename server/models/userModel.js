@@ -43,6 +43,7 @@ const userSchema = new Schema(
     },
     cuisines: {
       type: [String],
+    },
     cart: {
       chef: {
         type: mongoose.Schema.Types.ObjectId,
