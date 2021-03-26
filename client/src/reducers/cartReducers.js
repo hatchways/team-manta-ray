@@ -17,7 +17,6 @@ export const CartReducer = (state, action) => {
       };
 
     case CART_SAVE_BOOKING_DATE:
-      console.log("payload:", action.payload);
       return {
         ...state,
         bookingDetails: action.payload,

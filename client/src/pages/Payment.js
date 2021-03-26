@@ -308,7 +308,11 @@ const Payment = ({ history }) => {
 
   // Date change handler
   const handleDateChange = (date) => {
-    setSelectedDate(format(new Date(date), "eee PPpp"));
+    setSelectedDate(
+      format(date, "yyyy-MM-dd HH:mm:ssXXX", {
+        timeZone: "America/New_York",
+      })
+    );
   };
 
   function getStepContent(stepIndex) {
