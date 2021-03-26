@@ -1,6 +1,7 @@
 import { Dialog } from "@material-ui/core";
 import React from "react";
 import RecipeModal from "./RecipeModal";
+import CartModal from "./CartModal";
 import TestEditProfile from "./TestEditProfile";
 
 const DialogControl = ({ open, onClose, selectedValue, control, ...rest }) => {
@@ -14,6 +15,8 @@ const DialogControl = ({ open, onClose, selectedValue, control, ...rest }) => {
         return <RecipeModal {...rest} />;
       case "EditRecipe":
         return <RecipeModal edit={true} {...rest} />;
+      case "cart":
+        return <CartModal />;
       default:
         return null;
     }

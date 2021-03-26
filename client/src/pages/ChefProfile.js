@@ -3,12 +3,13 @@ import { Grid, Hidden, Box, Typography, Paper } from "@material-ui/core";
 import ChefSideBar from "../components/ChefProfile/ChefSideBar";
 import ChefRecipes from "../components/ChefProfile/ChefRecipes";
 import { makeStyles } from "@material-ui/core/styles";
-import { RecipeContext, RecipeDispatchContext } from "../context/RecipeContext";
-import { UserContext } from "../context/UserContext";
+import { UserContext, UserDispatchContext } from "../context/UserContext";
 import axios from "axios";
 import { getRecipesByChef } from "../actions/recipeActions";
 
-const ChefProfile = ({ history }) => {
+const ChefProfile = ({ history, match }) => {
+  const { recipeId, userId } = match.params;
+
   const useStyles = makeStyles((theme) => ({
     chefMenuName: {
       marginTop: theme.spacing(10),
@@ -18,18 +19,23 @@ const ChefProfile = ({ history }) => {
 
   const classes = useStyles();
 
-  const { recipes } = useContext(RecipeContext);
-  const dispatch = useContext(RecipeDispatchContext);
+  const { recipes, userInfo } = useContext(UserContext);
+  const dispatch = useContext(UserDispatchContext);
 
-  const { userInfo } = useContext(UserContext);
   const [profile, setProfile] = useState(null);
+  const [isOwner, setIsOwner] = useState(true);
 
   useEffect(() => {
     if (userInfo && userInfo.isChef) {
       const getProfileAndRecipes = async () => {
-        const res = await axios.get(`/api/chefProfiles/${userInfo._id}`);
+        const idToFetchProfile = userId ? userId : userInfo._id;
+        console.log(idToFetchProfile);
+
+        const res = await axios.get(`/api/chefProfiles/${idToFetchProfile}`);
+        console.log(res.data);
         if (res.data) {
           setProfile(res.data.chefProfile);
+
           getRecipesByChef(dispatch, res.data.chefProfile._id);
         }
       };
@@ -37,7 +43,8 @@ const ChefProfile = ({ history }) => {
     } else if (!userInfo) {
       history.replace("/login");
     }
-  }, [dispatch, userInfo, history]);
+    setIsOwner(userId && userId !== userInfo._id ? false : true);
+  }, [dispatch, userInfo, history, userId]);
 
   const chefInfosAndRecipes = {
     name: "Gordon Ramsey",
@@ -61,6 +68,7 @@ const ChefProfile = ({ history }) => {
         profile={profile}
         userInfo={userInfo}
         setProfile={setProfile}
+        isOwner={isOwner}
       />
 
       {/* Imaginary Grid for mdUp views*/}
@@ -73,16 +81,22 @@ const ChefProfile = ({ history }) => {
         <Grid container justify="center">
           <Grid item xl={8} lg={9} md={10} sm={11} xs={12}>
             <Box textAlign="center" className={classes.chefMenuName}>
-              {userInfo && (
+              {profile && (
                 <Typography variant="h4">{`${
-                  userInfo.name.split(" ")[0]
+                  profile.user.name.split(" ")[0]
                 }'s Menu`}</Typography>
               )}
             </Box>
             <Paper elevation={3}>
-              {recipes.map((recipe) => (
-                <ChefRecipes recipe={recipe} key={recipe._id} id={recipe._id} />
-              ))}
+              {recipes &&
+                recipes.map((recipe) => (
+                  <ChefRecipes
+                    recipe={recipe}
+                    key={recipe._id}
+                    id={recipe._id}
+                    isOwner={isOwner}
+                  />
+                ))}
             </Paper>
           </Grid>
         </Grid>

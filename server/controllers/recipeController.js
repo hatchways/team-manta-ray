@@ -110,6 +110,7 @@ const updateRecipe = async (req, res) => {
       cuisineTags = cuisineTags
         .split(",")
         .map((tag) => tag.trim().toLowerCase());
+    //--------needs to make arrays here as well-------------//
 
     // update recipe
     recipe.name = name;

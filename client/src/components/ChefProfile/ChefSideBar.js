@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import {
   Grid,
   Box,
@@ -10,22 +11,16 @@ import {
 import line from "../../assets/line.png";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import DialogControl from "../Dialogs/DialogControl";
+import { UserContext } from "../../context/UserContext";
+import defaultUserPicture from "../../assets/defaultUserImage.png";
 
 const ChefSideBar = (props) => {
-  const { name, chefProfile } = props.chefInfosAndRecipes;
-  const { userInfo, profile, setProfile } = props;
+  const { chefProfile } = props.chefInfosAndRecipes;
+  const { userInfo, profile, setProfile, isOwner } = props;
 
-  const {
-    bio,
-    coverPictureUrl,
-    profilePictureUrl,
-    location,
-    cuisineTags,
-  } = chefProfile;
+  const { coverPictureUrl, location } = chefProfile;
 
   const theme = useTheme();
-
-  const isOwner = true;
 
   const isBrowser = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -72,11 +67,14 @@ const ChefSideBar = (props) => {
 
     chefReqBtnContainer: {
       height: "15%",
+      display: "flex",
     },
 
     chefReqBtn: {
       height: "100%",
       borderRadius: "0",
+      width: "100%",
+      textDecoration: "none",
     },
 
     chefInfoContainer: {
@@ -87,6 +85,7 @@ const ChefSideBar = (props) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [control, setControl] = useState(null);
+  const { cart } = useContext(UserContext);
 
   const handleClickOpen = (ctl) => {
     setOpen(true);
@@ -109,14 +108,16 @@ const ChefSideBar = (props) => {
           <Box display="flex" justifyContent="center">
             <Avatar
               alt="chef cover photo"
-              src={profilePictureUrl}
+              src={profile ? profile.profilePictureUrl : defaultUserPicture}
               className={classes.avatar}
             />
           </Box>
           <Box marginTop={-7} textAlign="center">
             <Box>
               {userInfo && (
-                <Typography variant="h4">{userInfo.name}</Typography>
+                <Typography variant="h4">
+                  {profile ? profile.user.name : userInfo.name}
+                </Typography>
               )}
             </Box>
             <Box>
@@ -127,7 +128,7 @@ const ChefSideBar = (props) => {
             </Box>
             <Box className={classes.chefBio}>
               <Typography variant="body1">
-                {profile ? profile.bio : bio}
+                {profile ? profile.bio : "Add a bio to your profile"}
               </Typography>
             </Box>
           </Box>
@@ -157,14 +158,26 @@ const ChefSideBar = (props) => {
           </Box>
         ) : (
           <Box className={classes.chefReqBtnContainer}>
-            <Button
-              color="secondary"
-              variant="contained"
-              fullWidth
-              className={classes.chefReqBtn}
-            >
-              Send Request
-            </Button>
+            <Link to="/messages" className={classes.chefReqBtn}>
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.chefReqBtn}
+              >
+                Contact Chef
+              </Button>
+            </Link>
+            {!isOwner && cart.length > 0 && (
+              <Link to="/payment" className={classes.chefReqBtn}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className={classes.chefReqBtn}
+                >
+                  Proceed to checkout
+                </Button>
+              </Link>
+            )}
           </Box>
         )}
       </Box>

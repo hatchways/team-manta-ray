@@ -1,28 +1,48 @@
 import React, { useState, useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
 import defaultUserImage from "../assets/defaultUserImage.png";
 import DialogControl from "../components/Dialogs/DialogControl";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
-import { RecipeContext, RecipeDispatchContext } from "../context/RecipeContext";
-import { UserContext } from "../context/UserContext";
+import { UserContext, UserDispatchContext } from "../context/UserContext";
 import TestRecipe from "../components/TestRecipe";
 import axios from "axios";
-import { Button } from "@material-ui/core";
+import { Button, Snackbar } from "@material-ui/core";
 import { getRecipesByChef } from "../actions/recipeActions";
 import NavBar from "../components/NavBar";
 
-const ChefProfile = ({ history }) => {
+import { makeStyles } from "@material-ui/core/styles";
+import { getCartInfo } from "../actions/cartActions";
+
+const useStyles = makeStyles((theme) => ({
+  btn: {
+    borderRadius: "0",
+    marginLeft: theme.spacing(3),
+    textDecoration: "none",
+    "& button": {
+      borderRadius: "0",
+      textTransform: "capitalize",
+    },
+  },
+}));
+
+const ChefProfile = ({ history, match }) => {
+  const classes = useStyles();
+
+  const { recipeId, userId } = match.params;
+
   const [open, setOpen] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
   const [control, setControl] = useState(null);
 
-  const { recipes } = useContext(RecipeContext);
-  const dispatch = useContext(RecipeDispatchContext);
+  const dispatch = useContext(UserDispatchContext);
 
-  const { userInfo } = useContext(UserContext);
+  const { userInfo, cart, chefConflictErr, recipes } = useContext(UserContext);
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const getProfileAndRecipes = async () => {
-      const res = await axios.get(`/api/chefProfiles/${userInfo._id}`);
+      const idToFetchProfile = userId ? userId : userInfo._id;
+      const res = await axios.get(`/api/chefProfiles/${idToFetchProfile}`);
       if (res.data) {
         setProfile(res.data.chefProfile);
         getRecipesByChef(dispatch, res.data.chefProfile._id);
@@ -34,11 +54,17 @@ const ChefProfile = ({ history }) => {
     } else {
       getProfileAndRecipes();
     }
-  }, [dispatch, userInfo, history]);
+    getCartInfo(dispatch);
+    setIsOwner(userId && userId !== userInfo._id ? false : true);
+  }, [dispatch, userInfo, history, userId, recipeId]);
 
   const handleClickOpen = (e) => {
+    if (e === "cart") {
+      setControl(e);
+    } else {
+      setControl(e.target.name);
+    }
     setOpen(true);
-    setControl(e.target.name);
   };
 
   const handleClose = (value) => {
@@ -116,6 +142,20 @@ const ChefProfile = ({ history }) => {
           value={profile.user.name}
           readOnly
         />
+        {!isOwner && (
+          <Link to="/messages" className={classes.btn}>
+            <Button variant="contained" color="secondary">
+              Contact Chef
+            </Button>
+          </Link>
+        )}
+        {!isOwner && cart.length > 0 && (
+          <Link to="/payment" className={classes.btn}>
+            <Button variant="contained" color="secondary">
+              Proceed to checkout
+            </Button>
+          </Link>
+        )}
 
         <div style={{ float: "right" }}>
           <h1>Recipes</h1>
@@ -132,9 +172,16 @@ const ChefProfile = ({ history }) => {
             />
           </label>
 
-          {recipes.map((recipe) => (
-            <TestRecipe recipe={recipe} key={recipe._id} id={recipe._id} />
-          ))}
+          {recipes &&
+            recipes.map((recipe) => (
+              <TestRecipe
+                recipe={recipe}
+                key={recipe._id}
+                id={recipe._id}
+                isOwner={isOwner}
+                onClick={() => console.log(recipe._id)}
+              />
+            ))}
         </div>
 
         <DialogControl
@@ -142,6 +189,12 @@ const ChefProfile = ({ history }) => {
           onClose={handleClose}
           control={control}
           profile={profile}
+        />
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          open={chefConflictErr ? true : false}
+          autoHideDuration={6000}
+          message={chefConflictErr}
         />
       </div>
     </>
