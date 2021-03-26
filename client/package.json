@@ -9,11 +9,13 @@
     "@stripe/stripe-js": "^1.13.1",
     "axios": "^0.21.1",
     "formik": "^2.2.6",
+    "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-context-devtool": "^2.0.3",
     "react-dom": "^17.0.1",
     "react-dropzone": "^11.3.1",
     "react-map-gl": "^6.1.10",
+    "react-moment": "^1.1.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.0",
     "yup": "^0.32.9"
