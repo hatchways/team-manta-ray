@@ -9,7 +9,6 @@ import "./App.css";
 import { ContextProvider } from "./context/UserContext";
 import TestComponent from "./pages/TestComponent";
 import SuccessPage from "./pages/SuccessPage";
-
 // stripe imports
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
