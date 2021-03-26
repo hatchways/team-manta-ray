@@ -88,8 +88,9 @@ const BrowseChefs = (props) => {
             </Box>
             <Grid container spacing={2}>
               {chefs.length > 0 ? (
-                chefs.map((chef) => (
+                chefs.map((chef, i) => (
                   <Chefs
+                    key={`${chef.name}${i}`}
                     chefProfileUrl={chef.chefProfileUrl}
                     name={chef.name}
                     location={chef.location}

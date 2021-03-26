@@ -90,6 +90,7 @@ const FilterChefs = (props) => {
               return (
                 <Chip
                   className={classes.cuisineChip}
+                  key={`${activeCuisineTag}${i}`}
                   color="secondary"
                   label={activeCuisineTag}
                   onDelete={
@@ -108,6 +109,7 @@ const FilterChefs = (props) => {
             {cuisineTags.map((cuisineTag, i) => (
               <Chip
                 className={classes.cuisineChip}
+                key={`${cuisineTag}${i}`}
                 label={cuisineTag}
                 onClick={() => addActiveCuisineTag(cuisineTag)}
                 variant="outlined"

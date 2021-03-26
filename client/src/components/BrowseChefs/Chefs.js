@@ -23,16 +23,6 @@ const Chefs = ({ chefProfileUrl, name, location, cuisineTags, bio }) => {
 
   const classes = useStyles();
 
-  const mapCuisineTags = (cuisineTags) => {
-    if (cuisineTags.length > 0) {
-      return cuisineTags.map(
-        (cuisineTag) => `${cuisineTag.toUpperCase()} CUISINE`
-      );
-    }
-
-    return " CUISINE";
-  };
-
   return (
     <Grid item md={4} xs={12}>
       <Paper>
@@ -52,11 +42,24 @@ const Chefs = ({ chefProfileUrl, name, location, cuisineTags, bio }) => {
               <Typography variant="body2">{location}</Typography>
             </Box>
             <Box mt={3} mb={3}>
-              <Chip
-                label={mapCuisineTags(cuisineTags)}
-                color="secondary"
-                className={classes.cuisineChip}
-              />
+              {cuisineTags.length > 0 ? (
+                cuisineTags.map((cuisineTag, i) => {
+                  return (
+                    <Chip
+                      key={`${name}${i}`}
+                      label={`${cuisineTag.toUpperCase()} CUISINE`}
+                      color="secondary"
+                      className={classes.cuisineChip}
+                    />
+                  );
+                })
+              ) : (
+                <Chip
+                  label={"CUISINE"}
+                  color="secondary"
+                  className={classes.cuisineChip}
+                />
+              )}
             </Box>
             <Box pl={5} pr={5}>
               <Typography align="center" className={classes.chefBio}>
