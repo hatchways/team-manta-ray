@@ -29,10 +29,9 @@ const ChefProfile = ({ history, match }) => {
     if (userInfo) {
       const getProfileAndRecipes = async () => {
         const idToFetchProfile = userId ? userId : userInfo._id;
-        console.log(idToFetchProfile);
 
         const res = await axios.get(`/api/chefProfiles/${idToFetchProfile}`);
-        console.log(res.data);
+
         if (res.data) {
           setProfile(res.data.chefProfile);
 
