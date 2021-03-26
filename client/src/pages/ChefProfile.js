@@ -26,7 +26,7 @@ const ChefProfile = ({ history, match }) => {
   const [isOwner, setIsOwner] = useState(true);
 
   useEffect(() => {
-    if (userInfo && userInfo.isChef) {
+    if (userInfo) {
       const getProfileAndRecipes = async () => {
         const idToFetchProfile = userId ? userId : userInfo._id;
         console.log(idToFetchProfile);

@@ -18,13 +18,16 @@ export const getCartInfo = async (dispatch) => {
     if (res.status === 200) {
       dispatch({ type: SET_CART_ITEMS, payload: res.data.cart.items });
       //-----------Temporary------- when we change the models and have only user model, we will not need this second call. I have it here because I need the name of the chef//
-      const chefRes = await axios.get(
-        `/api/chefProfiles/chefId/${res.data.cart.chef._id}`
-      );
-      dispatch({
-        type: GET_CHOSEN_CHEF_PROFILE,
-        payload: chefRes.data.chefProfile,
-      });
+      if (res.data.cart.chef) {
+        const chefRes = await axios.get(
+          `/api/chefProfiles/chefId/${res.data.cart.chef._id}`
+        );
+        dispatch({
+          type: GET_CHOSEN_CHEF_PROFILE,
+          payload: chefRes.data.chefProfile,
+        });
+      }
+
       // dispatch({ type: SET_CHEF, payload: res.data.cart.chef });
     }
   } catch (error) {
