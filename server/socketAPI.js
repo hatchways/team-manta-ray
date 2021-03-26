@@ -1,5 +1,5 @@
-const socket_io = require("socket.io");
-const io = socket_io();
+const socketIo = require("socket.io");
+const io = socketIo();
 const socketApi = {};
 
 const { socketAuth } = require("./middlewares/socketAuthMiddleware");
