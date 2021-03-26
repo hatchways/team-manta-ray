@@ -20,6 +20,11 @@ const FilterChefs = (props) => {
     cuisineChip: {
       borderRadius: "0px",
     },
+
+    filterContainer: {
+      marginTop: "75px",
+      height: "calc(100vh - 75px)",
+    },
   }));
 
   const classes = useStyles();
@@ -69,7 +74,7 @@ const FilterChefs = (props) => {
   };
 
   return (
-    <Box height="100vh" bgcolor="white">
+    <Box height="100vh" bgcolor="white" className={classes.filterContainer}>
       <Box display="flex" justifyContent="center">
         <Box width="100%" pl={4} pr={4} className={classes.searchField}>
           <Box mb={4}>

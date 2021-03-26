@@ -7,7 +7,7 @@ import Chefs from "../components/BrowseChefs/Chefs";
 const BrowseChefs = (props) => {
   const useStyles = makeStyles((theme) => ({
     title: {
-      marginTop: theme.spacing(10),
+      marginTop: theme.spacing(15),
       marginBottom: theme.spacing(6),
     },
   }));
