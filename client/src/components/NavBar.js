@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { UserDispatchContext } from "../context/UserContext";
+import { UserDispatchContext, UserContext } from "../context/UserContext";
 import { Link, withRouter } from "react-router-dom";
 import {
   AppBar,
@@ -48,6 +48,7 @@ const NavBar = ({ history }) => {
 
   // reducer dispatch function
   const dispatch = useContext(UserDispatchContext);
+  const { userInfo } = useContext(UserContext);
 
   const drawerHandler = () => {
     setOpen(true);
@@ -91,8 +92,16 @@ const NavBar = ({ history }) => {
                 <ListItem divider className={classes.plateIcon}>
                   <img src={plateLogo} alt="plate icon" />
                 </ListItem>
-                <ListItem button component={Link} to="/profile" divider>
+                <ListItem
+                  button
+                  component={Link}
+                  to={userInfo.isChef ? "/chefprofile" : "/profile"}
+                  divider
+                >
                   <ListItemText primary="Profile" />
+                </ListItem>
+                <ListItem button component={Link} to="/orders" divider>
+                  <ListItemText primary="Orders" />
                 </ListItem>
                 <ListItem button divider onClick={logoutHandler}>
                   <ListItemText primary="Log Out" />
