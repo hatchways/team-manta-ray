@@ -2,6 +2,25 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const Schema = mongoose.Schema;
+const cartSchema = new Schema({
+  chef: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  items: [
+    {
+      recipe: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Recipe",
+        required: true,
+      },
+      qty: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
+});
 
 const userSchema = new Schema(
   {
@@ -44,26 +63,7 @@ const userSchema = new Schema(
     cuisines: {
       type: [String],
     },
-    cart: {
-      chef: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "ChefProfile",
-        required: true,
-      },
-      items: [
-        {
-          recipe: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Recipe",
-            required: true,
-          },
-          qty: {
-            type: Number,
-            required: true,
-          },
-        },
-      ],
-    },
+    cart: cartSchema,
   },
   {
     timestamps: true,

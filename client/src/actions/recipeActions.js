@@ -16,7 +16,7 @@ export const createRecipe = async (dispatch, payload) => {
       },
     };
     const res = await axios.post("/api/recipes", payload, config);
-    if (res.status === 201) {
+    if (res.data) {
       dispatch({
         type: CREATE_RECIPE,
         payload: { ...res.data.newRecipe },
