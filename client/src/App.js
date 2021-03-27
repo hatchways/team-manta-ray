@@ -33,7 +33,7 @@ const Private = () => {
         <Route path="/profile" component={CustomerProfile} />
         <Route path="/chefprofile/:userId?" component={ChefProfile} />
         <Route path="/chef/:userId?/:recipeId?" component={TestChefProfile} />
-        <Route path="/orders" component={OrderList} />
+        <Route path="/orders/:orderId?" component={OrderList} />
       </Switch>
     </>
   );

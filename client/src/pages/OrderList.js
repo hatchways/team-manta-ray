@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Paper, makeStyles, AppBar, Tabs, Tab, Grid } from "@material-ui/core";
 import OrderTable from "../components/OrderTable";
 
@@ -55,140 +55,192 @@ function a11yProps(index) {
   };
 }
 
-const OrderList = () => {
+const OrderList = ({ match }) => {
   const classes = useStyles();
+
+  const { orderId } = match.params;
+
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [allOrders, setAllOrders] = useState(null);
+  const [upcomingOrders, setUpcomingOrders] = useState(null);
+  const [previousOrders, setPreviousOrders] = useState(null);
+
   const [value, setValue] = React.useState(0);
   //-------------Dummy Data------------------//
-  const allOrders = [
-    {
-      _id: "123456",
-      user: {
-        _id: 2,
-        name: "Sara Green",
-        pictureUrl:
-          "https://bucket-chef-image.s3.amazonaws.com/2c4612ed-42e6-4b97-8c0a-7c644c4fc664.png",
-      },
-      totalPrice: 89,
-      time: new Date("2021-02-25T14:20:00Z"),
-      address: "152 king street",
-      items: [
-        {
-          _id: 1,
-          name: "sushi",
-          recipePictureUrl:
-            "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
-          qty: 4,
-          price: 15,
-          ingredients: ["salmon", "pepper"],
-        },
-        {
+  const getAllOrders = () => {
+    return [
+      {
+        _id: "123456",
+        user: {
           _id: 2,
-          name: "Parmesan Chiken",
-          recipePictureUrl:
-            "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
-          qty: 3,
-          price: 10,
-          ingredients: ["salt", "pepper"],
+          name: "Sara Green",
+          pictureUrl:
+            "https://bucket-chef-image.s3.amazonaws.com/2c4612ed-42e6-4b97-8c0a-7c644c4fc664.png",
         },
-        {
-          _id: 4,
-          name: "beef wellington",
-          recipePictureUrl:
-            "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
-          qty: 2,
-          price: 10,
-          ingredients: ["parmesan", "beef"],
-        },
-        {
-          _id: 3,
-          name: "Tortilla soup",
-          recipePictureUrl:
-            "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
-          qty: 5,
-          price: 14,
-          ingredients: ["salt", "pepper"],
-        },
-      ],
-    },
-    {
-      _id: "123457",
-      user: {
-        _id: 2,
-        name: "Jack Smith",
-        pictureUrl:
-          "https://bucket-chef-image.s3.amazonaws.com/2c4612ed-42e6-4b97-8c0a-7c644c4fc664.png",
+        totalPrice: 89,
+        time: new Date("2021-02-25T14:20:00Z"),
+        address: "152 king street",
+        items: [
+          {
+            _id: 1,
+            name: "sushi",
+            recipePictureUrl:
+              "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
+            qty: 4,
+            price: 15,
+            ingredients: ["salmon", "pepper"],
+          },
+          {
+            _id: 2,
+            name: "Parmesan Chiken",
+            recipePictureUrl:
+              "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
+            qty: 3,
+            price: 10,
+            ingredients: ["salt", "pepper"],
+          },
+          {
+            _id: 4,
+            name: "beef wellington",
+            recipePictureUrl:
+              "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
+            qty: 2,
+            price: 10,
+            ingredients: ["parmesan", "beef"],
+          },
+          {
+            _id: 3,
+            name: "Tortilla soup",
+            recipePictureUrl:
+              "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
+            qty: 5,
+            price: 14,
+            ingredients: ["salt", "pepper"],
+          },
+        ],
       },
-      totalPrice: 240,
-      time: new Date("2021-03-25T10:30:00Z"),
-      address: "200 queen street",
-      items: [
-        {
-          _id: 1,
-          name: "Parmesan Chiken",
-          recipePictureUrl:
-            "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
-          qty: 1,
-          price: 10,
-          ingredients: ["shrimp", "salmon"],
-        },
-        {
+      {
+        _id: "123459",
+        user: {
           _id: 2,
-          name: "beef wellington",
-          recipePictureUrl:
-            "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
-          qty: 2,
-          price: 10,
-          ingredients: ["salt", "peper"],
+          name: "Sara Green",
+          pictureUrl:
+            "https://bucket-chef-image.s3.amazonaws.com/2c4612ed-42e6-4b97-8c0a-7c644c4fc664.png",
         },
-        {
-          _id: 3,
-          name: "Tortilla soup",
-          recipePictureUrl:
-            "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
-          qty: 5,
-          price: 14,
-          ingredients: ["parmesan", "maranara"],
-        },
-      ],
-    },
-    {
-      _id: "123458",
-      user: {
-        _id: 2,
-        name: "John Doe",
-        pictureUrl:
-          "https://bucket-chef-image.s3.amazonaws.com/2c4612ed-42e6-4b97-8c0a-7c644c4fc664.png",
+        totalPrice: 89,
+        time: new Date("2021-04-25T14:20:00Z"),
+        address: "152 king street",
+        items: [
+          {
+            _id: 1,
+            name: "sushi",
+            recipePictureUrl:
+              "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
+            qty: 4,
+            price: 15,
+            ingredients: ["salmon", "pepper"],
+          },
+        ],
       },
-      totalPrice: 100,
-      time: new Date("2021-04-05T16:30:00Z"),
-      address: "200 queen street",
-      instructions: "Buzz number 501",
-      items: [
-        {
-          _id: 1,
-          name: "Parmesan Chiken",
-          recipePictureUrl:
-            "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
-          qty: 4,
-          price: 15,
-          ingredients: ["salt", "peper"],
-        },
-        {
+      {
+        _id: "123457",
+        user: {
           _id: 2,
-          name: "beef wellington",
-          recipePictureUrl:
-            "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
-          qty: 1,
-          price: 10,
+          name: "Jack Smith",
+          pictureUrl:
+            "https://bucket-chef-image.s3.amazonaws.com/2c4612ed-42e6-4b97-8c0a-7c644c4fc664.png",
+        },
+        totalPrice: 240,
+        time: new Date("2021-03-25T10:30:00Z"),
+        address: "200 queen street",
+        items: [
+          {
+            _id: 1,
+            name: "Parmesan Chiken",
+            recipePictureUrl:
+              "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
+            qty: 1,
+            price: 10,
+            ingredients: ["shrimp", "salmon"],
+          },
+          {
+            _id: 2,
+            name: "beef wellington",
+            recipePictureUrl:
+              "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
+            qty: 2,
+            price: 10,
+            ingredients: ["salt", "peper"],
+          },
+          {
+            _id: 3,
+            name: "Tortilla soup",
+            recipePictureUrl:
+              "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
+            qty: 5,
+            price: 14,
+            ingredients: ["parmesan", "maranara"],
+          },
+        ],
+      },
+      {
+        _id: "123458",
+        user: {
+          _id: 2,
+          name: "John Doe",
+          pictureUrl:
+            "https://bucket-chef-image.s3.amazonaws.com/2c4612ed-42e6-4b97-8c0a-7c644c4fc664.png",
+        },
+        totalPrice: 100,
+        time: new Date("2021-04-05T16:30:00Z"),
+        address: "200 queen street",
+        instructions: "Buzz number 501",
+        items: [
+          {
+            _id: 1,
+            name: "Parmesan Chiken",
+            recipePictureUrl:
+              "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
+            qty: 4,
+            price: 15,
+            ingredients: ["salt", "peper"],
+          },
+          {
+            _id: 2,
+            name: "beef wellington",
+            recipePictureUrl:
+              "https://bucket-chef-image.s3.ca-central-1.amazonaws.com/35bec520-4d8f-4bd6-817a-4d3fb2f778aa.png",
+            qty: 1,
+            price: 10,
 
-          ingredients: ["salmon", "shrimp", "peper", "salt"],
-        },
-      ],
-    },
-  ];
+            ingredients: ["salmon", "shrimp", "peper", "salt"],
+          },
+        ],
+      },
+    ];
+  };
 
-  const upcomingOrders = allOrders.filter((order) => order.time >= Date.now());
-  const previousOrders = allOrders.filter((order) => order.time < Date.now());
+  useEffect(() => {
+    const allOrders = getAllOrders();
+    const upcomingOrders = allOrders.filter(
+      (order) => order.time >= Date.now()
+    );
+    const previousOrders = allOrders.filter((order) => order.time < Date.now());
+    setAllOrders(allOrders);
+    setUpcomingOrders(upcomingOrders);
+    setPreviousOrders(previousOrders);
+
+    if (orderId) {
+      const selectedOrder = allOrders.find(
+        (order) => order._id.toString() === orderId
+      );
+      setSelectedOrder(selectedOrder);
+      window.history.pushState({}, document.title, "/orders");
+    }
+    return () => {
+      setSelectedOrder(null);
+    };
+  }, [orderId]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -217,7 +269,12 @@ const OrderList = () => {
         {/* <div className={classes.orders}> */}
         <Paper className={classes.paper} elevation={5}>
           <TabPanel value={value} index={0}>
-            <OrderTable orders={upcomingOrders} title="Upcoming orders" />
+            <OrderTable
+              orders={upcomingOrders}
+              title="Upcoming orders"
+              selectedOrder={selectedOrder}
+              setSelectedOrder={(v) => setSelectedOrder(v)}
+            />
           </TabPanel>
           <TabPanel value={value} index={1}>
             <OrderTable orders={previousOrders} title="Previous orders" />
