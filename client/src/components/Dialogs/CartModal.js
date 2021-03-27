@@ -15,6 +15,7 @@ import {
   TableRow,
   Typography,
   ButtonGroup,
+  Dialog,
 } from "@material-ui/core";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import React, { useContext } from "react";
@@ -69,11 +70,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CartModal = () => {
+const CartModal = ({ open, onClose, selectedValue }) => {
   const classes = useStyles();
 
   const { cart, chosenChefProfile } = useContext(UserContext);
   const dispatch = useContext(UserDispatchContext);
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
 
   const addDecimals = (num) => (Math.round(num * 100) / 100).toFixed(2);
 
@@ -98,7 +103,11 @@ const CartModal = () => {
       : removeFromCart(dispatch, id);
   };
   return (
-    <>
+    <Dialog
+      onClose={handleClose}
+      aria-labelledby="simple-dialog-title"
+      open={open}
+    >
       <DialogTitle id="simple-dialog-title">Cart Items</DialogTitle>
       {cart.length === 0 ? (
         <Typography
@@ -251,20 +260,31 @@ const CartModal = () => {
             </ListItemText>
           </ListItem>
           <ListItem className={classes.btnSection}>
-            <Link to="/messages" className={classes.btn}>
-              <Button variant="contained" color="secondary">
-                Contact Chef
-              </Button>
-            </Link>
-            <Link to="/payment" className={classes.btn}>
-              <Button variant="contained" color="secondary">
-                Proceed to checkout
-              </Button>
-            </Link>
+            <Button
+              variant="contained"
+              color="secondary"
+              component={Link}
+              to="/messages"
+              onClick={handleClose}
+              className={classes.btn}
+            >
+              Contact Chef
+            </Button>
+
+            <Button
+              variant="contained"
+              color="secondary"
+              component={Link}
+              className={classes.btn}
+              to="/payment"
+              onClick={handleClose}
+            >
+              Proceed to checkout
+            </Button>
           </ListItem>
         </List>
       )}
-    </>
+    </Dialog>
   );
 };
 
