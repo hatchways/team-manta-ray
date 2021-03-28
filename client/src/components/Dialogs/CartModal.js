@@ -1,20 +1,14 @@
 import {
   Avatar,
   Button,
-  DialogTitle,
   IconButton,
   List,
   ListItem,
   ListItemText,
-  Table,
-  Hidden,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Typography,
   ButtonGroup,
+  Grid,
+  Card,
 } from "@material-ui/core";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import React, { useContext } from "react";
@@ -31,6 +25,9 @@ import {
 } from "../../actions/cartActions";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    minWidth: theme.spacing(70),
+  },
   table: {
     tableLayout: "fixed",
   },
@@ -42,6 +39,17 @@ const useStyles = makeStyles((theme) => ({
   },
   emptyText: {
     padding: theme.spacing(20, 10),
+  },
+  chefCard: {
+    margin: "10px auto",
+    marginBottom: theme.spacing(2),
+  },
+  recipeCard: {
+    padding: "15px",
+  },
+  recipeCardItem: {
+    padding: "10px",
+    marginBottom: "10px",
   },
   btn: {
     borderRadius: "0",
@@ -99,7 +107,6 @@ const CartModal = () => {
   };
   return (
     <>
-      <DialogTitle id="simple-dialog-title">Cart Items</DialogTitle>
       {cart.length === 0 ? (
         <Typography
           gutterBottom
@@ -108,12 +115,14 @@ const CartModal = () => {
           align="center"
           className={classes.emptyText}
         >
-          {" "}
           Your Cart Is Empty
         </Typography>
       ) : (
-        <List dense>
+        <List dense className={classes.root}>
           <ListItem dense>
+            <ListItemText>
+              <Typography variant="h6">Cart Items</Typography>
+            </ListItemText>
             <Button
               variant="contained"
               className={classes.clearBtn}
@@ -122,113 +131,173 @@ const CartModal = () => {
               clear cart
             </Button>
           </ListItem>
+
           <ListItem alignItems="center">
-            <ListItemText>
-              <Typography variant="h5" align="center">{`${
-                chosenChefProfile && chosenChefProfile.user.name
-              }`}</Typography>
-            </ListItemText>
+            <Grid
+              container
+              direction="column"
+              justify="space-between"
+              alignItems="center"
+              spacing={2}
+              md={9}
+              xs={11}
+              square
+              component={Card}
+              className={classes.chefCard}
+            >
+              <Grid item>
+                <Typography>Chef</Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="h5" align="center">{`${
+                  chosenChefProfile && chosenChefProfile.user.name
+                }`}</Typography>
+              </Grid>
+              <Grid item>
+                <img
+                  src={
+                    chosenChefProfile
+                      ? chosenChefProfile.profilePictureUrl
+                      : defaultUserImage
+                  }
+                  alt="profileImage"
+                  className={classes.img}
+                />
+              </Grid>
+              <Grid
+                item
+                container
+                direction="row"
+                justify="space-around"
+                alignItems="flex-start"
+              >
+                <Grid
+                  container
+                  item
+                  direction="column"
+                  justify="space-evenly"
+                  alignItems="flex-start"
+                  xs={6}
+                  spacing={1}
+                >
+                  <Grid item>
+                    <Typography variant="body2">Bio:</Typography>
+                  </Grid>
+                  <Grid item>
+                    <span>{chosenChefProfile && chosenChefProfile.bio}</span>
+                  </Grid>
+                </Grid>
+
+                <Grid
+                  container
+                  item
+                  direction="column"
+                  justify="space-evenly"
+                  alignItems="flex-start"
+                  xs={6}
+                  spacing={1}
+                >
+                  <Grid item>
+                    <Typography variant="body2">Specialties:</Typography>
+                  </Grid>
+                  <Grid item>
+                    <span>
+                      {chosenChefProfile &&
+                        chosenChefProfile.cuisineTags.join(",")}
+                    </span>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
           </ListItem>
           <ListItem>
-            <img
-              src={
-                chosenChefProfile
-                  ? chosenChefProfile.profilePictureUrl
-                  : defaultUserImage
-              }
-              alt="profileImage"
-              className={classes.img}
-            />
-          </ListItem>
-          <ListItem divider>
-            <ListItemText>
-              <Typography variant="h6">Bio</Typography>
-              <span>{chosenChefProfile && chosenChefProfile.bio}</span>
-            </ListItemText>
-            <ListItemText>
-              <Typography variant="h6">Specialties:</Typography>
-              <span>
-                {chosenChefProfile && chosenChefProfile.cuisineTags.join(",")}
-              </span>
-            </ListItemText>
-          </ListItem>
-          <ListItem dense>
-            <TableContainer>
-              <Table
-                className={classes.table}
-                size="small"
-                aria-label="a dense table"
-              >
-                <TableHead>
-                  <TableRow>
-                    <TableCell></TableCell>
-                    <TableCell align="center">Menu</TableCell>
-
-                    <Hidden smDown>
-                      <TableCell align="left">Qty</TableCell>
-                    </Hidden>
-                    <Hidden smDown>
-                      <TableCell align="center">Price</TableCell>
-                    </Hidden>
-
-                    <TableCell align="right"></TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {cart.map(({ qty, recipe }) => (
-                    <TableRow key={recipe._id}>
-                      <TableCell component="th" scope="item">
-                        <Avatar
-                          alt="recipe"
-                          src={recipe.recipePictureUrl || plate}
-                        />
-                      </TableCell>
-                      <TableCell align="justify">{recipe.name}</TableCell>
-                      <Hidden smDown>
-                        <TableCell align="justify" nowrap="nowrap">
-                          <span>{qty}</span>{" "}
-                          <ButtonGroup
-                            disableElevation
-                            variant="contained"
-                            className={classes.btnGroup}
+            <Grid
+              container
+              direction="column"
+              justify="space-around"
+              alignItems="center"
+              className={classes.recipeCard}
+            >
+              {cart.map(({ qty, recipe }) => (
+                <>
+                  <Grid
+                    container
+                    key={recipe._id}
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
+                    component={Card}
+                    padding={5}
+                    xs={12}
+                    className={classes.recipeCardItem}
+                  >
+                    <Grid item xs={2}>
+                      <Avatar
+                        alt="recipe"
+                        src={recipe.recipePictureUrl || plate}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      container
+                      direction="column"
+                      justify="space-around"
+                      alignItems="flex-start"
+                      xs={6}
+                      spacing={1}
+                    >
+                      <Grid item>
+                        <Typography>{recipe.name}</Typography>
+                      </Grid>
+                      <Grid item>
+                        <span>{qty}</span>{" "}
+                        <ButtonGroup
+                          disableElevation
+                          variant="contained"
+                          className={classes.btnGroup}
+                        >
+                          <Button
+                            onClick={() =>
+                              handleDecrease(recipe._id, qty, recipe.user)
+                            }
                           >
-                            <Button
-                              onClick={() =>
-                                handleDecrease(recipe._id, qty, recipe.user)
-                              }
-                            >
-                              -
-                            </Button>
-                            <Button
-                              onClick={() =>
-                                handleIncrease(recipe._id, qty, recipe.user)
-                              }
-                            >
-                              +
-                            </Button>
-                          </ButtonGroup>
-                        </TableCell>
-                      </Hidden>
-                      <Hidden smDown>
-                        <TableCell align="right" nowrap="nowrap">{`${
-                          recipe.price
-                        } x ${qty} = ${addDecimals(
-                          qty * recipe.price
-                        )}`}</TableCell>
-                      </Hidden>
-                      <TableCell
-                        align="right"
+                            -
+                          </Button>
+                          <Button
+                            onClick={() =>
+                              handleIncrease(recipe._id, qty, recipe.user)
+                            }
+                          >
+                            +
+                          </Button>
+                        </ButtonGroup>
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      item
+                      container
+                      direction="column"
+                      justify="space-around"
+                      alignItems="flex-start"
+                      spacing={2}
+                      xs={3}
+                    >
+                      <Grid item>$ {recipe.price}</Grid>
+                      <Grid item> $ {addDecimals(qty * recipe.price)}</Grid>
+                    </Grid>
+                    <Grid item xs={1}>
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
                         onClick={(e) => handleDelete(recipe._id)}
                       >
-                        <IconButton edge="end" aria-label="delete">
-                          <DeleteForeverIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                        <DeleteForeverIcon />
+                      </IconButton>
+                    </Grid>
+                  </Grid>
+                </>
+              ))}
+            </Grid>
           </ListItem>
           <ListItem>
             <ListItemText>
