@@ -19,6 +19,11 @@ const MessageItem = (props) => {
     noBorderRadius: {
       borderRadius: "0",
     },
+
+    messageContainer: {
+      marginTop: "75px",
+      height: "calc(100vh - 75px)",
+    },
   }));
 
   const classes = useStyles();
@@ -209,137 +214,141 @@ const MessageItem = (props) => {
   };
 
   return (
-    <Grid container>
-      {/* SIDEBAR */}
-      <Grid item md={2} sm={4} xs={12}>
-        <Box height="100vh">
-          {usersChat.chats.map((chat, i) => {
-            chat["i"] = i;
-            return (
-              <MessageItems
-                chat={chat}
-                name={chat.chattingWith.user.name}
-                isOnline={true}
-                lastMessage={chat.lastMessage.body}
-                profilePictureUrl={chat.chattingWith.user.profilePictureUrl}
-                key={`${chat.chattingWith.user._id}chat${i}`}
-                handleSelectedMessageItem={handleSelectedMessageItem}
-                isSelected={activeMessageItem.i === i}
-              />
-            );
-          })}
-        </Box>
-      </Grid>
-
-      {/* CHATBAR */}
-      <Grid item md={10} sm={8} xs={12}>
-        <Paper
-          component={Box}
-          height={"100vh"}
-          className={classes.noBorderRadius}
-        >
-          {Object.keys(activeMessageItem).length > 0 ? (
-            <Grid container justify="center">
-              {/* MESSAGE TITLE */}
-              <Grid item xl={9} lg={10} md={11} xs={12}>
-                <MessageTitle
+    <Box className={classes.messageContainer}>
+      <Grid container>
+        {/* SIDEBAR */}
+        <Grid item md={2} sm={4} xs={12}>
+          <Box height="100vh">
+            {usersChat.chats.map((chat, i) => {
+              chat["i"] = i;
+              return (
+                <MessageItems
+                  chat={chat}
+                  name={chat.chattingWith.user.name}
                   isOnline={true}
-                  profilePictureUrl={
-                    activeMessageItem.chattingWith.user.profilePictureUrl
-                  }
-                  name={activeMessageItem.chattingWith.user.name}
-                  location={activeMessageItem.chattingWith.user.location}
+                  lastMessage={chat.lastMessage.body}
+                  profilePictureUrl={chat.chattingWith.user.profilePictureUrl}
+                  key={`${chat.chattingWith.user._id}chat${i}`}
+                  handleSelectedMessageItem={handleSelectedMessageItem}
+                  isSelected={activeMessageItem.i === i}
                 />
-              </Grid>
-              <Grid container>
-                <Grid item xs={12}>
-                  <Divider />
-                </Grid>
-              </Grid>
+              );
+            })}
+          </Box>
+        </Grid>
 
-              {/* CHAT OVERFLOW */}
+        {/* CHATBAR */}
+        <Grid item md={10} sm={8} xs={12}>
+          <Paper
+            component={Box}
+            height={"100vh"}
+            className={classes.noBorderRadius}
+          >
+            {Object.keys(activeMessageItem).length > 0 ? (
               <Grid container justify="center">
-                <Grid
-                  item
-                  xl={9}
-                  lg={10}
-                  md={11}
-                  xs={12}
-                  component={Box}
-                  mt={6}
-                >
-                  <Box
-                    style={{
-                      // change thhis when appbar merged
-                      height: "calc(100vh - 101px)",
-                    }}
-                    display="flex"
-                    flexDirection="column"
+                {/* MESSAGE TITLE */}
+                <Grid item xl={9} lg={10} md={11} xs={12}>
+                  <MessageTitle
+                    isOnline={true}
+                    profilePictureUrl={
+                      activeMessageItem.chattingWith.user.profilePictureUrl
+                    }
+                    name={activeMessageItem.chattingWith.user.name}
+                    location={activeMessageItem.chattingWith.user.location}
+                  />
+                </Grid>
+                <Grid container>
+                  <Grid item xs={12}>
+                    <Divider />
+                  </Grid>
+                </Grid>
+
+                {/* CHAT OVERFLOW */}
+                <Grid container justify="center">
+                  <Grid
+                    item
+                    xl={9}
+                    lg={10}
+                    md={11}
+                    xs={12}
+                    component={Box}
+                    mt={6}
                   >
-                    {/* CHAT AREA */}
                     <Box
                       style={{
-                        flexGrow: 1,
-                        overflowY: "auto",
-                        display: "flex",
-                        flexDirection: "column-reverse",
+                        // change thhis when appbar merged
+                        height: "calc(100vh - 176px)",
                       }}
+                      display="flex"
+                      flexDirection="column"
                     >
-                      {messages.length > 0 ? (
-                        messages.reverse().map((message, i) => (
-                          <Chat
-                            key={`${message.sentBy}chat${i}`}
-                            profilePictureUrl={message.sentBy.profilePictureUrl}
-                            body={message.body}
-                            // CHANGE THIS! must be authenticated.user._id
-                            isOwner={message.sentBy._id === "user1"}
-                          />
-                        ))
-                      ) : (
-                        <Box display="flex" justifyContent="center" mt={3}>
-                          No messages found.
-                        </Box>
-                      )}
-                    </Box>
-                    {/* TEXT FIELD */}
-                    <Box mb={2}>
-                      <FilledInput
+                      {/* CHAT AREA */}
+                      <Box
                         style={{
-                          padding: "10px 10px 17px 10px",
-                          borderRadius: "0px",
+                          flexGrow: 1,
+                          overflowY: "auto",
+                          display: "flex",
+                          flexDirection: "column-reverse",
                         }}
-                        fullWidth
-                        placeholder="Write a message..."
-                        disableUnderline
-                        endAdornment={
-                          <InputAdornment
-                            position="end"
-                            style={{ marginRight: "10px" }}
-                          >
-                            <IconButton>
-                              <SendIcon color="secondary" />
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                      />
+                      >
+                        {messages.length > 0 ? (
+                          messages.reverse().map((message, i) => (
+                            <Chat
+                              key={`${message.sentBy}chat${i}`}
+                              profilePictureUrl={
+                                message.sentBy.profilePictureUrl
+                              }
+                              body={message.body}
+                              // CHANGE THIS! must be authenticated.user._id
+                              isOwner={message.sentBy._id === "user1"}
+                            />
+                          ))
+                        ) : (
+                          <Box display="flex" justifyContent="center" mt={3}>
+                            No messages found.
+                          </Box>
+                        )}
+                      </Box>
+                      {/* TEXT FIELD */}
+                      <Box mb={2}>
+                        <FilledInput
+                          style={{
+                            padding: "10px 10px 17px 10px",
+                            borderRadius: "0px",
+                          }}
+                          fullWidth
+                          placeholder="Write a message..."
+                          disableUnderline
+                          endAdornment={
+                            <InputAdornment
+                              position="end"
+                              style={{ marginRight: "10px" }}
+                            >
+                              <IconButton>
+                                <SendIcon color="secondary" />
+                              </IconButton>
+                            </InputAdornment>
+                          }
+                        />
+                      </Box>
                     </Box>
-                  </Box>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          ) : (
-            <Box
-              height="100%"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              Please select message.
-            </Box>
-          )}
-        </Paper>
+            ) : (
+              <Box
+                height="100%"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                Please select message.
+              </Box>
+            )}
+          </Paper>
+        </Grid>
       </Grid>
-    </Grid>
+    </Box>
   );
 };
 
