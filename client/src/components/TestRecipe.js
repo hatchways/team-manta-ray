@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -17,6 +17,12 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import plate from "../assets/plate.svg";
 import DialogControl from "./Dialogs/DialogControl";
+import { UserDispatchContext, UserContext } from "../context/UserContext";
+import {
+  addToCart,
+  getChosenChefProfile,
+  setChefConflictError,
+} from "../actions/cartActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,7 +47,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RecipeReviewCard({ recipe }) {
+export default function RecipeReviewCard({ id, isOwner }) {
+  const { recipes } = useContext(UserContext);
+  const recipe = recipes.filter((res) => res._id === id)[0];
   const {
     name,
     price,
@@ -51,6 +59,9 @@ export default function RecipeReviewCard({ recipe }) {
     cuisineTags,
     recipePictureUrl,
   } = recipe;
+
+  const globalDispatch = useContext(UserDispatchContext);
+  const { cart, chosenChefProfile } = useContext(UserContext);
 
   const [open, setOpen] = useState(false);
 
@@ -62,8 +73,26 @@ export default function RecipeReviewCard({ recipe }) {
   };
 
   const handleClickOpen = (e) => {
-    setOpen(true);
+    // if the user is its own profile open add recipe
+    if (isOwner) {
+      setOpen(true);
+      //if user is visiting other chef's profile add item to cart
+    } else {
+      if (cart.length === 0) {
+        getChosenChefProfile(globalDispatch, recipe.user);
+        addToCart(globalDispatch, recipe);
+      } else {
+        const isSelectingFromADifferentChef =
+          chosenChefProfile && chosenChefProfile._id !== recipe.user;
+        if (isSelectingFromADifferentChef) {
+          setChefConflictError(globalDispatch);
+        } else {
+          addToCart(globalDispatch, recipe);
+        }
+      }
+    }
   };
+
   const handleClose = (value) => {
     setOpen(false);
   };

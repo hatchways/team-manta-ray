@@ -11,6 +11,7 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
+  RESET_RECIPES,
 } from "../constants/userConstants";
 
 // User login action
@@ -56,7 +57,7 @@ export const login = async (dispatch, loginPayload) => {
 
 // Register User Action
 export const register = async (dispatch, registerPayload) => {
-  const { name, email, password } = registerPayload;
+  const { name, email, password, isChef } = registerPayload;
   try {
     dispatch({
       type: USER_REGISTER_REQUEST,
@@ -71,7 +72,7 @@ export const register = async (dispatch, registerPayload) => {
     // data from backend server
     const { data } = await axios.post(
       "/api/users/register",
-      { name, email, password },
+      { name, email, password, isChef },
       config
     );
 
@@ -105,6 +106,10 @@ export const logout = async (dispatch) => {
     localStorage.removeItem("userInfo");
     dispatch({
       type: USER_LOGOUT,
+    });
+
+    dispatch({
+      type: RESET_RECIPES,
     });
   }
 };

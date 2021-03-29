@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import FormikControl from "../Formik/FormikControl";
 import { makeStyles } from "@material-ui/core/styles";
 import EditPicture from "./EditPicture";
-import { RecipeDispatchContext } from "../../context/RecipeContext";
+import { UserDispatchContext } from "../../context/UserContext";
 import {
   createRecipe,
   deleteRecipe,
@@ -36,7 +36,7 @@ export const useStyles = makeStyles((theme) => ({
 const RecipeModal = ({ edit, id, recipe }) => {
   const classes = useStyles();
 
-  const dispatch = useContext(RecipeDispatchContext);
+  const dispatch = useContext(UserDispatchContext);
 
   const [recipePictureUrl, setRecipePictureUrl] = useState(
     edit ? recipe.recipePictureUrl : ""

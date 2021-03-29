@@ -27,6 +27,43 @@ const userSchema = new Schema(
       type: String,
       required: false,
     },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+      },
+      coordinates: {
+        type: [Number],
+        index: "2dsphere",
+      },
+    },
+    bio: String,
+    profilePictureUrl: {
+      type: String,
+    },
+    cuisines: {
+      type: [String],
+    },
+    cart: {
+      chef: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ChefProfile",
+        required: true,
+      },
+      items: [
+        {
+          recipe: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Recipe",
+            required: true,
+          },
+          qty: {
+            type: Number,
+            required: true,
+          },
+        },
+      ],
+    },
   },
   {
     timestamps: true,
