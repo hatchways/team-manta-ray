@@ -1,11 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography, Button } from "@material-ui/core";
+import {
+  Typography,
+  Button,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+} from "@material-ui/core";
+
 // stripe
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { UserContext, UserDispatchContext } from "../context/UserContext";
 import Loader from "../components/Loader";
-import sushi from "../assets/sushi.png";
+// import sushi from "../assets/sushi.png";
 
 //Shipping checkout
 import Stepper from "@material-ui/core/Stepper";
@@ -265,6 +274,30 @@ const Payment = ({ history }) => {
   const [instructions, setInstructions] = useState(
     bookingDetails.instructions || ""
   );
+
+  const cartItems = [
+    {
+      recipe: {
+        name: "5 specialty sushi roles",
+        recipePictureUrl: "Image",
+        price: "$10.00",
+      },
+    },
+    {
+      recipe: {
+        name: "1 specialty sushi roles",
+        recipePictureUrl: "Image",
+        price: "$10.00",
+      },
+    },
+    {
+      recipe: {
+        name: "2 specialty sushi roles",
+        recipePictureUrl: "Image",
+        price: "$10.00",
+      },
+    },
+  ];
 
   // stripe
   const [succeeded, setSucceeded] = useState(false);
@@ -621,13 +654,27 @@ const Payment = ({ history }) => {
         <div className={classes.right__container}>
           <div className={classes.order}>
             <Typography variant="h4">Your order:</Typography>
-            {/**This section will be isolated in the individual order component */}
-            <div className={classes.orderDetails}>
-              <img className={classes.img} src={sushi} alt="test" />
-              <Typography>
-                2 Yakisoba dishes, 6 sushi rolls and 10pc sashimi
-              </Typography>
-            </div>
+            {cartItems.map(({ recipe }) => (
+              <>
+                <List>
+                  <ListItem alignItems="flex-start">
+                    <ListItemAvatar>V</ListItemAvatar>
+
+                    <ListItemText
+                      style={{ display: "inline" }}
+                      primary={recipe.name}
+                      secondary={
+                        <>
+                          <Typography>{recipe.price}</Typography>
+                        </>
+                      }
+                    />
+                  </ListItem>
+                  <Divider />
+                </List>
+              </>
+            ))}
+
             <div className={classes.orderTotal}>
               <Typography variant="h5">
                 Total: <span className={classes.orderTotal}>$30.00</span>
