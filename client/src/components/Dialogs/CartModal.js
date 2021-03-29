@@ -9,6 +9,7 @@ import {
   ButtonGroup,
   Grid,
   Card,
+  Hidden,
 } from "@material-ui/core";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import React, { useContext } from "react";
@@ -25,8 +26,11 @@ import {
 } from "../../actions/cartActions";
 
 const useStyles = makeStyles((theme) => ({
+  // root: {
+  //   minWidth: theme.spacing(70),
+  // },
   root: {
-    minWidth: theme.spacing(70),
+    minWidth: "70%",
   },
   table: {
     tableLayout: "fixed",
@@ -45,11 +49,19 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   recipeCard: {
-    padding: "15px",
+    padding: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(0.1),
+    },
   },
   recipeCardItem: {
-    padding: "10px",
-    marginBottom: "10px",
+    padding: theme.spacing(1),
+
+    marginBottom: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(0.5),
+      paddingLeft: theme.spacing(0.1),
+    },
   },
   btn: {
     borderRadius: "0",
@@ -135,6 +147,7 @@ const CartModal = () => {
           <ListItem alignItems="center">
             <Grid
               container
+              item
               direction="column"
               justify="space-between"
               alignItems="center"
@@ -219,60 +232,61 @@ const CartModal = () => {
               className={classes.recipeCard}
             >
               {cart.map(({ qty, recipe }) => (
-                <>
+                <Grid
+                  container
+                  item
+                  key={recipe._id}
+                  direction="row"
+                  justify="center"
+                  alignItems="center"
+                  component={Card}
+                  // padding={5}
+                  xs={12}
+                  className={classes.recipeCardItem}
+                >
+                  <Grid item xs={2}>
+                    <Avatar
+                      alt="recipe"
+                      src={recipe.recipePictureUrl || plate}
+                    />
+                  </Grid>
                   <Grid
+                    item
                     container
-                    key={recipe._id}
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    component={Card}
-                    padding={5}
-                    xs={12}
-                    className={classes.recipeCardItem}
+                    direction="column"
+                    justify="space-around"
+                    alignItems="flex-start"
+                    xs={6}
+                    spacing={1}
                   >
-                    <Grid item xs={2}>
-                      <Avatar
-                        alt="recipe"
-                        src={recipe.recipePictureUrl || plate}
-                      />
+                    <Grid item>
+                      <Typography>{recipe.name}</Typography>
                     </Grid>
-                    <Grid
-                      item
-                      container
-                      direction="column"
-                      justify="space-around"
-                      alignItems="flex-start"
-                      xs={6}
-                      spacing={1}
-                    >
-                      <Grid item>
-                        <Typography>{recipe.name}</Typography>
-                      </Grid>
-                      <Grid item>
-                        <span>{qty}</span>{" "}
-                        <ButtonGroup
-                          disableElevation
-                          variant="contained"
-                          className={classes.btnGroup}
+                    <Grid item>
+                      <span>{qty}</span>{" "}
+                      <ButtonGroup
+                        disableElevation
+                        variant="contained"
+                        className={classes.btnGroup}
+                      >
+                        <Button
+                          onClick={() =>
+                            handleDecrease(recipe._id, qty, recipe.user)
+                          }
                         >
-                          <Button
-                            onClick={() =>
-                              handleDecrease(recipe._id, qty, recipe.user)
-                            }
-                          >
-                            -
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              handleIncrease(recipe._id, qty, recipe.user)
-                            }
-                          >
-                            +
-                          </Button>
-                        </ButtonGroup>
-                      </Grid>
+                          -
+                        </Button>
+                        <Button
+                          onClick={() =>
+                            handleIncrease(recipe._id, qty, recipe.user)
+                          }
+                        >
+                          +
+                        </Button>
+                      </ButtonGroup>
                     </Grid>
+                  </Grid>
+                  <Hidden smDown>
                     <Grid
                       item
                       container
@@ -282,20 +296,24 @@ const CartModal = () => {
                       spacing={2}
                       xs={3}
                     >
-                      <Grid item>$ {recipe.price}</Grid>
+                      <Grid item>
+                        <Typography variant="body2">
+                          $ {recipe.price}
+                        </Typography>
+                      </Grid>
                       <Grid item> $ {addDecimals(qty * recipe.price)}</Grid>
                     </Grid>
-                    <Grid item xs={1}>
-                      <IconButton
-                        edge="end"
-                        aria-label="delete"
-                        onClick={(e) => handleDelete(recipe._id)}
-                      >
-                        <DeleteForeverIcon />
-                      </IconButton>
-                    </Grid>
+                  </Hidden>
+                  <Grid item xs={1}>
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={(e) => handleDelete(recipe._id)}
+                    >
+                      <DeleteForeverIcon />
+                    </IconButton>
                   </Grid>
-                </>
+                </Grid>
               ))}
             </Grid>
           </ListItem>
