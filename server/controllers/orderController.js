@@ -13,7 +13,6 @@ const addOrderItems = AsyncHandler(async (req, res) => {
     bookingDate,
     instructions,
     itemsPrice,
-    taxPrice,
     totalPrice,
   } = req.body;
 
@@ -29,7 +28,6 @@ const addOrderItems = AsyncHandler(async (req, res) => {
       bookingDate,
       instructions,
       itemsPrice,
-      taxPrice,
       totalPrice,
       paidAt: Date.now(),
     });
