@@ -12,11 +12,12 @@ import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import { FormControl, Snackbar, TextField } from "@material-ui/core";
-import DateFnsUtils from "@date-io/date-fns";
 import { saveShippingAddress, saveBooking } from "../actions/cartActions";
 import { createOrder } from "../actions/orderActions";
 //MUI date time picker
-import { format } from "date-fns";
+import "date-fns";
+import DateFnsUtils from "@date-io/date-fns";
+
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -27,7 +28,6 @@ export const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     height: "100vh",
-    flexGrow: "1",
   },
 
   backButton: {
@@ -140,14 +140,14 @@ export const useStyles = makeStyles((theme) => ({
     flex: "0.6",
     height: "100vh",
     background: "white",
-    marginTop: theme.spacing(10),
+    marginTop: theme.spacing(12),
   },
   right__container: {
     display: "flex",
     flexDirection: "column",
     height: "100vh",
     flex: "0.4",
-    marginTop: theme.spacing(10),
+    marginTop: theme.spacing(12),
   },
   logo: {
     margin: theme.spacing(2, 1, 0, 1),
@@ -259,8 +259,9 @@ const Payment = ({ history }) => {
   const [open, setOpen] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [selectedDate, setSelectedDate] = useState(
-    bookingDetails.selectedDate || new Date("2021-03-26T21:11:54")
+    bookingDetails.selectedDate || new Date(Date.now())
   );
+
   const [instructions, setInstructions] = useState(
     bookingDetails.instructions || ""
   );
@@ -308,11 +309,7 @@ const Payment = ({ history }) => {
 
   // Date change handler
   const handleDateChange = (date) => {
-    setSelectedDate(
-      format(date, "yyyy-MM-dd HH:mm:ssXXX", {
-        timeZone: "America/New_York",
-      })
-    );
+    setSelectedDate(date);
   };
 
   function getStepContent(stepIndex) {
@@ -400,7 +397,7 @@ const Payment = ({ history }) => {
         price: 23.98,
       },
       shippingAddress: shippingAddress,
-      bookingDate: bookingDetails.selectedDate,
+      bookingDate: bookingDetails.selectedDate.toString(),
       instructions: bookingDetails.instructions,
       totalPrice: 65.12,
     });
@@ -478,7 +475,7 @@ const Payment = ({ history }) => {
                         margin="normal"
                         label="Pick a date"
                         value={selectedDate}
-                        onChange={handleDateChange}
+                        onChange={(date) => handleDateChange(date)}
                         KeyboardButtonProps={{
                           "aria-label": "change date",
                         }}
@@ -486,10 +483,9 @@ const Payment = ({ history }) => {
                       <KeyboardTimePicker
                         margin="normal"
                         required
-                        format="hh:mm"
                         label="Time picker"
                         value={selectedDate}
-                        onChange={handleDateChange}
+                        onChange={(date) => handleDateChange(date)}
                         KeyboardButtonProps={{
                           "aria-label": "change time",
                         }}
@@ -534,7 +530,7 @@ const Payment = ({ history }) => {
                           ORDER DATE
                         </Typography>
                         <Typography>
-                          Date: {" " + bookingDetails.selectedDate}{" "}
+                          Date: {bookingDetails.selectedDate.toString()}{" "}
                         </Typography>
                       </div>
 
