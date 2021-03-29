@@ -55,19 +55,11 @@ const EditProfile = ({ create, profile, setProfile }) => {
   });
 
   const onSubmit = async (values) => {
-    if (create) {
-      const profile = await axios.post("/api/chefProfiles", {
-        ...values,
-        profilePictureUrl,
-      });
-      setProfileInfo(profile);
-    } else {
-      const profile = await axios.put(`/api/chefProfiles/${userInfo._id}`, {
-        ...values,
-        profilePictureUrl,
-      });
-      setProfileInfo(profile);
-    }
+    const profile = await axios.put(`/api/users/${userInfo._id}`, {
+      ...values,
+      profilePictureUrl,
+    });
+    setProfileInfo(profile);
   };
 
   return (

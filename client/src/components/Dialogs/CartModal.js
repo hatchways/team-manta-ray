@@ -125,14 +125,14 @@ const CartModal = () => {
           <ListItem alignItems="center">
             <ListItemText>
               <Typography variant="h5" align="center">{`${
-                chosenChefProfile && chosenChefProfile.user.name
+                chosenChefProfile && chosenChefProfile.name
               }`}</Typography>
             </ListItemText>
           </ListItem>
           <ListItem>
             <img
               src={
-                chosenChefProfile
+                chosenChefProfile && chosenChefProfile.profilePictureUrl
                   ? chosenChefProfile.profilePictureUrl
                   : defaultUserImage
               }
@@ -148,7 +148,7 @@ const CartModal = () => {
             <ListItemText>
               <Typography variant="h6">Specialties:</Typography>
               <span>
-                {chosenChefProfile && chosenChefProfile.cuisineTags.join(",")}
+                {chosenChefProfile && chosenChefProfile.cuisines.join(",")}
               </span>
             </ListItemText>
           </ListItem>

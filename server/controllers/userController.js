@@ -210,27 +210,17 @@ const getUserCart = AsyncHandler(async (req, res) => {
   //get user from middleWare
   const { user } = req;
   try {
-    const cartInfo = await User.findById(user._id)
-      .select("cart")
-      .populate({
-        path: "cart",
-        populate: {
-          path: "chef",
-        },
-      })
-      .populate({
-        path: "cart",
-        populate: {
-          path: "items",
-          populate: {
-            path: "recipe",
-          },
-        },
-      })
-      .exec();
-    res.status(200).json(cartInfo);
+    if (user.cart) {
+      const cartInfo = await User.findOne({ _id: user._id })
+        .select("cart")
+        .populate("cart.chef")
+        .populate("cart.items.recipe")
+        .exec();
+      return res.status(200).json(cartInfo);
+    }
+    return res.status(200).json({ cart: { items: [] } });
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     res.status(500);
     throw new Error("Server Error");
   }
@@ -248,9 +238,10 @@ const deleteUserCart = AsyncHandler(async (req, res) => {
 
     //find the user and remove the instance of cart
 
-    const updatedUser = await User.updateOne(
+    const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
-      { $unset: { cart: "" } }
+      { $unset: { cart: "" } },
+      { new: true }
     );
 
     res.status(200).json(updatedUser);
@@ -275,22 +266,16 @@ const editUserCart = AsyncHandler(async (req, res) => {
       throw new Error("User Not Found");
     }
 
-    const cartIsEmpty = currentUser.cart.items.length === 0;
+    const cartIsEmpty = !currentUser.cart;
     if (cartIsEmpty) {
       currentUser.cart = { chef, items: [{ recipe, qty: 1 }] };
       await currentUser.save();
+
       const updatedCart = await User.findById(user._id)
         .select("cart")
-        .populate({
-          path: "cart",
-          populate: {
-            path: "items",
-            populate: {
-              path: "recipe",
-            },
-          },
-        })
-        .exec();
+        .populate("cart.chef")
+        .populate("cart.items.recipe");
+
       res.status(200).json(updatedCart.cart.items);
       return;
     }
@@ -328,15 +313,7 @@ const editUserCart = AsyncHandler(async (req, res) => {
     await currentUser.save();
     const updatedCart = await User.findById(user._id)
       .select("cart")
-      .populate({
-        path: "cart",
-        populate: {
-          path: "items",
-          populate: {
-            path: "recipe",
-          },
-        },
-      })
+      .populate("cart.items.recipe")
       .exec();
     res.status(200).json(updatedCart.cart.items);
   } catch (error) {
@@ -351,7 +328,8 @@ const deleteAnItemFromCart = AsyncHandler(async (req, res) => {
   const { user } = req;
   try {
     const currentUser = await User.findById(user._id);
-    const cartIsEmpty = currentUser.cart.items.length === 0;
+
+    const cartIsEmpty = !currentUser.cart;
     if (cartIsEmpty) {
       res.status(400);
       throw new Error("Cart Is Empty");
@@ -362,28 +340,20 @@ const deleteAnItemFromCart = AsyncHandler(async (req, res) => {
 
     await currentUser.save();
 
-    //check if the is no items in the cart reset the cart
+    //check if there is no items in the cart reset the cart
     if (currentUser.cart.items.length === 0) {
       const updatedUser = await User.updateOne(
         { _id: user._id },
         { $unset: { cart: "" } }
       );
+      return res.status(200).json([]);
     }
 
     //return all the info needed for a smooth context workflow in frontend-aka items of the cart for this route
 
     const updatedCart = await User.findById(user._id)
       .select("cart")
-      .populate({
-        path: "cart",
-        populate: {
-          path: "items",
-          populate: {
-            path: "recipe",
-          },
-        },
-      })
-      .exec();
+      .populate("cart.items.recipe");
 
     res.status(200).json(updatedCart.cart.items);
   } catch (error) {
