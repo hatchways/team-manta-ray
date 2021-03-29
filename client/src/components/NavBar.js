@@ -11,10 +11,14 @@ import {
   ListItemText,
   // Avatar,
   makeStyles,
-  Box,
-  Container,
+  Grid,
+  Badge,
 } from "@material-ui/core";
+import NotificationsIcon from "@material-ui/icons/Notifications";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
+
+import NotifsDrawer from "./NotifsDrawer";
+
 import plateLogo from "../assets/plate.svg";
 import { logout } from "../actions/userActions";
 import Logo from "./Logo";
@@ -44,13 +48,26 @@ const useStyles = makeStyles((theme) => ({
 
 const NavBar = ({ history }) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
+  const [notifsOpen, setNotifsOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   // reducer dispatch function
   const dispatch = useContext(UserDispatchContext);
 
-  const drawerHandler = () => {
-    setOpen(true);
+  const navDrawerHandler = () => {
+    setNavOpen(true);
+    if (notifsOpen) {
+      setNotifsOpen(false);
+    }
+  };
+
+  const notifsDrawerHandler = () => {
+    setNotifsOpen(true);
+    if (navOpen) {
+      setNavOpen(false);
+    }
+    setUnreadCount(0);
   };
 
   const logoutHandler = async (e) => {
@@ -60,49 +77,70 @@ const NavBar = ({ history }) => {
   };
 
   return (
-    <Box color="white">
+    <div>
       <AppBar className={classes.appBar} color="inherit" position="fixed">
-        <Container maxWidth="xl">
-          <Toolbar className={classes.toolBar}>
+        <Toolbar className={classes.toolBar}>
+          <Grid
+            container
+            direction="row"
+            justify="space-between"
+            alignItems="center"
+          >
             <Logo />
             {/* <Grid item>
                 <Avatar src={userData.avatar} alt="user profile pic" />
               </Grid> */}
-
-            <Box color="#000">
+            <Grid item>
+              <IconButton
+                color="inherit"
+                aria-label="navbar"
+                onClick={notifsDrawerHandler}
+              >
+                <Badge badgeContent={unreadCount} color="secondary">
+                  <NotificationsIcon fontSize="medium" />
+                </Badge>
+              </IconButton>
+            </Grid>
+            <Grid item>
               <IconButton
                 color="inherit"
                 aria-label="menu"
-                onClick={drawerHandler}
+                onClick={navDrawerHandler}
               >
                 <DragHandleIcon fontSize="large" />
               </IconButton>
-            </Box>
-          </Toolbar>
-
-          <Drawer
-            variant="temporary"
-            anchor="right"
-            open={open}
-            onClose={() => setOpen(false)}
-          >
-            <div className={classes.drawerDiv}>
-              <List component="nav" aria-label="navigation">
-                <ListItem divider className={classes.plateIcon}>
-                  <img src={plateLogo} alt="plate icon" />
-                </ListItem>
-                <ListItem button component={Link} to="/profile" divider>
-                  <ListItemText primary="Profile" />
-                </ListItem>
-                <ListItem button divider onClick={logoutHandler}>
-                  <ListItemText primary="Log Out" />
-                </ListItem>
-              </List>
-            </div>
-          </Drawer>
-        </Container>
+            </Grid>
+          </Grid>
+        </Toolbar>
       </AppBar>
-    </Box>
+
+      <Drawer
+        variant="temporary"
+        anchor="right"
+        open={navOpen}
+        onClose={() => setNavOpen(false)}
+      >
+        <div className={classes.drawerDiv}>
+          <List component="nav" aria-label="navigation">
+            <ListItem divider className={classes.plateIcon}>
+              <img src={plateLogo} alt="plate icon" />
+            </ListItem>
+            <ListItem button component={Link} to="/profile" divider>
+              <ListItemText primary="Profile" />
+            </ListItem>
+            <ListItem button divider onClick={logoutHandler}>
+              <ListItemText primary="Log Out" />
+            </ListItem>
+          </List>
+        </div>
+      </Drawer>
+      <NotifsDrawer
+        notifsOpen={notifsOpen}
+        setNotifsOpen={setNotifsOpen}
+        setUnreadCount={setUnreadCount}
+        classes={classes}
+      />
+    </div>
   );
 };
 
