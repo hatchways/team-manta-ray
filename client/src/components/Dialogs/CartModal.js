@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   //   minWidth: theme.spacing(70),
   // },
   root: {
-    width: "80%",
+    width: "100%",
     [theme.breakpoints.down("sm")]: {
       width: "99%",
     },

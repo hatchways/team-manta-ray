@@ -214,12 +214,7 @@ const getUserCart = AsyncHandler(async (req, res) => {
       const cartInfo = await User.findOne({ _id: user._id })
         .select("cart")
         .populate("cart.chef")
-        .populate("cart.items.recipe", [
-          "recipePictureUrl",
-          "name",
-          "price",
-          "_id",
-        ])
+        .populate("cart.items.recipe")
         .exec();
       return res.status(200).json(cartInfo);
     }
@@ -279,12 +274,7 @@ const editUserCart = AsyncHandler(async (req, res) => {
       const updatedCart = await User.findById(user._id)
         .select("cart")
         .populate("cart.chef")
-        .populate("cart.items.recipe", [
-          "recipePictureUrl",
-          "name",
-          "price",
-          "_id",
-        ]);
+        .populate("cart.items.recipe");
 
       res.status(200).json(updatedCart.cart.items);
       return;
@@ -323,12 +313,7 @@ const editUserCart = AsyncHandler(async (req, res) => {
     await currentUser.save();
     const updatedCart = await User.findById(user._id)
       .select("cart")
-      .populate("cart.items.recipe", [
-        "recipePictureUrl",
-        "name",
-        "price",
-        "_id",
-      ])
+      .populate("cart.items.recipe")
       .exec();
     res.status(200).json(updatedCart.cart.items);
   } catch (error) {
@@ -368,12 +353,7 @@ const deleteAnItemFromCart = AsyncHandler(async (req, res) => {
 
     const updatedCart = await User.findById(user._id)
       .select("cart")
-      .populate("cart.items.recipe", [
-        "recipePictureUrl",
-        "name",
-        "price",
-        "_id",
-      ]);
+      .populate("cart.items.recipe");
 
     res.status(200).json(updatedCart.cart.items);
   } catch (error) {
