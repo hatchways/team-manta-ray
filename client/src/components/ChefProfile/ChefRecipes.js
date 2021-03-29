@@ -14,8 +14,8 @@ import plate from "../../assets/plate.svg";
 import DialogControl from "../Dialogs/DialogControl";
 import {
   addToCart,
-  getChosenChefProfile,
   setChefConflictError,
+  getChosenChefProfile,
 } from "../../actions/cartActions";
 import { UserContext, UserDispatchContext } from "../../context/UserContext";
 

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { UserDispatchContext } from "../context/UserContext";
 import { Link, withRouter } from "react-router-dom";
 import {
@@ -15,6 +15,7 @@ import {
   Box,
   Container,
 } from "@material-ui/core";
+import socketIOClient from "socket.io-client";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 import plateLogo from "../assets/plate.svg";
 import { logout } from "../actions/userActions";
@@ -44,6 +45,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const SERVER = "http://localhost:3001";
+
 const NavBar = ({ history }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -55,7 +58,19 @@ const NavBar = ({ history }) => {
     setOpen(true);
   };
 
+  const socket = useRef();
+
+  useEffect(() => {
+    socket.current = socketIOClient(SERVER, {
+      withCredentials: true,
+    });
+    socket.current.on("connection", () => {
+      console.log("Connected to the socket");
+    });
+  }, []);
+
   const logoutHandler = async (e) => {
+    socket.current.disconnect();
     e.preventDefault();
     await logout(dispatch);
     history.replace("/login");
