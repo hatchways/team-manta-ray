@@ -28,14 +28,12 @@ const ChefProfile = ({ history, match }) => {
   useEffect(() => {
     if (userInfo) {
       const getProfileAndRecipes = async () => {
-        const idToFetchProfile = userId ? userId : userInfo._id;
-
-        const res = await axios.get(`/api/chefProfiles/${idToFetchProfile}`);
-
+        const path = userId ? `/api/users/${userId}` : `/api/users`;
+        const res = await axios.get(path);
         if (res.data) {
-          setProfile(res.data.chefProfile);
-
-          getRecipesByChef(dispatch, res.data.chefProfile._id);
+          setProfile(res.data.user);
+          const id = userId || userInfo._id;
+          getRecipesByChef(dispatch, id);
         }
       };
       getProfileAndRecipes();
@@ -80,7 +78,7 @@ const ChefProfile = ({ history, match }) => {
             <Box textAlign="center" className={classes.chefMenuName}>
               {profile && (
                 <Typography variant="h4">{`${
-                  profile.user.name.split(" ")[0]
+                  profile.name.split(" ")[0]
                 }'s Menu`}</Typography>
               )}
             </Box>

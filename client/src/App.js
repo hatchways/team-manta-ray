@@ -17,6 +17,7 @@ import ChefProfile from "./pages/ChefProfile";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import NavBar from "./components/NavBar";
 import TestChefProfile from "./pages/TestChefProfile";
+import BrowseChefs from "./pages/BrowseChefs";
 
 /** This will be moved once we have a parent component for payment */
 const promise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
@@ -30,6 +31,7 @@ const Private = () => {
         <Route path="/payment" render={(props) => <Payment {...props} />} />
         <Route path="/test" component={TestComponent} />
         <Route path="/profile" component={CustomerProfile} />
+        <Route path="/browsechefs" component={BrowseChefs} />
         <Route
           path="/chefprofile/:userId?/:recipeId?"
           component={ChefProfile}

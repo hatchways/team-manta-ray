@@ -18,11 +18,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import plate from "../assets/plate.svg";
 import DialogControl from "./Dialogs/DialogControl";
 import { UserDispatchContext, UserContext } from "../context/UserContext";
-import {
-  addToCart,
-  getChosenChefProfile,
-  setChefConflictError,
-} from "../actions/cartActions";
+import { addToCart, setChefConflictError } from "../actions/cartActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,7 +75,6 @@ export default function RecipeReviewCard({ id, isOwner }) {
       //if user is visiting other chef's profile add item to cart
     } else {
       if (cart.length === 0) {
-        getChosenChefProfile(globalDispatch, recipe.user);
         addToCart(globalDispatch, recipe);
       } else {
         const isSelectingFromADifferentChef =
