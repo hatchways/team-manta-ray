@@ -2,6 +2,25 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const Schema = mongoose.Schema;
+const cartSchema = new Schema({
+  chef: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  items: [
+    {
+      recipe: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Recipe",
+        required: true,
+      },
+      qty: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
+});
 
 const userSchema = new Schema(
   {
@@ -27,6 +46,24 @@ const userSchema = new Schema(
       type: String,
       required: false,
     },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+      },
+      coordinates: {
+        type: [Number],
+        index: "2dsphere",
+      },
+    },
+    bio: String,
+    profilePictureUrl: {
+      type: String,
+    },
+    cuisines: {
+      type: [String],
+    },
+    cart: cartSchema,
   },
   {
     timestamps: true,

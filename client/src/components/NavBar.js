@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { UserDispatchContext } from "../context/UserContext";
 import { Link, withRouter } from "react-router-dom";
 import {
@@ -9,18 +9,21 @@ import {
   List,
   ListItem,
   ListItemText,
+
   // Avatar,
   makeStyles,
   Grid,
   Badge,
 } from "@material-ui/core";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import socketIOClient from "socket.io-client";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
 
 import NotifsDrawer from "./NotifsDrawer";
 
 import plateLogo from "../assets/plate.svg";
 import { logout } from "../actions/userActions";
+import CartIcon from "./CartIcon";
 import Logo from "./Logo";
 
 const useStyles = makeStyles((theme) => ({
@@ -46,6 +49,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const SERVER = "http://localhost:3001";
+
 const NavBar = ({ history }) => {
   const classes = useStyles();
   const [navOpen, setNavOpen] = useState(false);
@@ -70,7 +75,19 @@ const NavBar = ({ history }) => {
     setUnreadCount(0);
   };
 
+  const socket = useRef();
+
+  useEffect(() => {
+    socket.current = socketIOClient(SERVER, {
+      withCredentials: true,
+    });
+    socket.current.on("connection", () => {
+      console.log("Connected to the socket");
+    });
+  }, []);
+
   const logoutHandler = async (e) => {
+    socket.current.disconnect();
     e.preventDefault();
     await logout(dispatch);
     history.replace("/login");
@@ -90,7 +107,7 @@ const NavBar = ({ history }) => {
             {/* <Grid item>
                 <Avatar src={userData.avatar} alt="user profile pic" />
               </Grid> */}
-            <Grid item>
+            <Grid item style={{ marginRight: "5px" }}>
               <IconButton
                 color="inherit"
                 aria-label="navbar"
@@ -100,6 +117,9 @@ const NavBar = ({ history }) => {
                   <NotificationsIcon fontSize="medium" />
                 </Badge>
               </IconButton>
+            </Grid>
+            <Grid item>
+              <CartIcon />
             </Grid>
             <Grid item>
               <IconButton

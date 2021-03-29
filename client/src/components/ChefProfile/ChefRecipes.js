@@ -1,14 +1,25 @@
 import React, { useContext, useState } from "react";
-import { Box, Grid, Typography, Chip, Divider } from "@material-ui/core";
+import {
+  Box,
+  Grid,
+  Typography,
+  Chip,
+  Divider,
+  Button,
+  Snackbar,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { RecipeContext } from "../../context/RecipeContext";
 import plate from "../../assets/plate.svg";
 
 import DialogControl from "../Dialogs/DialogControl";
+import {
+  addToCart,
+  setChefConflictError,
+  getChosenChefProfile,
+} from "../../actions/cartActions";
+import { UserContext, UserDispatchContext } from "../../context/UserContext";
 
-const ChefProfile = ({ id }) => {
-  const { recipes } = useContext(RecipeContext);
-  const recipe = recipes.filter((res) => res._id === id)[0];
+const ChefProfile = ({ recipe, isOwner }) => {
   const {
     name,
     price,
@@ -18,14 +29,28 @@ const ChefProfile = ({ id }) => {
     recipePictureUrl,
   } = recipe;
 
-  const [open, setOpen] = useState(false);
+  const dispatch = useContext(UserDispatchContext);
+  const { chosenChefProfile, cart, chefConflictErr } = useContext(UserContext);
 
-  const handleClickOpen = (e) => {
-    setOpen(true);
-  };
+  const [open, setOpen] = useState(false);
 
   const handleClose = (value) => {
     setOpen(false);
+  };
+  const handleAddToCart = () => {
+    if (cart.length === 0) {
+      getChosenChefProfile(dispatch, recipe.user);
+      addToCart(dispatch, recipe);
+    } else {
+      const isSelectingFromADifferentChef =
+        chosenChefProfile && chosenChefProfile._id !== recipe.user;
+
+      if (isSelectingFromADifferentChef) {
+        setChefConflictError(dispatch);
+      } else {
+        addToCart(dispatch, recipe);
+      }
+    }
   };
 
   const useStyles = makeStyles((theme) => ({
@@ -40,6 +65,36 @@ const ChefProfile = ({ id }) => {
       backgroundPosition: "center",
       height: "300px",
       cursor: "pointer",
+      "& button": {
+        visibility: "hidden",
+      },
+    },
+    chefRecipeImageWithBtn: {
+      backgroundImage: `url("${recipePictureUrl ? recipePictureUrl : plate}")`,
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "contain",
+      backgroundPosition: "center",
+      height: "300px",
+      cursor: "pointer",
+      display: "flex",
+      "& button": {
+        margin: "auto",
+        height: theme.spacing(5),
+        width: theme.spacing(14),
+        textTransform: "capitalize",
+        borderRadius: "0",
+        visibility: "hidden",
+      },
+      "&:hover": {
+        opacity: "0.95",
+        transform: "scale(1.01)",
+        transition: "all 0.5s ease-out",
+        "& button": {
+          visibility: "visible",
+          zIndex: 1,
+          opacity: "1",
+        },
+      },
     },
   }));
 
@@ -88,9 +143,19 @@ const ChefProfile = ({ id }) => {
         <Grid item sm={6} xs={12}>
           <Box
             m={5}
-            className={classes.chefRecipeImage}
-            onClick={handleClickOpen}
-          />
+            className={
+              isOwner ? classes.chefRecipeImage : classes.chefRecipeImageWithBtn
+            }
+            onClick={() => (isOwner ? setOpen(true) : null)}
+          >
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleAddToCart}
+            >
+              Add to cart
+            </Button>
+          </Box>
         </Grid>
       </Grid>
       <DialogControl
@@ -98,6 +163,11 @@ const ChefProfile = ({ id }) => {
         onClose={handleClose}
         control="EditRecipe"
         recipe={{ ...recipe }}
+      />
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={chefConflictErr ? true : false}
+        message={chefConflictErr}
       />
       <Divider />
     </>

@@ -10,7 +10,9 @@ export const theme = createMuiTheme({
     h4: {
       fontWeight: "medium",
     },
-    h5: {},
+    h5: {
+      fontWeight: "medium",
+    },
     h6: {},
     body1: {
       color: "#000",
