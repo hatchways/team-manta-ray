@@ -27,7 +27,7 @@ const NotifsDrawer = ({
 
   useEffect(() => {
     setUnreadCount(notifs.length);
-  }, [notifs]);
+  }, [notifs, setUnreadCount]);
 
   const notificationClickHandler = (notif) => {
     notifs.splice(
@@ -86,7 +86,7 @@ const NotifsDrawer = ({
                   />
                 </ListItem>
               );
-            } else if (notif.type === "order") {
+            } else {
               return (
                 <ListItem
                   button
