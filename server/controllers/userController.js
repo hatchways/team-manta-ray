@@ -266,7 +266,6 @@ const editUserCart = AsyncHandler(async (req, res) => {
       throw new Error("User Not Found");
     }
 
-    // const cartIsEmpty = currentUser.cart.items.length === 0;
     const cartIsEmpty = !currentUser.cart;
     if (cartIsEmpty) {
       currentUser.cart = { chef, items: [{ recipe, qty: 1 }] };
@@ -276,16 +275,7 @@ const editUserCart = AsyncHandler(async (req, res) => {
         .select("cart")
         .populate("cart.chef")
         .populate("cart.items.recipe");
-      // .populate({
-      //   path: "cart",
-      //   populate: {
-      //     path: "items",
-      //     populate: {
-      //       path: "recipe",
-      //     },
-      //   },
-      // })
-      // .exec();
+
       res.status(200).json(updatedCart.cart.items);
       return;
     }
@@ -338,7 +328,6 @@ const deleteAnItemFromCart = AsyncHandler(async (req, res) => {
   const { user } = req;
   try {
     const currentUser = await User.findById(user._id);
-    // const cartIsEmpty = currentUser.cart.items.length === 0;
 
     const cartIsEmpty = !currentUser.cart;
     if (cartIsEmpty) {
@@ -365,16 +354,6 @@ const deleteAnItemFromCart = AsyncHandler(async (req, res) => {
     const updatedCart = await User.findById(user._id)
       .select("cart")
       .populate("cart.items.recipe");
-    // .populate({
-    //   path: "cart",
-    //   populate: {
-    //     path: "items",
-    //     populate: {
-    //       path: "recipe",
-    //     },
-    //   },
-    // })
-    // .exec();
 
     res.status(200).json(updatedCart.cart.items);
   } catch (error) {

@@ -16,9 +16,9 @@ export const getCartInfo = async (dispatch) => {
   try {
     const res = await axios.get("/api/users/cart");
     if (res.status === 200) {
-      console.log(res.data.cart);
-      dispatch({ type: SET_CART_ITEMS, payload: res.data.cart.items });
-      dispatch({ type: SET_CHEF, payload: res.data.cart.chef });
+      const { items, chef } = res.data.cart;
+      dispatch({ type: SET_CART_ITEMS, payload: items });
+      if (chef) dispatch({ type: SET_CHEF, payload: res.data.cart.chef });
     }
   } catch (error) {
     console.log(error);
@@ -32,7 +32,6 @@ export const addToCart = async (dispatch, payload) => {
       recipe: payload._id,
       chef: payload.user,
     });
-    console.log(body);
 
     const res = await axios.put("/api/users/cart", body, config);
     if (res.status === 200) {

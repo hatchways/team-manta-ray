@@ -28,6 +28,7 @@ export const UserLoginReducer = (initialState, action) => {
   switch (action.type) {
     case USER_LOGIN_REQUEST:
       return {
+        ...initialState,
         loading: true,
       };
     case USER_LOGIN_SUCCESS:
@@ -37,10 +38,16 @@ export const UserLoginReducer = (initialState, action) => {
         loading: false,
       };
     case USER_LOGOUT:
-      return {};
+      return {
+        ...initialState,
+        userInfo: null,
+        loading: null,
+        error: null,
+      };
 
     case USER_LOGIN_FAIL:
       return {
+        ...initialState,
         loading: false,
         error: action.payload,
       };
@@ -55,17 +62,20 @@ export const UserRegisterReducer = (initialState, action) => {
   switch (action.type) {
     case USER_REGISTER_REQUEST:
       return {
+        ...initialState,
         loading: true,
       };
 
     case USER_REGISTER_SUCCESS:
       return {
+        ...initialState,
         loading: false,
         userInfo: action.payload,
       };
 
     case USER_REGISTER_FAIL:
       return {
+        ...initialState,
         loading: false,
         error: action.payload,
       };
