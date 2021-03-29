@@ -13,6 +13,9 @@ export const recipeInitialState = {
 };
 
 export const RecipeReducer = (state, action) => {
+  console.log(action.type);
+  console.log(state.recipes);
+  console.log(state.cart);
   switch (action.type) {
     case CREATE_RECIPE:
       return { ...state, recipes: [action.payload, ...state.recipes] };
