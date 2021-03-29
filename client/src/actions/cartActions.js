@@ -9,6 +9,7 @@ import {
   SET_CONFLICT_ERR,
   CLEAR_CONFLICT_ERR,
   SET_CART_ITEMS,
+  SET_CHEF,
 } from "../constants/userConstants";
 
 import {

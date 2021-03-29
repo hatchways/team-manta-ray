@@ -211,6 +211,7 @@ export const useStyles = makeStyles((theme) => ({
   orderTotal: {
     color: "#FF743D",
     fontWeight: "bold",
+    marginRight: theme.spacing(2),
   },
 
   paymentDetails: {
@@ -229,6 +230,27 @@ export const useStyles = makeStyles((theme) => ({
 
   hidden: {
     display: "none",
+  },
+  avatarImg: {
+    width: "80px",
+    height: "80px",
+    marginRight: theme.spacing(3),
+    // marginBottom: theme.spacing(3),
+  },
+  total: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginTop: theme.spacing(1),
+    marginLeft: theme.spacing(2),
+  },
+  date: {
+    marginLeft: theme.spacing(2),
+    color: "lightgrey",
+  },
+  dates: {
+    display: "flex",
+    padding: theme.spacing(1),
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -254,7 +276,9 @@ const Payment = ({ history }) => {
   const classes = useStyles();
   // dispatch function from reducer
   const dispatch = useContext(UserDispatchContext);
-  const { shippingAddress, bookingDetails } = useContext(UserContext);
+  const { userInfo, shippingAddress, bookingDetails, cart } = useContext(
+    UserContext
+  );
 
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
@@ -274,30 +298,6 @@ const Payment = ({ history }) => {
   const [instructions, setInstructions] = useState(
     bookingDetails.instructions || ""
   );
-
-  const cartItems = [
-    {
-      recipe: {
-        name: "5 specialty sushi roles",
-        recipePictureUrl: "Image",
-        price: "$10.00",
-      },
-    },
-    {
-      recipe: {
-        name: "1 specialty sushi roles",
-        recipePictureUrl: "Image",
-        price: "$10.00",
-      },
-    },
-    {
-      recipe: {
-        name: "2 specialty sushi roles",
-        recipePictureUrl: "Image",
-        price: "$10.00",
-      },
-    },
-  ];
 
   // stripe
   const [succeeded, setSucceeded] = useState(false);
@@ -364,32 +364,35 @@ const Payment = ({ history }) => {
     return ["Shipping", "Pick Date and Time", "Review", "Pay"];
   }
 
-  // data from context
-  const { userInfo } = useContext(UserContext);
+  cart.totalPrice = Number(
+    cart.reduce((total, item) => total + item.recipe.price * item.qty, 0)
+  ).toFixed(2);
 
   useEffect(() => {
     if (!userInfo) {
       history.replace("/login");
     }
 
-    // Create PaymentIntent as soon as the page loads
-    fetch("/payment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        items: [{ id: "xl-tshirt" }],
-        userInfo,
-      }),
-    })
-      .then((res) => {
-        return res.json();
+    if (cart.totalPrice && cart.totalPrice > 0) {
+      fetch("/payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          price: cart.totalPrice,
+          userInfo,
+        }),
       })
-      .then((data) => {
-        setClientSecret(data.clientSecret);
-      });
-  }, [history, userInfo]);
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setClientSecret(data.clientSecret);
+        });
+    }
+    // Create PaymentIntent as soon as the page loads
+  }, [history, userInfo, cart]);
 
   const handleChange = async (event) => {
     setDisabled(event.empty);
@@ -422,17 +425,19 @@ const Payment = ({ history }) => {
 
   const placeOrder = () => {
     createOrder(dispatch, {
-      orderItems: {
-        id: "605a05d716942757f1ea8b2b",
-        name: "xyz",
-        quantity: 1,
-        image: "image url",
-        price: 23.98,
-      },
+      orderItems: cart.map((item) => {
+        return {
+          name: item.recipe.name,
+          quantity: item.qty,
+          image: item.recipe.recipePictureUrl,
+          price: item.recipe.price,
+          id: item.recipe._id,
+        };
+      }),
       shippingAddress: shippingAddress,
       bookingDate: bookingDetails.selectedDate.toString(),
       instructions: bookingDetails.instructions,
-      totalPrice: 65.12,
+      totalPrice: cart.totalPrice,
     });
   };
 
@@ -654,30 +659,65 @@ const Payment = ({ history }) => {
         <div className={classes.right__container}>
           <div className={classes.order}>
             <Typography variant="h4">Your order:</Typography>
-            {cartItems.map(({ recipe }) => (
-              <>
-                <List>
-                  <ListItem alignItems="flex-start">
-                    <ListItemAvatar>V</ListItemAvatar>
-
-                    <ListItemText
-                      style={{ display: "inline" }}
-                      primary={recipe.name}
-                      secondary={
-                        <>
-                          <Typography>{recipe.price}</Typography>
-                        </>
-                      }
+            {cart.map(({ qty, recipe }) => (
+              <List key={recipe._id}>
+                <ListItem alignItems="flex-start">
+                  <ListItemAvatar>
+                    <img
+                      className={classes.avatarImg}
+                      src={recipe.recipePictureUrl}
+                      alt={recipe.name}
                     />
-                  </ListItem>
-                  <Divider />
-                </List>
-              </>
-            ))}
+                    {/* <Avatar
+                      className={classes.avatarImg}
+                      alt={recipe.name}
+                      src={recipe.recipePictureUrl}
+                    /> */}
+                  </ListItemAvatar>
 
-            <div className={classes.orderTotal}>
+                  <ListItemText
+                    style={{ display: "inline" }}
+                    primary={
+                      <Typography variant="h6">{recipe.name}</Typography>
+                    }
+                    secondary={
+                      <Typography variant="h5">
+                        $ {qty * recipe.price}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+              </List>
+            ))}
+            {activeStep === 2 ? (
+              <>
+                <Typography className={classes.dates}>Arrival time </Typography>
+                <Typography>
+                  <span className={classes.date}>
+                    {selectedDate.toString()}
+                  </span>
+                </Typography>
+              </>
+            ) : (
+              activeStep === 3 && (
+                <>
+                  <Typography className={classes.dates}>
+                    Arrival time{" "}
+                  </Typography>
+                  <Typography>
+                    <span className={classes.date}>
+                      {selectedDate.toString()}
+                    </span>
+                  </Typography>
+                </>
+              )
+            )}
+
+            <Divider variant="middle" />
+            <div className={classes.total}>
+              <Typography variant="h5"> Total: </Typography>
               <Typography variant="h5">
-                Total: <span className={classes.orderTotal}>$30.00</span>
+                <span className={classes.orderTotal}>${cart.totalPrice}</span>
               </Typography>
             </div>
           </div>
