@@ -30,7 +30,10 @@ const useStyles = makeStyles((theme) => ({
   //   minWidth: theme.spacing(70),
   // },
   root: {
-    minWidth: "70%",
+    width: "80%",
+    [theme.breakpoints.down("sm")]: {
+      width: "99%",
+    },
   },
   table: {
     tableLayout: "fixed",
@@ -163,13 +166,13 @@ const CartModal = () => {
               </Grid>
               <Grid item>
                 <Typography variant="h5" align="center">{`${
-                  chosenChefProfile && chosenChefProfile.user.name
+                  chosenChefProfile && chosenChefProfile.name
                 }`}</Typography>
               </Grid>
               <Grid item>
                 <img
                   src={
-                    chosenChefProfile
+                    chosenChefProfile && chosenChefProfile.profilePictureUrl
                       ? chosenChefProfile.profilePictureUrl
                       : defaultUserImage
                   }
@@ -216,7 +219,7 @@ const CartModal = () => {
                   <Grid item>
                     <span>
                       {chosenChefProfile &&
-                        chosenChefProfile.cuisineTags.join(",")}
+                        chosenChefProfile.cuisines.join(",")}
                     </span>
                   </Grid>
                 </Grid>
