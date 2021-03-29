@@ -62,7 +62,6 @@ export const getRecipesByChef = async (dispatch, chefId) => {
   try {
     const res = await axios.get(`/api/recipes/chef/${chefId}`);
     if (res.status === 200) {
-      console.log(res.data);
       dispatch({
         type: GET_RECIPES_BY_CHEF,
         payload: res.data.allRecipesByChef,
