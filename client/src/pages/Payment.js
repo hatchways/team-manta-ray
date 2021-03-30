@@ -21,7 +21,11 @@ import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import { FormControl, Snackbar, TextField } from "@material-ui/core";
-import { saveShippingAddress, saveBooking } from "../actions/cartActions";
+import {
+  saveShippingAddress,
+  saveBooking,
+  clearCart,
+} from "../actions/cartActions";
 import { createOrder } from "../actions/orderActions";
 //MUI date time picker
 import "date-fns";
@@ -252,6 +256,10 @@ export const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     marginLeft: theme.spacing(1),
   },
+  empty: {
+    textAlign: "center",
+    margin: theme.spacing(3),
+  },
 }));
 
 const cardStyle = {
@@ -276,9 +284,13 @@ const Payment = ({ history }) => {
   const classes = useStyles();
   // dispatch function from reducer
   const dispatch = useContext(UserDispatchContext);
-  const { userInfo, shippingAddress, bookingDetails, cart } = useContext(
-    UserContext
-  );
+  const {
+    userInfo,
+    shippingAddress,
+    bookingDetails,
+    cart,
+    chosenChefProfile,
+  } = useContext(UserContext);
 
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
@@ -372,6 +384,9 @@ const Payment = ({ history }) => {
     if (!userInfo) {
       history.replace("/login");
     }
+    if (!chosenChefProfile) {
+      console.log("No chef profile");
+    }
 
     if (cart.totalPrice && cart.totalPrice > 0) {
       fetch("/payment", {
@@ -392,7 +407,7 @@ const Payment = ({ history }) => {
         });
     }
     // Create PaymentIntent as soon as the page loads
-  }, [history, userInfo, cart]);
+  }, [history, userInfo, cart, chosenChefProfile]);
 
   const handleChange = async (event) => {
     setDisabled(event.empty);
@@ -434,11 +449,13 @@ const Payment = ({ history }) => {
           id: item.recipe._id,
         };
       }),
+      chefId: chosenChefProfile._id,
       shippingAddress: shippingAddress,
       bookingDate: bookingDetails.selectedDate.toString(),
       instructions: bookingDetails.instructions,
       totalPrice: cart.totalPrice,
     });
+    clearCart(dispatch);
   };
 
   return (
@@ -633,6 +650,7 @@ const Payment = ({ history }) => {
                     <Button
                       type="submit"
                       className={classes.backButton}
+                      disabled={cart.length === 0}
                       variant="contained"
                       color="secondary"
                       onClick={handleNext}
@@ -659,67 +677,75 @@ const Payment = ({ history }) => {
         <div className={classes.right__container}>
           <div className={classes.order}>
             <Typography variant="h4">Your order:</Typography>
-            {cart.map(({ qty, recipe }) => (
-              <List key={recipe._id}>
-                <ListItem alignItems="flex-start">
-                  <ListItemAvatar>
-                    <img
-                      className={classes.avatarImg}
-                      src={recipe.recipePictureUrl}
-                      alt={recipe.name}
-                    />
-                    {/* <Avatar
-                      className={classes.avatarImg}
-                      alt={recipe.name}
-                      src={recipe.recipePictureUrl}
-                    /> */}
-                  </ListItemAvatar>
 
-                  <ListItemText
-                    style={{ display: "inline" }}
-                    primary={
-                      <Typography variant="h6">{recipe.name}</Typography>
-                    }
-                    secondary={
-                      <Typography variant="h5">
-                        $ {qty * recipe.price}
-                      </Typography>
-                    }
-                  />
-                </ListItem>
-              </List>
-            ))}
-            {activeStep === 2 ? (
+            {cart.length > 0 ? (
               <>
-                <Typography className={classes.dates}>Arrival time </Typography>
-                <Typography>
-                  <span className={classes.date}>
-                    {selectedDate.toString()}
-                  </span>
-                </Typography>
-              </>
-            ) : (
-              activeStep === 3 && (
-                <>
-                  <Typography className={classes.dates}>
-                    Arrival time{" "}
-                  </Typography>
-                  <Typography>
-                    <span className={classes.date}>
-                      {selectedDate.toString()}
+                {cart.map(({ qty, recipe }) => (
+                  <List key={recipe._id}>
+                    <ListItem alignItems="flex-start">
+                      <ListItemAvatar>
+                        <img
+                          className={classes.avatarImg}
+                          src={recipe.recipePictureUrl}
+                          alt={recipe.name}
+                        />
+                      </ListItemAvatar>
+
+                      <ListItemText
+                        style={{ display: "inline" }}
+                        primary={
+                          <Typography variant="h6">{recipe.name}</Typography>
+                        }
+                        secondary={
+                          <Typography variant="h5">
+                            $ {qty * recipe.price}
+                          </Typography>
+                        }
+                      />
+                    </ListItem>
+                  </List>
+                ))}
+                {activeStep === 2 ? (
+                  <>
+                    <Typography className={classes.dates}>
+                      Arrival time{" "}
+                    </Typography>
+                    <Typography>
+                      <span className={classes.date}>
+                        {selectedDate.toString()}
+                      </span>
+                    </Typography>
+                  </>
+                ) : (
+                  activeStep === 3 && (
+                    <>
+                      <Typography className={classes.dates}>
+                        Arrival time{" "}
+                      </Typography>
+                      <Typography>
+                        <span className={classes.date}>
+                          {selectedDate.toString()}
+                        </span>
+                      </Typography>
+                    </>
+                  )
+                )}
+
+                <Divider variant="middle" />
+                <div className={classes.total}>
+                  <Typography variant="h5"> Total: </Typography>
+                  <Typography variant="h5">
+                    <span className={classes.orderTotal}>
+                      ${cart.totalPrice}
                     </span>
                   </Typography>
-                </>
-              )
+                </div>
+              </>
+            ) : (
+              <div className={classes.empty}>
+                <Typography>Your cart is empty</Typography>
+              </div>
             )}
-
-            <Divider variant="middle" />
-            <div className={classes.total}>
-              <Typography variant="h5"> Total: </Typography>
-              <Typography variant="h5">
-                <span className={classes.orderTotal}>${cart.totalPrice}</span>
-              </Typography>
-            </div>
           </div>
           <Button
             disabled={processing || disabled || succeeded}

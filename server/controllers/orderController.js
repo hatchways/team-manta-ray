@@ -10,6 +10,7 @@ const addOrderItems = AsyncHandler(async (req, res) => {
   const {
     orderItems,
     shippingAddress,
+    chefId,
     bookingDate,
     instructions,
     itemsPrice,
@@ -25,6 +26,7 @@ const addOrderItems = AsyncHandler(async (req, res) => {
       orderItems,
       user: req.user._id,
       shippingAddress,
+      chefId,
       bookingDate,
       instructions,
       itemsPrice,
