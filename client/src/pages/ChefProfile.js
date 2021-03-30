@@ -26,17 +26,14 @@ const ChefProfile = ({ history, match }) => {
   const [isOwner, setIsOwner] = useState(true);
 
   useEffect(() => {
-    if (userInfo && userInfo.isChef) {
+    if (userInfo) {
       const getProfileAndRecipes = async () => {
-        const idToFetchProfile = userId ? userId : userInfo._id;
-        console.log(idToFetchProfile);
-
-        const res = await axios.get(`/api/chefProfiles/${idToFetchProfile}`);
-        console.log(res.data);
+        const path = userId ? `/api/users/${userId}` : `/api/users`;
+        const res = await axios.get(path);
         if (res.data) {
-          setProfile(res.data.chefProfile);
-
-          getRecipesByChef(dispatch, res.data.chefProfile._id);
+          setProfile(res.data.user);
+          const id = userId || userInfo._id;
+          getRecipesByChef(dispatch, id);
         }
       };
       getProfileAndRecipes();
@@ -83,7 +80,7 @@ const ChefProfile = ({ history, match }) => {
             <Box textAlign="center" className={classes.chefMenuName}>
               {profile && (
                 <Typography variant="h4">{`${
-                  profile.user.name.split(" ")[0]
+                  profile.name.split(" ")[0]
                 }'s Menu`}</Typography>
               )}
             </Box>

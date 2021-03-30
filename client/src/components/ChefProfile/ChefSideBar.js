@@ -116,7 +116,7 @@ const ChefSideBar = (props) => {
             <Box>
               {userInfo && (
                 <Typography variant="h4">
-                  {profile ? profile.user.name : userInfo.name}
+                  {profile ? profile.name : userInfo.name}
                 </Typography>
               )}
             </Box>
