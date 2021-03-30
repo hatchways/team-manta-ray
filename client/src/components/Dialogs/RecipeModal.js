@@ -103,6 +103,8 @@ const RecipeModal = ({ edit, id, recipe, open, onClose, selectedValue }) => {
       onClose={handleClose}
       aria-labelledby="simple-dialog-title"
       open={open}
+      maxWidth="sm"
+      fullWidth={true}
     >
       <div>
         {edit && (
@@ -121,6 +123,7 @@ const RecipeModal = ({ edit, id, recipe, open, onClose, selectedValue }) => {
         <EditPicture
           srcData={recipePictureUrl}
           setSrcData={setRecipePictureUrl}
+          recipe={true}
         />
         <div className={classes.form}>
           <Formik

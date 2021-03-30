@@ -5,6 +5,7 @@ import { List, ListItem, Snackbar } from "@material-ui/core";
 import defaultUserImage from "../../assets/defaultUserImage.png";
 import plate from "../../assets/plate.svg";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
+import Loader from "../Loader";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -14,15 +15,27 @@ const useStyles = makeStyles((theme) =>
       margin: "auto",
       borderRadius: "50%",
     },
+    notRound: {
+      height: theme.spacing(25),
+      width: theme.spacing(25),
+      margin: "auto",
+    },
     uploadSection: {
       height: theme.spacing(10),
-      width: theme.spacing(50),
+      // width: theme.spacing(50),
+      width: "95%",
       outline: "none",
       border: "3px dotted #ccc",
+      margin: "auto",
       "& p": {
         color: "#999",
         textAlign: "center",
       },
+    },
+    loader: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
     },
     fieldImg: {
       height: theme.spacing(5),
@@ -33,12 +46,13 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const EditPicture = ({ profile, srcData, setSrcData }) => {
+const EditPicture = ({ profile, srcData, setSrcData, recipe }) => {
   const classes = useStyles();
 
   const [src, setSrc] = useState(srcData ? srcData : null);
   const [err, setErr] = useState(null);
   const [snackBarOpen, setSnackBarOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const uploadImage = useUploadImage();
 
@@ -53,7 +67,9 @@ const EditPicture = ({ profile, srcData, setSrcData }) => {
         setSnackBarOpen(true);
         return;
       }
+      if (acceptedFiles.length > 0) setLoading(true);
       const res = await uploadImage(acceptedFiles[0]);
+      setLoading(false);
       if (res.key) {
         setSrcData(res.Location);
         setSrc(res.Location);
@@ -77,8 +93,11 @@ const EditPicture = ({ profile, srcData, setSrcData }) => {
           <img
             src={src ? src : profile ? defaultUserImage : plate}
             alt="profileImage"
-            className={classes.img}
+            className={recipe ? classes.notRound : classes.img}
           />
+        </ListItem>
+        <ListItem alignItems="center" className={classes.loader}>
+          {loading && <Loader />}
         </ListItem>
         <ListItem button autoFocus>
           <div className={classes.uploadSection} {...getRootProps()}>
