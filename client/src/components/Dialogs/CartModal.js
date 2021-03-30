@@ -66,6 +66,9 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(6),
     textDecoration: "none",
     textTransform: "capitalize",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: theme.spacing(1.2),
+    },
     "& button": {
       height: "100%",
       width: "100%",
