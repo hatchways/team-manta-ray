@@ -16,6 +16,7 @@ const paymentRoutes = require("./routes/paymentRoutes");
 const imageRoutes = require("./routes/imageRoutes");
 const recipeRoutes = require("./routes/recipeRoutes");
 const searchRoutes = require("./routes/searchRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 connectDB();
 
@@ -42,6 +43,8 @@ app.use("/api/recipes", recipeRoutes);
 app.use("/api/search", searchRoutes);
 
 app.use("/payment", paymentRoutes);
+
+app.use("/api/orders", orderRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

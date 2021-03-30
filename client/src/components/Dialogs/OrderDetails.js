@@ -79,7 +79,11 @@ const OrderDetails = ({ items, user, orderId }) => {
           </ListItemText>
         </ListItem>
         <ListItem>
-          <img src={user.pictureUrl} alt="customer" className={classes.img} />
+          <img
+            src={user.profilePictureUrl}
+            alt="customer"
+            className={classes.img}
+          />
         </ListItem>
         <ListItem dense>
           <TableContainer>
@@ -92,31 +96,31 @@ const OrderDetails = ({ items, user, orderId }) => {
                   <Hidden smDown>
                     <TableCell align="center">Price</TableCell>
                   </Hidden>
-                  <Hidden smDown>
+                  {/* <Hidden smDown>
                     <TableCell align="center">Ingredients</TableCell>
-                  </Hidden>
+                  </Hidden> */}
                 </TableRow>
               </TableHead>
               <TableBody>
                 {items.map((item) => (
                   <TableRow key={item._id}>
                     <TableCell component="th" scope="item">
-                      <Avatar alt="recipe" src={item.recipePictureUrl} />
+                      <Avatar alt="recipe" src={item.image} />
                     </TableCell>
                     <TableCell align="left">{item.name}</TableCell>
-                    <TableCell align="center">{item.qty}</TableCell>
+                    <TableCell align="center">{item.quantity}</TableCell>
                     <Hidden smDown>
                       <TableCell align="left" nowrap="nowrap">{`${
                         item.price
-                      } x ${item.qty} = ${addDecimals(
-                        item.qty * item.price
+                      } x ${item.quantity} = ${addDecimals(
+                        item.quantity * item.price
                       )}`}</TableCell>
                     </Hidden>
-                    <Hidden smDown>
+                    {/* <Hidden smDown>
                       <TableCell align="left" nowrap="nowrap">
                         {item.ingredients.join(",")}
                       </TableCell>
-                    </Hidden>
+                    </Hidden> */}
                   </TableRow>
                 ))}
               </TableBody>

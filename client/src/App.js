@@ -18,7 +18,6 @@ import ChefProfile from "./pages/ChefProfile";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import NavBar from "./components/NavBar";
 import OrderList from "./pages/OrderList";
-import TestChefProfile from "./pages/TestChefProfile";
 import BrowseChefs from "./pages/BrowseChefs";
 
 /** This will be moved once we have a parent component for payment */

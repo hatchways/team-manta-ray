@@ -10,13 +10,20 @@ import {
   TableRow,
   Typography,
 } from "@material-ui/core";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Moment from "react-moment";
 import DialogControl from "./Dialogs/DialogControl";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 export const useStyles = makeStyles((theme) => ({
+  table: {
+    "& td": {
+      fontSize: theme.spacing(1.5),
+      textTransform: "normal",
+    },
+  },
   btn: {
     borderRadius: "0",
     // height: theme.spacing(4),
@@ -40,6 +47,9 @@ const OrderTable = ({
   const [open, setOpen] = useState(false);
   // const [focusOrder, setFocusOrder] = useState(false);
   console.log(selectedOrder);
+
+  const { userInfo } = useContext(UserContext);
+  const isChef = userInfo.isChef;
 
   useEffect(() => {
     if (selectedOrder) {
@@ -93,7 +103,7 @@ const OrderTable = ({
                   <TableCell>orderId</TableCell>
                 </Hidden>
                 <Hidden smDown>
-                  <TableCell>Customer</TableCell>
+                  <TableCell>{isChef ? "Customer" : "Chef"}</TableCell>
                 </Hidden>
                 <TableCell>Time</TableCell>
                 <Hidden smDown>
@@ -127,19 +137,23 @@ const OrderTable = ({
                       <TableCell>{order._id}</TableCell>
                     </Hidden>
                     <Hidden smDown>
-                      <TableCell>{order.user.name}</TableCell>
+                      <TableCell>
+                        {isChef ? order.user.name : order.chefId.name}
+                      </TableCell>
                     </Hidden>
 
                     <TableCell>
-                      <Moment format="YY-MM-DD HH:mm">{order.time}</Moment>
+                      <Moment format="YY-MM-DD HH:mm">
+                        {order.bookingDate}
+                      </Moment>
                     </TableCell>
                     <Hidden smDown>
                       <TableCell>
-                        <Moment fromNow>{order.time}</Moment>
+                        <Moment fromNow>{order.bookingDate}</Moment>
                       </TableCell>
                     </Hidden>
-                    <TableCell>{order.address}</TableCell>
-                    <TableCell>1E6 A8Z</TableCell>
+                    <TableCell>{`${order.shippingAddress.address}-${order.shippingAddress.city}`}</TableCell>
+                    <TableCell>{order.shippingAddress.postalCode}</TableCell>
 
                     <Hidden smDown>
                       <TableCell>{order.instructions}</TableCell>
@@ -152,9 +166,16 @@ const OrderTable = ({
                         variant="contained"
                         color="secondary"
                         className={classes.btn}
-                        onClick={() =>
-                          handleClickOpen(order._id, order.items, order.user)
-                        }
+                        onClick={() => {
+                          const userToRender = isChef
+                            ? order.user
+                            : order.chefId;
+                          handleClickOpen(
+                            order._id,
+                            order.orderItems,
+                            userToRender
+                          );
+                        }}
                       >
                         Details
                       </Button>
