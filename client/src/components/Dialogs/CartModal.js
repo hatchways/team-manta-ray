@@ -10,6 +10,7 @@ import {
   Grid,
   Card,
   Hidden,
+  Dialog,
 } from "@material-ui/core";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import React, { useContext } from "react";
@@ -26,21 +27,12 @@ import {
 } from "../../actions/cartActions";
 
 const useStyles = makeStyles((theme) => ({
-  // root: {
-  //   minWidth: theme.spacing(70),
-  // },
-  root: {
-    width: "100%",
-    [theme.breakpoints.down("sm")]: {
-      width: "99%",
-    },
-  },
   table: {
     tableLayout: "fixed",
   },
   img: {
-    height: theme.spacing(25),
-    width: theme.spacing(25),
+    height: theme.spacing(12),
+    width: theme.spacing(12),
     margin: "auto",
     borderRadius: "50%",
   },
@@ -48,8 +40,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(20, 10),
   },
   chefCard: {
-    margin: "10px auto",
-    marginBottom: theme.spacing(2),
+    padding: theme.spacing(2),
+    // margin: "10px auto",
+    margin: theme.spacing(2),
   },
   recipeCard: {
     padding: theme.spacing(2),
@@ -92,11 +85,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CartModal = () => {
+const CartModal = ({ open, onClose, selectedValue }) => {
   const classes = useStyles();
 
   const { cart, chosenChefProfile } = useContext(UserContext);
   const dispatch = useContext(UserDispatchContext);
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
 
   const addDecimals = (num) => (Math.round(num * 100) / 100).toFixed(2);
 
@@ -120,8 +117,15 @@ const CartModal = () => {
         })
       : removeFromCart(dispatch, id);
   };
+
   return (
-    <>
+    <Dialog
+      onClose={handleClose}
+      aria-labelledby="simple-dialog-title"
+      open={open}
+      maxWidth="sm"
+      fullWidth={true}
+    >
       {cart.length === 0 ? (
         <Typography
           gutterBottom
@@ -152,11 +156,10 @@ const CartModal = () => {
               container
               item
               direction="column"
-              justify="space-between"
+              // justify="space-between"
+              justify="center"
               alignItems="center"
-              spacing={2}
-              md={9}
-              xs={11}
+              spacing={1}
               square
               component={Card}
               className={classes.chefCard}
@@ -164,65 +167,60 @@ const CartModal = () => {
               <Grid item>
                 <Typography>Chef</Typography>
               </Grid>
-              <Grid item>
-                <Typography variant="h5" align="center">{`${
-                  chosenChefProfile && chosenChefProfile.name
-                }`}</Typography>
-              </Grid>
-              <Grid item>
-                <img
-                  src={
-                    chosenChefProfile && chosenChefProfile.profilePictureUrl
-                      ? chosenChefProfile.profilePictureUrl
-                      : defaultUserImage
-                  }
-                  alt="profileImage"
-                  className={classes.img}
-                />
-              </Grid>
               <Grid
                 item
                 container
                 direction="row"
-                justify="space-around"
-                alignItems="flex-start"
+                justify="center"
+                alignItems="center"
               >
-                <Grid
-                  container
-                  item
-                  direction="column"
-                  justify="space-evenly"
-                  alignItems="flex-start"
-                  xs={6}
-                  spacing={1}
-                >
-                  <Grid item>
-                    <Typography variant="body2">Bio:</Typography>
-                  </Grid>
-                  <Grid item>
-                    <span>{chosenChefProfile && chosenChefProfile.bio}</span>
-                  </Grid>
+                <Grid item xs={3}>
+                  <img
+                    src={
+                      chosenChefProfile && chosenChefProfile.profilePictureUrl
+                        ? chosenChefProfile.profilePictureUrl
+                        : defaultUserImage
+                    }
+                    alt="profileImage"
+                    className={classes.img}
+                  />
                 </Grid>
-
-                <Grid
-                  container
-                  item
-                  direction="column"
-                  justify="space-evenly"
-                  alignItems="flex-start"
-                  xs={6}
-                  spacing={1}
-                >
-                  <Grid item>
-                    <Typography variant="body2">Specialties:</Typography>
+                <Hidden smDown>
+                  <Grid item container direction="column" xs={9}>
+                    <Grid item container direction="row" spacing={1}>
+                      <Grid item>
+                        <Typography>Name:</Typography>
+                      </Grid>
+                      <Grid item>
+                        {`${chosenChefProfile && chosenChefProfile.name}`}
+                      </Grid>
+                    </Grid>
+                    <Grid item container direction="row" spacing={1}>
+                      <Grid item>
+                        <Typography>Bio:</Typography>
+                      </Grid>
+                      <Grid item>
+                        {`${
+                          chosenChefProfile && chosenChefProfile.bio
+                            ? chosenChefProfile.bio
+                            : ""
+                        }`}
+                      </Grid>
+                    </Grid>
+                    <Grid item container direction="row" spacing={1}>
+                      <Grid item>
+                        <Typography>Specialties:</Typography>
+                      </Grid>
+                      <Grid item>
+                        {`${
+                          chosenChefProfile && chosenChefProfile.cuisines
+                            ? chosenChefProfile.cuisines
+                            : ""
+                        }`}
+                      </Grid>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <span>
-                      {chosenChefProfile &&
-                        chosenChefProfile.cuisines.join(",")}
-                    </span>
-                  </Grid>
-                </Grid>
+                </Hidden>
               </Grid>
             </Grid>
           </ListItem>
@@ -240,14 +238,14 @@ const CartModal = () => {
                   item
                   key={recipe._id}
                   direction="row"
-                  justify="center"
                   alignItems="center"
+                  justify="space-between"
                   component={Card}
                   // padding={5}
                   xs={12}
                   className={classes.recipeCardItem}
                 >
-                  <Grid item xs={2}>
+                  <Grid item xs={1}>
                     <Avatar
                       alt="recipe"
                       src={recipe.recipePictureUrl || plate}
@@ -266,7 +264,7 @@ const CartModal = () => {
                       <Typography>{recipe.name}</Typography>
                     </Grid>
                     <Grid item>
-                      <span>{qty}</span>{" "}
+                      <span>{`${qty} x $${recipe.price}`}</span>{" "}
                       <ButtonGroup
                         disableElevation
                         variant="contained"
@@ -292,22 +290,17 @@ const CartModal = () => {
                   <Hidden smDown>
                     <Grid
                       item
-                      container
-                      direction="column"
-                      justify="space-around"
-                      alignItems="flex-start"
-                      spacing={2}
-                      xs={3}
+                      // container
+                      // direction="column"
+                      // justify="space-around"
+                      // alignItems="flex-start"
+                      // spacing={2}
+                      // xs={3}
                     >
-                      <Grid item>
-                        <Typography variant="body2">
-                          $ {recipe.price}
-                        </Typography>
-                      </Grid>
-                      <Grid item> $ {addDecimals(qty * recipe.price)}</Grid>
+                      $ {addDecimals(qty * recipe.price)}
                     </Grid>
                   </Hidden>
-                  <Grid item xs={1}>
+                  <Grid item xs={2} md={1}>
                     <IconButton
                       edge="end"
                       aria-label="delete"
@@ -341,20 +334,31 @@ const CartModal = () => {
             </ListItemText>
           </ListItem>
           <ListItem className={classes.btnSection}>
-            <Link to="/messages" className={classes.btn}>
-              <Button variant="contained" color="secondary">
-                Contact Chef
-              </Button>
-            </Link>
-            <Link to="/payment" className={classes.btn}>
-              <Button variant="contained" color="secondary">
-                Proceed to checkout
-              </Button>
-            </Link>
+            <Button
+              variant="contained"
+              color="secondary"
+              component={Link}
+              to="/messages"
+              onClick={handleClose}
+              className={classes.btn}
+            >
+              Contact Chef
+            </Button>
+
+            <Button
+              variant="contained"
+              color="secondary"
+              component={Link}
+              className={classes.btn}
+              to="/payment"
+              onClick={handleClose}
+            >
+              Proceed to checkout
+            </Button>
           </ListItem>
         </List>
       )}
-    </>
+    </Dialog>
   );
 };
 

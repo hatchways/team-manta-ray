@@ -1,4 +1,4 @@
-import { Button, DialogTitle, Fab, Snackbar } from "@material-ui/core";
+import { Button, Dialog, DialogTitle, Fab, Snackbar } from "@material-ui/core";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import React, { useState, useContext } from "react";
 import { Formik, Form } from "formik";
@@ -33,7 +33,7 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecipeModal = ({ edit, id, recipe }) => {
+const RecipeModal = ({ edit, id, recipe, open, onClose, selectedValue }) => {
   const classes = useStyles();
 
   const dispatch = useContext(UserDispatchContext);
@@ -43,6 +43,9 @@ const RecipeModal = ({ edit, id, recipe }) => {
   );
 
   const [snackBarOpen, setSnackBarOpen] = useState(false);
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
 
   const handleSnackBarClose = () => {
     setSnackBarOpen(false);
@@ -78,6 +81,7 @@ const RecipeModal = ({ edit, id, recipe }) => {
   const onSubmit = async (values) => {
     if (!recipePictureUrl) {
       setSnackBarOpen(true);
+      return;
     }
     if (edit) {
       editRecipe(dispatch, { ...values, recipePictureUrl, _id: recipe._id });
@@ -87,6 +91,7 @@ const RecipeModal = ({ edit, id, recipe }) => {
         recipePictureUrl,
       });
     }
+    onClose(selectedValue);
   };
 
   const handleDelete = () => {
@@ -94,94 +99,100 @@ const RecipeModal = ({ edit, id, recipe }) => {
   };
 
   return (
-    <div>
-      {edit && (
-        <Fab
-          color="primary"
-          onClick={handleDelete}
-          className={classes.deleteBtn}
-        >
-          <DeleteForeverIcon />
-        </Fab>
-      )}
-      <DialogTitle id="simple-dialog-title">
-        {edit ? `Edit "${recipe.name}" Recipe` : "Add a recipe"}
-      </DialogTitle>
+    <Dialog
+      onClose={handleClose}
+      aria-labelledby="simple-dialog-title"
+      open={open}
+    >
+      <div>
+        {edit && (
+          <Fab
+            color="primary"
+            onClick={handleDelete}
+            className={classes.deleteBtn}
+          >
+            <DeleteForeverIcon />
+          </Fab>
+        )}
+        <DialogTitle id="simple-dialog-title">
+          {edit ? `Edit "${recipe.name}" Recipe` : "Add a recipe"}
+        </DialogTitle>
 
-      <EditPicture
-        srcData={recipePictureUrl}
-        setSrcData={setRecipePictureUrl}
-      />
-      <div className={classes.form}>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {(formik) => (
-            <Form>
-              <FormikControl
-                control="input"
-                type="text"
-                label="Name"
-                name="name"
-              />
-              <FormikControl
-                control="input"
-                type="text"
-                label="Price"
-                name="price"
-              />
-              <FormikControl
-                control="input"
-                type="text"
-                label="Ingredients"
-                name="ingredients"
-                helperText="please provide a comma separated list"
-              />
-              <FormikControl
-                control="input"
-                type="text"
-                label="Required Stuff"
-                name="requiredStuff"
-                helperText="please provide a comma separated list"
-              />
-              <FormikControl
-                control="input"
-                type="text"
-                label="Portion Description"
-                name="portionDescription"
-              />
-              <FormikControl
-                control="input"
-                type="text"
-                label="Cuisine Tags"
-                name="cuisineTags"
-                helperText="please provide a comma separated list"
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                color="secondary"
-                className={classes.btn}
-              >
-                Submit
-              </Button>
-            </Form>
-          )}
-        </Formik>
-        <Snackbar
-          open={snackBarOpen}
-          onClose={handleSnackBarClose}
-          message="Picture is required"
-          autoHideDuration={4000}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
+        <EditPicture
+          srcData={recipePictureUrl}
+          setSrcData={setRecipePictureUrl}
         />
+        <div className={classes.form}>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            {(formik) => (
+              <Form>
+                <FormikControl
+                  control="input"
+                  type="text"
+                  label="Name"
+                  name="name"
+                />
+                <FormikControl
+                  control="input"
+                  type="text"
+                  label="Price"
+                  name="price"
+                />
+                <FormikControl
+                  control="input"
+                  type="text"
+                  label="Ingredients"
+                  name="ingredients"
+                  helperText="please provide a comma separated list"
+                />
+                <FormikControl
+                  control="input"
+                  type="text"
+                  label="Required Stuff"
+                  name="requiredStuff"
+                  helperText="please provide a comma separated list"
+                />
+                <FormikControl
+                  control="input"
+                  type="text"
+                  label="Portion Description"
+                  name="portionDescription"
+                />
+                <FormikControl
+                  control="input"
+                  type="text"
+                  label="Cuisine Tags"
+                  name="cuisineTags"
+                  helperText="please provide a comma separated list"
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                  className={classes.btn}
+                >
+                  Submit
+                </Button>
+              </Form>
+            )}
+          </Formik>
+          <Snackbar
+            open={snackBarOpen}
+            onClose={handleSnackBarClose}
+            message="Picture is required"
+            autoHideDuration={4000}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
+            }}
+          />
+        </div>
       </div>
-    </div>
+    </Dialog>
   );
 };
 
