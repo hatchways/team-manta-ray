@@ -13,6 +13,7 @@ import SuccessPage from "./pages/SuccessPage";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import Payment from "./pages/Payment";
+import Messages from "./pages/Messages";
 import ChefProfile from "./pages/ChefProfile";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import NavBar from "./components/NavBar";
@@ -32,6 +33,7 @@ const Private = () => {
         <Route path="/test" component={TestComponent} />
         <Route path="/profile" component={CustomerProfile} />
         <Route path="/browsechefs" component={BrowseChefs} />
+        <Route path="/messages" component={Messages} />
         <Route
           path="/chefprofile/:userId?/:recipeId?"
           component={ChefProfile}
