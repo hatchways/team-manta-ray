@@ -21,6 +21,7 @@ import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import { FormControl, Snackbar, TextField } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 import {
   saveShippingAddress,
   saveBooking,
@@ -230,6 +231,7 @@ export const useStyles = makeStyles((theme) => ({
   resultMessage: {
     lineHeight: "22px",
     fontSize: "16px",
+    color: theme.palette.success,
   },
 
   hidden: {
@@ -302,6 +304,7 @@ const Payment = ({ history }) => {
   );
 
   const [open, setOpen] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [selectedDate, setSelectedDate] = useState(
     bookingDetails.selectedDate || new Date(Date.now())
@@ -351,6 +354,13 @@ const Payment = ({ history }) => {
   const handleClose = () => {
     setOpen(false);
   };
+  const handleSuccessClose = () => {
+    setSuccessOpen(false);
+  };
+
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
 
   // Date change handler
   const handleDateChange = (date) => {
@@ -433,8 +443,11 @@ const Payment = ({ history }) => {
       setError(null);
       setProcessing(false);
       setSucceeded(true);
-      history.replace("/success");
-      placeOrder();
+      setSuccessOpen(true);
+      setTimeout(() => {
+        history.replace("/orders");
+        placeOrder();
+      }, 5000);
     }
   };
 
@@ -748,7 +761,7 @@ const Payment = ({ history }) => {
             )}
           </div>
           <Button
-            disabled={processing || disabled || succeeded}
+            disabled={processing || disabled || succeeded || cart.length === 0}
             id="submit"
             className={classes.btn}
             color="secondary"
@@ -761,14 +774,13 @@ const Payment = ({ history }) => {
 
           {error && <div className={classes.cardError}>{error}</div>}
 
-          <p
-            className={
-              succeeded ? `${classes.resultMessage}` : `${classes.hidden}`
-            }
+          <Snackbar
+            open={successOpen}
+            autoHideDuration={5000}
+            onClose={handleSuccessClose}
           >
-            Payment succeeded, see the result in your Stripe dashboard. Refresh
-            the page to pay again.
-          </p>
+            <Alert severity="success">Payment Successful! Redirecting...</Alert>
+          </Snackbar>
         </div>
       </div>
     </div>

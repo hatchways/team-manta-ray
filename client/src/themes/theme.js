@@ -35,6 +35,7 @@ export const theme = createMuiTheme({
   palette: {
     primary: { main: "#DF1B1B" },
     secondary: { main: "#FF510C" },
+    success: { main: "#4BB543" },
     cardBackground: { main: "#fff" },
   },
 });
