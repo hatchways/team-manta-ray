@@ -31,7 +31,7 @@ const ChefSideBar = (props) => {
     },
 
     chefSideBar: {
-      height: isBrowser ? "calc(100vh - 75px)" : "100vh",
+      height: isBrowser ? "calc(100vh - 60px)" : "100vh",
       backgroundColor: "white",
     },
 
@@ -115,19 +115,27 @@ const ChefSideBar = (props) => {
           <Box marginTop={-7} textAlign="center">
             <Box>
               {userInfo && (
-                <Typography variant="h4">
+                <Typography variant="h4" style={{ fontWeight: 500 }}>
                   {profile ? profile.name : userInfo.name}
                 </Typography>
               )}
             </Box>
             <Box>
-              <Typography variant="body2">{location}</Typography>
+              <Typography
+                variant="body2"
+                style={{ fontSize: "20px", fontWeight: 600 }}
+              >
+                {location}
+              </Typography>
             </Box>
             <Box className={classes.lineBreak}>
               <img src={line} alt="linebreak" />
             </Box>
             <Box className={classes.chefBio}>
-              <Typography variant="body1">
+              <Typography
+                variant="body1"
+                style={{ fontSize: "20px", fontWeight: 400 }}
+              >
                 {profile ? profile.bio : "Add a bio to your profile"}
               </Typography>
             </Box>

@@ -17,27 +17,26 @@ const useStyles = makeStyles((theme) => ({
     overflow: "hidden",
   },
   sideBar: {
-    height: 500,
-    width: 270,
-    position: "fixed",
+    width: "100%",
     marginTop: 10,
     marginLeft: 30,
   },
   results: {
     marginTop: 10,
-    marginLeft: 20,
+    marginLeft: 5,
     marginBottom: 20,
   },
   filterHeader: {
-    fontSize: 15,
+    fontSize: "25px",
     fontWeight: 600,
     marginBottom: 15,
+    marginTop: 20,
   },
   cuisineTag: {
     fontFamily: "Montserrat, sans-serif",
     fontWeight: 700,
-    fontSize: "10px",
-    padding: "3px 6px",
+    fontSize: "17px",
+    padding: "6px 12px",
     textTransform: "uppercase",
     textAlign: "center",
     margin: 3,
@@ -61,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "#FF510C",
     },
+    fontSize: "22px",
   },
 }));
 
@@ -106,7 +106,7 @@ const SearchRecipes = () => {
         if (data.length === 0) {
           setResultsHeader("No recipes found. Try adjusting the filters.");
         } else {
-          setResultsHeader(`${data.length} recipes found:`);
+          setResultsHeader("Recipes found:");
         }
       } catch (error) {
         console.log(error);
@@ -155,7 +155,7 @@ const SearchRecipes = () => {
       if (data.length === 0) {
         setResultsHeader("No recipes found. Try adjusting the filters.");
       } else {
-        setResultsHeader(`${data.length} recipes found:`);
+        setResultsHeader("Recipes found: ");
       }
     } catch (error) {
       setResultsHeader(error.message);
@@ -183,7 +183,7 @@ const SearchRecipes = () => {
                   <h5
                     style={{
                       fontWeight: 400,
-                      fontSize: "10px",
+                      fontSize: "22px",
                       opacity: 0.6,
                       margin: 0,
                     }}
@@ -203,7 +203,7 @@ const SearchRecipes = () => {
                       {tag}
                       <span
                         style={{
-                          fontSize: "10px",
+                          fontSize: "17px",
                           fontWeight: 500,
                           marginLeft: "6px",
                           opacity: 0.7,
@@ -238,17 +238,22 @@ const SearchRecipes = () => {
                     SORT BY:
                   </Typography>
                 </Grid>
-                <Grid item xs={12} style={{ marginBottom: 30 }}>
+                <Grid item xs={12} style={{ marginBottom: 80 }}>
                   <Select
                     value={params.sort}
                     onChange={selectChangeHandler}
                     displayEmpty
+                    style={{ fontSize: "20px" }}
                   >
-                    <MenuItem value={""}>
+                    <MenuItem style={{ fontSize: "20px" }} value={""}>
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={"price,asc"}>Price: Low to high</MenuItem>
-                    <MenuItem value={"price,desc"}>Price: High to low</MenuItem>
+                    <MenuItem style={{ fontSize: "20px" }} value={"price,asc"}>
+                      Price: Low to high
+                    </MenuItem>
+                    <MenuItem style={{ fontSize: "20px" }} value={"price,desc"}>
+                      Price: High to low
+                    </MenuItem>
                   </Select>
                 </Grid>
               </Grid>
@@ -272,26 +277,23 @@ const SearchRecipes = () => {
           </Grid>
           {recipes.map((recipe) => {
             return (
-              <Grid item xs={4}>
+              <Grid item xs={3}>
                 <SearchRecipesCard
-                  chefName={recipe.user ? recipe.user.user.name : "A chef"}
+                  chefName={recipe.user ? recipe.user.name : "A chef"}
                   chefProfilePic={
-                    recipe.user
-                      ? recipe.user.profilePictureUrl
-                      : "https://i.imgur.com/BZCx7SW.png"
+                    recipe.user ? recipe.user.profilePictureUrl : ""
                   }
                   recipeName={recipe.name ? recipe.name : "A recipe"}
                   recipePrice={recipe.price ? recipe.price : "00.00"}
                   recipePreview={
-                    recipe.recipePictureUrl
-                      ? recipe.recipePictureUrl
-                      : "https://i.imgur.com/dD69dIa.png"
+                    recipe.recipePictureUrl ? recipe.recipePictureUrl : ""
                   }
                   recipePortion={
                     recipe.portionDescription
                       ? recipe.portionDescription
                       : "Meal for 2"
                   }
+                  link={`/chefprofile/${recipe.user._id}/${recipe._id}`}
                 />
               </Grid>
             );

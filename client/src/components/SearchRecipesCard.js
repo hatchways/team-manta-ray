@@ -9,21 +9,24 @@ import {
   Avatar,
   Grid,
 } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 200,
+    width: "100%",
+    height: 450,
     borderRadius: 0,
     boxShadow: "0px 10px 10px 0px rgba(204, 204, 204, 0.5)",
+    cursor: "pointer",
   },
   media: {
-    height: 140,
+    height: 200,
   },
   portion: {
     backgroundColor: "#FF743D",
     color: "white",
-    fontSize: "8px",
-    padding: "3px 8px",
+    fontSize: "15px",
+    padding: "6px 16px",
     textTransform: "uppercase",
     display: "inline-block",
     marginLeft: 5,
@@ -31,15 +34,18 @@ const useStyles = makeStyles({
     fontWeight: 700,
   },
   titleText: {
-    fontSize: 14,
+    fontSize: 20,
     fontWeight: 500,
+    marginTop: 10,
+    marginLeft: 10,
   },
   price: {
-    fontSize: 10,
+    fontSize: 17,
     color: "#FF510C",
     fontWeight: 700,
     marginTop: 7,
-    marginBottom: 15,
+    marginBottom: 50,
+    marginLeft: 10,
   },
 });
 
@@ -50,11 +56,20 @@ const SearchRecipesCard = ({
   recipePrice,
   recipePreview,
   recipePortion,
+  link,
 }) => {
   const classes = useStyles();
+  const history = useHistory();
+  const recipeClickHandler = () => {
+    history.push(link);
+  };
   return (
     <>
-      <Card className={classes.root} variant="elevation">
+      <Card
+        className={classes.root}
+        variant="elevation"
+        onClick={recipeClickHandler}
+      >
         <CardMedia
           className={classes.media}
           image={recipePreview}
@@ -71,22 +86,22 @@ const SearchRecipesCard = ({
           </Typography>
         </CardContent>
         <Divider />
-        <CardContent style={{ paddingBottom: "12px", paddingTop: "12px" }}>
+        <CardContent style={{ paddingBottom: "20px", paddingTop: "20px" }}>
           <Grid container>
             <Grid item xs={3}>
-              <Avatar style={{ height: 30, width: 30 }} src={chefProfilePic} />
+              <Avatar style={{ height: 50, width: 50 }} src={chefProfilePic} />
             </Grid>
             <Grid item container xs={8}>
               <Grid item xs={12}>
                 <Typography
-                  style={{ fontSize: 12, fontWeight: 500 }}
+                  style={{ fontSize: 18, fontWeight: 500 }}
                   variant="h4"
                 >
                   {chefName}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography style={{ fontSize: 8, opacity: 0.6 }} variant="h5">
+                <Typography style={{ fontSize: 14, opacity: 0.6 }} variant="h5">
                   Toronto, Canada
                 </Typography>
               </Grid>
