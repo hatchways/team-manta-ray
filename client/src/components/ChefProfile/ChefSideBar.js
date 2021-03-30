@@ -186,7 +186,7 @@ const ChefSideBar = (props) => {
         onClose={handleClose}
         control={control}
         profile={profile}
-        setProfile={setProfile}
+        setProfile={(e) => setProfile(e)}
       />
     </Grid>
   );

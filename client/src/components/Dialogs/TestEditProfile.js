@@ -46,20 +46,24 @@ const EditProfile = ({ create, profile, setProfile }) => {
     name: userInfo.name,
     location: "",
     bio: create ? "" : profileInfo.bio,
-    cuisineTags: create ? "" : profileInfo.cuisineTags,
+    cuisines: create ? "" : profileInfo.cuisines.join(","),
   };
 
   const validationSchema = Yup.object({
     location: Yup.string().required("Location is required"),
-    cuisineTags: Yup.string().required("Cuisine Tags are required"),
+    cuisines: Yup.string().required("Cuisine Tags are required"),
+    name: Yup.string().required("Name is required"),
   });
 
   const onSubmit = async (values) => {
-    const profile = await axios.put(`/api/users/${userInfo._id}`, {
+    const res = await axios.put(`/api/users`, {
       ...values,
       profilePictureUrl,
     });
-    setProfileInfo(profile);
+    if (res.data) {
+      setProfileInfo(res.data.updatedUser);
+      setProfile(res.data.updatedUser);
+    }
   };
 
   return (
@@ -93,14 +97,14 @@ const EditProfile = ({ create, profile, setProfile }) => {
               <FormikControl
                 control="input"
                 type="text"
-                label="Bio"
+                label={userInfo.isChef ? `Bio` : `About`}
                 name="bio"
               />
               <FormikControl
                 control="input"
                 type="text"
-                label="Cuisine Tags"
-                name="cuisineTags"
+                label={userInfo.isChef ? `Cuisine Tags` : `Faviorit Cuisines`}
+                name="cuisines"
                 helperText="please provide a comma separated list"
               />
               <Button
