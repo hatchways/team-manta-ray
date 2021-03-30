@@ -13,7 +13,7 @@ const getFiltered = async (req, res) => {
     let filteredOutput = {};
 
     const cuisinesTagsParam = req.query.cuisines
-      ? JSON.parse(req.query.cuisines)
+      ? req.query.cuisines.split(",") //As per Dan's suggestion
       : [];
 
     const getChefsParam = req.query.chefs ? JSON.parse(req.query.chefs) : false;
@@ -60,11 +60,25 @@ const getFiltered = async (req, res) => {
       //To sort or not to sort
       if (sortByParam === "price") {
         filteredOutput = await Recipe.find(mongoQuery)
+          .populate({
+            path: "user",
+            populate: { path: "user", select: "-password" },
+          })
           .sort({ price: orderParam === "asc" ? 1 : -1 })
           .skip(skip)
           .limit(limit);
       } else {
-        filteredOutput = await Recipe.find(mongoQuery).skip(skip).limit(limit);
+        filteredOutput = await Recipe.find(mongoQuery)
+          .populate({
+            path: "user",
+            populate: { path: "chefProfile" },
+          }) //Populate with info about the chef
+          .populate({
+            path: "user",
+            populate: { path: "user", select: "-password" },
+          }) //Since the Chef schema doesn't have a name field we need to populate that from the user model
+          .skip(skip)
+          .limit(limit);
       }
     }
 

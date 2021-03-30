@@ -12,6 +12,7 @@ import "./App.css";
 import { ContextProvider } from "./context/UserContext";
 import TestComponent from "./pages/TestComponent";
 import TestChefProfile from "./pages/TestChefProfile";
+import SearchRecipes from "./pages/SearchRecipes";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <ContextProvider>
           <RecipeContextProvider>
             <Switch>
+              <Route path="/search" component={SearchRecipes} />
               <Route path="/profile" component={CustomerProfile}>
                 <NavBar />
               </Route>

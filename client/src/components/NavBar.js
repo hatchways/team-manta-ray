@@ -39,7 +39,9 @@ const useStyles = makeStyles((theme) => ({
     color: "black",
   },
   appBar: {
-    boxShadow: "0px 10px 30px 0px rgba(204, 204, 204, 0.5)",
+    boxShadow: "0px 10px 30px 0px rgba(204, 204, 204, 0.3)",
+    position: "fixed",
+    top: 0,
   },
   drawerDiv: {
     width: 200,
