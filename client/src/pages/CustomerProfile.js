@@ -88,6 +88,7 @@ const CustomerProfile = () => {
   useEffect(() => {
     const getUserInfo = async () => {
       const res = await axios.get("/api/users");
+      console.log(res.data.user);
       if (res.data) setUserData(res.data.user);
     };
     if (!userData) getUserInfo();

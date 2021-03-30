@@ -46,7 +46,11 @@ const EditProfile = ({ create, profile, setProfile, isChef }) => {
     name: userInfo.name,
     location: "",
     bio: create ? "" : profileInfo.bio,
-    cuisines: create ? "" : profileInfo.cuisines.join(","),
+    cuisines: create
+      ? ""
+      : profileInfo.cuisines
+          .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+          .join(","),
   };
 
   const ChefValidationSchema = Yup.object({
@@ -63,6 +67,13 @@ const EditProfile = ({ create, profile, setProfile, isChef }) => {
     : UserValidationSchema;
 
   const onSubmit = async (values) => {
+    console.log(values);
+    if (values.cuisines) {
+      values.cuisines = values.cuisines
+        .split(",")
+        .map((c) => c.trim().toLowerCase());
+    }
+    console.log(values);
     const res = await axios.put(`/api/users`, {
       ...values,
       profilePictureUrl,
