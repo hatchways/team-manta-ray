@@ -37,7 +37,7 @@ const paymentRequest = AsyncHandler(async (req, res) => {
     const customer = await stripe.customers.create({
       name: userInfo.name,
       email: userInfo.email,
-      description: "First customer",
+      description: userInfo.name,
     });
 
     const paymentIntent = await stripe.paymentIntents.create({
