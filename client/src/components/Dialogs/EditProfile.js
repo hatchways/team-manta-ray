@@ -67,13 +67,12 @@ const EditProfile = ({ create, profile, setProfile, isChef }) => {
     : UserValidationSchema;
 
   const onSubmit = async (values) => {
-    console.log(values);
     if (values.cuisines) {
       values.cuisines = values.cuisines
         .split(",")
         .map((c) => c.trim().toLowerCase());
     }
-    console.log(values);
+
     const res = await axios.put(`/api/users`, {
       ...values,
       profilePictureUrl,
@@ -105,12 +104,14 @@ const EditProfile = ({ create, profile, setProfile, isChef }) => {
                 type="text"
                 label="Name"
                 name="name"
+                placeholder="*Required"
               />
               <FormikControl
                 control="input"
                 type="text"
                 label="Location"
                 name="location"
+                placeholder="*Required"
               />
               <FormikControl
                 control="input"
@@ -124,6 +125,7 @@ const EditProfile = ({ create, profile, setProfile, isChef }) => {
                 label={userInfo.isChef ? `Cuisine Tags` : `Faviorit Cuisines`}
                 name="cuisines"
                 helperText="please provide a comma separated list"
+                placeholder={userInfo.isChef ? "*Required" : ""}
               />
               <Button
                 type="submit"

@@ -77,18 +77,12 @@ const CustomerProfile = () => {
   };
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const handleClose = (value) => {
-    setOpen(false);
-  };
-  const handleClickOpen = (e) => {
-    setOpen(true);
-  };
+
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const getUserInfo = async () => {
       const res = await axios.get("/api/users");
-      console.log(res.data.user);
       if (res.data) setUserData(res.data.user);
     };
     if (!userData) getUserInfo();
@@ -148,7 +142,7 @@ const CustomerProfile = () => {
                   color="secondary"
                   size="large"
                   className={classes.button}
-                  onClick={handleClickOpen}
+                  onClick={() => setOpen(true)}
                 >
                   Edit profile
                 </Button>
@@ -203,7 +197,7 @@ const CustomerProfile = () => {
       </Paper>
       <DialogControl
         open={open}
-        onClose={handleClose}
+        onClose={() => setOpen(false)}
         control="EditProfile"
         isChef={false}
         profile={userData}
