@@ -23,6 +23,7 @@ const orderSchema = mongoose.Schema(
     chefId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "User",
     },
     shippingAddress: {
       address: { type: String, required: true },
