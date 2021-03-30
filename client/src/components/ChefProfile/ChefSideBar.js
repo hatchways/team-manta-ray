@@ -31,7 +31,9 @@ const ChefSideBar = (props) => {
     },
 
     chefSideBar: {
-      height: isBrowser ? "calc(100vh - 75px)" : "100vh",
+      // height: isBrowser ? "calc(100vh - 75px)" : "100vh",
+      height: "95vh",
+      width: "25vw",
       backgroundColor: "white",
     },
 
@@ -68,6 +70,7 @@ const ChefSideBar = (props) => {
     chefReqBtnContainer: {
       height: "15%",
       display: "flex",
+      marginBottom: theme.spacing(2),
     },
 
     chefReqBtn: {
