@@ -32,7 +32,11 @@ const getFiltered = async (req, res) => {
 
     //Filter for matching cuisine tags
     if (cuisinesTagsParam.length > 0) {
-      mongoQuery.cuisineTags = { $in: cuisinesTagsParam };
+      if (getChefsParam) {
+        mongoQuery.cuisines = { $in: cuisinesTagsParam };
+      } else {
+        mongoQuery.cuisineTags = { $in: cuisinesTagsParam };
+      }
     }
 
     //Max distance filtering for chefs
@@ -53,7 +57,9 @@ const getFiltered = async (req, res) => {
 
     //Determine whether to return chefs or recipes
     if (getChefsParam) {
-      filteredOutput = await User.find(mongoQuery).skip(skip).limit(limit);
+      filteredOutput = await User.find({ isChef: true, ...mongoQuery })
+        .skip(skip)
+        .limit(limit);
     } else {
       //To sort or not to sort
       if (sortByParam === "price") {
@@ -69,12 +75,8 @@ const getFiltered = async (req, res) => {
         filteredOutput = await Recipe.find(mongoQuery)
           .populate({
             path: "user",
-            populate: { path: "chefProfile" },
-          }) //Populate with info about the chef
-          .populate({
-            path: "user",
-            populate: { path: "user", select: "-password" },
-          }) //Since the Chef schema doesn't have a name field we need to populate that from the user model
+            populate: { path: "user" },
+          })
           .skip(skip)
           .limit(limit);
       }

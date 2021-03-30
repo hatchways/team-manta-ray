@@ -166,7 +166,12 @@ const SearchRecipes = () => {
     <>
       <NavBar />
       <Grid container className={classes.root}>
-        <Grid item container xs={3} style={{ backgroundColor: "white" }}>
+        <Grid
+          item
+          container
+          xs={3}
+          style={{ backgroundColor: "white", minHeight: "95vh" }}
+        >
           <div className={classes.sideBar}>
             <Grid container style={{ marginTop: 15 }}>
               <Grid item xs={12}>
