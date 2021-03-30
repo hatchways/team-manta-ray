@@ -65,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
     width: "40%",
     height: theme.spacing(6),
     textDecoration: "none",
+    textTransform: "capitalize",
     "& button": {
       height: "100%",
       width: "100%",
@@ -156,7 +157,6 @@ const CartModal = ({ open, onClose, selectedValue }) => {
               container
               item
               direction="column"
-              // justify="space-between"
               justify="center"
               alignItems="center"
               spacing={1}
@@ -241,7 +241,6 @@ const CartModal = ({ open, onClose, selectedValue }) => {
                   alignItems="center"
                   justify="space-between"
                   component={Card}
-                  // padding={5}
                   xs={12}
                   className={classes.recipeCardItem}
                 >
@@ -288,17 +287,7 @@ const CartModal = ({ open, onClose, selectedValue }) => {
                     </Grid>
                   </Grid>
                   <Hidden smDown>
-                    <Grid
-                      item
-                      // container
-                      // direction="column"
-                      // justify="space-around"
-                      // alignItems="flex-start"
-                      // spacing={2}
-                      // xs={3}
-                    >
-                      $ {addDecimals(qty * recipe.price)}
-                    </Grid>
+                    <Grid item>$ {addDecimals(qty * recipe.price)}</Grid>
                   </Hidden>
                   <Grid item xs={2} md={1}>
                     <IconButton
