@@ -29,7 +29,7 @@ const chargeCustomer = async (customerId) => {
  * @description Stripe create payment intent, customer (save to DB) and charge
  */
 const paymentRequest = AsyncHandler(async (req, res) => {
-  const { items, userInfo } = req.body;
+  const { price, userInfo } = req.body;
 
   const user = await User.findById(userInfo._id);
 
@@ -37,13 +37,13 @@ const paymentRequest = AsyncHandler(async (req, res) => {
     const customer = await stripe.customers.create({
       name: userInfo.name,
       email: userInfo.email,
-      description: "First customer",
+      description: userInfo.name,
     });
 
     const paymentIntent = await stripe.paymentIntents.create({
       customer: customer.id,
       setup_future_usage: "off_session",
-      amount: 30 * 100,
+      amount: price * 100,
       currency: "cad",
     });
 
@@ -60,7 +60,7 @@ const paymentRequest = AsyncHandler(async (req, res) => {
   const paymentIntent = await stripe.paymentIntents.create({
     customer: user.stripeCustomer,
     setup_future_usage: "off_session",
-    amount: 30 * 100,
+    amount: price * 100,
     currency: "cad",
   });
 
