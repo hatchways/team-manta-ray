@@ -45,6 +45,8 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(0.1),
+      margin: "0",
+      marginBottom: theme.spacing(1),
     },
   },
   recipeCard: {
