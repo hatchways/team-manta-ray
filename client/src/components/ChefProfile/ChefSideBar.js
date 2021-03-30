@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Grid,
@@ -95,6 +95,12 @@ const ChefSideBar = (props) => {
   const handleClose = (value) => {
     setOpen(false);
   };
+  useEffect(() => {
+    if (profile && !profile.location) {
+      setControl("EditProfile");
+      setOpen(true);
+    }
+  }, [profile]);
 
   return (
     <Grid item md={3} xs={12} className={classes.chefSideBarContainer}>

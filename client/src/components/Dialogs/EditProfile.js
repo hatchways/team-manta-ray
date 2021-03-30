@@ -33,7 +33,7 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditProfile = ({ create, profile, setProfile }) => {
+const EditProfile = ({ create, profile, setProfile, isChef }) => {
   const classes = useStyles();
 
   const [profileInfo, setProfileInfo] = useState(profile ? profile : null);
@@ -49,11 +49,18 @@ const EditProfile = ({ create, profile, setProfile }) => {
     cuisines: create ? "" : profileInfo.cuisines.join(","),
   };
 
-  const validationSchema = Yup.object({
+  const ChefValidationSchema = Yup.object({
     location: Yup.string().required("Location is required"),
     cuisines: Yup.string().required("Cuisine Tags are required"),
     name: Yup.string().required("Name is required"),
   });
+  const UserValidationSchema = Yup.object({
+    location: Yup.string().required("Location is required"),
+    name: Yup.string().required("Name is required"),
+  });
+  const validationSchema = userInfo.isChef
+    ? ChefValidationSchema
+    : UserValidationSchema;
 
   const onSubmit = async (values) => {
     const res = await axios.put(`/api/users`, {
