@@ -33,18 +33,20 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditProfile = ({ create, profile }) => {
+const EditProfile = ({ create, profile, setProfile }) => {
   const classes = useStyles();
 
-  const [pictureKey, setPictureKey] = useState("");
-  const [srcData, setSrcData] = useState(null);
+  const [profileInfo, setProfileInfo] = useState(profile ? profile : null);
+  const [profilePictureUrl, setprofilePictureUrl] = useState(
+    create ? "" : profileInfo.profilePictureUrl
+  );
   const { userInfo } = useContext(UserContext);
 
   const initialValues = {
     name: userInfo.name,
     location: "",
-    bio: create ? "" : profile.bio,
-    cuisineTags: "",
+    bio: create ? "" : profileInfo.bio,
+    cuisineTags: create ? "" : profileInfo.cuisineTags,
   };
 
   const validationSchema = Yup.object({
@@ -53,22 +55,20 @@ const EditProfile = ({ create, profile }) => {
   });
 
   const onSubmit = async (values) => {
-    if (create) {
-      const profile = await axios.post("/api/chefProfiles", {
-        ...values,
-        pictureKey,
-      });
-    }
-    console.log({ ...values, pictureKey });
+    const profile = await axios.put(`/api/users/${userInfo._id}`, {
+      ...values,
+      profilePictureUrl,
+    });
+    setProfileInfo(profile);
   };
 
   return (
     <div>
       <DialogTitle id="simple-dialog-title">Edit Profile</DialogTitle>
       <EditPicture
-        setPictureKey={setPictureKey}
         profile={true}
-        setSrcData={setSrcData}
+        setSrcData={setprofilePictureUrl}
+        srcData={profilePictureUrl}
       />
       <div className={classes.form}>
         <Formik

@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import FormikControl from "../Formik/FormikControl";
 import { makeStyles } from "@material-ui/core/styles";
 import EditPicture from "./EditPicture";
-import { RecipeDispatchContext } from "../../context/RecipeContext";
+import { UserDispatchContext } from "../../context/UserContext";
 import {
   createRecipe,
   deleteRecipe,
@@ -36,12 +36,12 @@ export const useStyles = makeStyles((theme) => ({
 const RecipeModal = ({ edit, id, recipe }) => {
   const classes = useStyles();
 
-  // const { recipe } = useContext(RecipeContext);
+  const dispatch = useContext(UserDispatchContext);
 
-  const dispatch = useContext(RecipeDispatchContext);
+  const [recipePictureUrl, setRecipePictureUrl] = useState(
+    edit ? recipe.recipePictureUrl : ""
+  );
 
-  const [pictureKey, setPictureKey] = useState(edit ? recipe.pictureKey : "");
-  const [srcData, setSrsData] = useState(edit ? recipe.srcData : "");
   const [snackBarOpen, setSnackBarOpen] = useState(false);
 
   const handleSnackBarClose = () => {
@@ -76,16 +76,15 @@ const RecipeModal = ({ edit, id, recipe }) => {
   });
 
   const onSubmit = async (values) => {
-    if (!pictureKey) {
+    if (!recipePictureUrl) {
       setSnackBarOpen(true);
     }
     if (edit) {
-      editRecipe(dispatch, { ...values, pictureKey, srcData, _id: recipe._id });
+      editRecipe(dispatch, { ...values, recipePictureUrl, _id: recipe._id });
     } else {
       createRecipe(dispatch, {
         ...values,
-        pictureKey,
-        srcData,
+        recipePictureUrl,
       });
     }
   };
@@ -110,9 +109,8 @@ const RecipeModal = ({ edit, id, recipe }) => {
       </DialogTitle>
 
       <EditPicture
-        setPictureKey={setPictureKey}
-        srcData={srcData}
-        setSrcData={setSrsData}
+        srcData={recipePictureUrl}
+        setSrcData={setRecipePictureUrl}
       />
       <div className={classes.form}>
         <Formik

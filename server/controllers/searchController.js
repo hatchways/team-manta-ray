@@ -1,5 +1,5 @@
 const Recipe = require("../models/recipeModel");
-const ChefProfile = require("../models/chefProfileModel");
+const User = require("../models/userModel");
 
 /**
  * @description Filter through and retrieve recipes or chefs based on filters
@@ -53,9 +53,7 @@ const getFiltered = async (req, res) => {
 
     //Determine whether to return chefs or recipes
     if (getChefsParam) {
-      filteredOutput = await ChefProfile.find(mongoQuery)
-        .skip(skip)
-        .limit(limit);
+      filteredOutput = await User.find(mongoQuery).skip(skip).limit(limit);
     } else {
       //To sort or not to sort
       if (sortByParam === "price") {

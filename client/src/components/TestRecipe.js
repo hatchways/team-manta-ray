@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -16,11 +16,9 @@ import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import plate from "../assets/plate.svg";
-import useGetSrcData from "../hooks/useGetSrcData";
 import DialogControl from "./Dialogs/DialogControl";
-import { RecipeContext } from "../context/RecipeContext";
-import { RecipeDispatchContext } from "../context/RecipeContext";
-import { setSrcDataToRecipe } from "../actions/recipeActions";
+import { UserDispatchContext, UserContext } from "../context/UserContext";
+import { addToCart, setChefConflictError } from "../actions/cartActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RecipeReviewCard({ id }) {
-  const { recipes } = useContext(RecipeContext);
+export default function RecipeReviewCard({ id, isOwner }) {
+  const { recipes } = useContext(UserContext);
   const recipe = recipes.filter((res) => res._id === id)[0];
   const {
     name,
@@ -55,30 +53,13 @@ export default function RecipeReviewCard({ id }) {
     requiredStuff,
     portionDescription,
     cuisineTags,
-    pictureKey,
-    srcData,
+    recipePictureUrl,
   } = recipe;
 
-  const dispatch = useContext(RecipeDispatchContext);
+  const globalDispatch = useContext(UserDispatchContext);
+  const { cart, chosenChefProfile } = useContext(UserContext);
 
-  const [src, setSrc] = useState(srcData ? srcData : null);
   const [open, setOpen] = useState(false);
-
-  const getSrcData = useGetSrcData();
-  useEffect(() => {
-    const getImageSrcData = async () => {
-      if (srcData || !pictureKey) return;
-      const response = await getSrcData(pictureKey);
-      if (response.srcData) {
-        setSrcDataToRecipe(dispatch, recipe._id, response.srcData);
-      }
-    };
-    if (srcData) {
-      setSrc(srcData);
-    }
-
-    getImageSrcData();
-  }, [pictureKey, getSrcData, srcData, dispatch, recipe._id]);
 
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -88,8 +69,25 @@ export default function RecipeReviewCard({ id }) {
   };
 
   const handleClickOpen = (e) => {
-    setOpen(true);
+    // if the user is its own profile open add recipe
+    if (isOwner) {
+      setOpen(true);
+      //if user is visiting other chef's profile add item to cart
+    } else {
+      if (cart.length === 0) {
+        addToCart(globalDispatch, recipe);
+      } else {
+        const isSelectingFromADifferentChef =
+          chosenChefProfile && chosenChefProfile._id !== recipe.user;
+        if (isSelectingFromADifferentChef) {
+          setChefConflictError(globalDispatch);
+        } else {
+          addToCart(globalDispatch, recipe);
+        }
+      }
+    }
   };
+
   const handleClose = (value) => {
     setOpen(false);
   };
@@ -113,7 +111,7 @@ export default function RecipeReviewCard({ id }) {
       />
       <CardMedia
         className={classes.media}
-        image={src ? src : plate}
+        image={recipePictureUrl ? recipePictureUrl : plate}
         title="Paella dish"
       />
       <CardContent>
@@ -155,7 +153,7 @@ export default function RecipeReviewCard({ id }) {
         open={open}
         onClose={handleClose}
         control="EditRecipe"
-        recipe={{ ...recipe, srcData }}
+        recipe={recipe}
       />
     </Card>
   );
