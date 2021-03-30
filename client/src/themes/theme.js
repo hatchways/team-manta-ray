@@ -13,7 +13,10 @@ export const theme = createMuiTheme({
     h5: {
       fontWeight: "medium",
     },
-    h6: {},
+    h6: {
+      color: "#000",
+      fontWeight: "medium",
+    },
     body1: {
       color: "#000",
       fontWeight: "bold",
@@ -32,6 +35,7 @@ export const theme = createMuiTheme({
   palette: {
     primary: { main: "#DF1B1B" },
     secondary: { main: "#FF510C" },
+    success: { main: "#4BB543" },
     cardBackground: { main: "#fff" },
   },
 });
