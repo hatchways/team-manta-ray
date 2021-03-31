@@ -1,6 +1,9 @@
 const socketIo = require("socket.io");
 const io = socketIo();
 const socketApi = {};
+const { v4: uuidv4 } = require("uuid");
+
+const Conversation = require("./models/conversationModel");
 
 const { socketAuth } = require("./middlewares/socketAuthMiddleware");
 
@@ -11,16 +14,52 @@ const wrap = (middleware) => (socket, next) =>
 
 io.use(wrap(socketAuth));
 
-const connectedUsers = [];
+//Add the message to the conversation in the database
+const sendMessageToDatabase = async (recipient, sender, content) => {
+  await Conversation.findOneAndUpdate(
+    {
+      participants: { $all: [sender, recipient] },
+    },
+    {
+      $push: {
+        messages: {
+          content,
+          sender,
+          createdAt: Date.now(),
+        },
+      },
+      lastMessage: {
+        content,
+        sender,
+        createdAt: Date.now(),
+      },
+    }
+  );
+};
+
 //Socket logic here
 io.on("connection", (socket) => {
   const user = socket.request.user;
-  console.log(socket.id);
-  console.log(user.name + " has connected");
-  connectedUsers.push(user);
-  console.log("Currently connected users: \n" + connectedUsers);
-  socket.id = user._id;
-  console.log("Socket ID: " + socket.id);
+  const id = socket.handshake.query.id;
+  socket.join(id);
+  socket.on("send-message", ({ recipient, content }) => {
+    socket.broadcast.to(recipient).emit("receive-message", {
+      sender: id,
+      content,
+    });
+    socket.broadcast.to(id).emit("receive-message", {
+      sender: id,
+      content,
+    });
+    socket.broadcast.to(recipient).emit("notification", {
+      _id: `${uuidv4()}`,
+      type: "message",
+      name: user.name,
+      preview: content,
+      link: `/chat/${id}`,
+    });
+    sendMessageToDatabase(recipient, id, content);
+  });
 
   socket.on("test", (message) => {
     socket.emit("notification", {
@@ -34,9 +73,7 @@ io.on("connection", (socket) => {
   });
   socket.on("disconnect", () => {
     console.log(user.name + " has disconnected");
-    connectedUsers.splice(connectedUsers.indexOf(user), 1);
-    console.log("Currently connected users:" + connectedUsers);
   });
 });
 
-module.exports = { socketApi, connectedUsers };
+module.exports = { socketApi };

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import {
   Grid,
   Box,
@@ -13,10 +13,13 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import DialogControl from "../Dialogs/DialogControl";
 import { UserContext } from "../../context/UserContext";
 import defaultUserPicture from "../../assets/defaultUserImage.png";
+import axios from "axios";
 
 const ChefSideBar = (props) => {
   const { chefProfile } = props.chefInfosAndRecipes;
   const { userInfo, profile, setProfile, isOwner } = props;
+  const { userId } = useParams();
+  const history = useHistory();
 
   const { coverPictureUrl, location } = chefProfile;
 
@@ -86,6 +89,17 @@ const ChefSideBar = (props) => {
   const [open, setOpen] = useState(false);
   const [control, setControl] = useState(null);
   const { cart } = useContext(UserContext);
+
+  const contactChefHandler = async () => {
+    try {
+      const res = await axios.post("/api/chat/contact", {
+        recipient: userId,
+      });
+      history.push(`/chat/${userId}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleClickOpen = (ctl) => {
     setOpen(true);
@@ -158,15 +172,14 @@ const ChefSideBar = (props) => {
           </Box>
         ) : (
           <Box className={classes.chefReqBtnContainer}>
-            <Link to="/messages" className={classes.chefReqBtn}>
-              <Button
-                variant="contained"
-                color="secondary"
-                className={classes.chefReqBtn}
-              >
-                Contact Chef
-              </Button>
-            </Link>
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.chefReqBtn}
+              onClick={contactChefHandler}
+            >
+              Contact Chef
+            </Button>
             {!isOwner && cart.length > 0 && (
               <Link to="/payment" className={classes.chefReqBtn}>
                 <Button

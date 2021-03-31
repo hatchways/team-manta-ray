@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useCallback } from "react";
 import { UserDispatchContext } from "../context/UserContext";
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, useLocation } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -22,6 +22,7 @@ import { useSocket } from "../context/SocketContext";
 import NotifsDrawer from "./NotifsDrawer";
 import plateLogo from "../assets/plate.svg";
 import { logout } from "../actions/userActions";
+import { UserContext } from "../context/UserContext";
 import CartIcon from "./CartIcon";
 import Logo from "./Logo";
 
@@ -63,11 +64,18 @@ const NavBar = ({ history }) => {
   const [notifOpen, setNotifOpen] = useState(false);
   const [notifs, setNotifs] = useState([]);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const location = useLocation();
+
+  console.log(location.pathname);
+  console.log(typeof location.pathname);
 
   const handleIncomingNotification = useCallback(
     (notification) => {
       setNotifs([notification, ...notifs]);
       setUnreadCount(unreadCount + 1);
+      console.log(notification.link);
+      console.log(typeof notification.link);
+      console.log("made it here");
       if (notification.type === "message") {
         const message = `${notification.name}: ${notification.preview}`;
         setSnackbarMessage(message);
@@ -202,6 +210,15 @@ const NavBar = ({ history }) => {
               divider
             >
               <ListItemText primary="Profile" />
+            </ListItem>
+            <ListItem
+              key="chatbutton"
+              button
+              component={Link}
+              to="/chat"
+              divider
+            >
+              <ListItemText primary="Chat" />
             </ListItem>
             <ListItem key="logoutbutton" button divider onClick={logoutHandler}>
               <ListItemText primary="Log Out" />

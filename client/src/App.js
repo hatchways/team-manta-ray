@@ -34,7 +34,7 @@ const Private = () => {
         <Route path="/test" component={TestComponent} />
         <Route path="/profile" component={CustomerProfile} />
         <Route path="/browsechefs" component={BrowseChefs} />
-        <Route path="/messages" component={Messages} />
+        <Route path="/chat/:chattingWithId?" component={Messages} />
         <Route
           path="/chefprofile/:userId?/:recipeId?"
           component={ChefProfile}
