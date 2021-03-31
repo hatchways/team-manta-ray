@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import {
   Grid,
@@ -92,7 +92,7 @@ const ChefSideBar = (props) => {
 
   const contactChefHandler = async () => {
     try {
-      const res = await axios.post("/api/chat/contact", {
+      await axios.post("/api/chat/contact", {
         recipient: userId,
       });
       history.push(`/chat/${userId}`);
@@ -109,6 +109,12 @@ const ChefSideBar = (props) => {
   const handleClose = (value) => {
     setOpen(false);
   };
+  useEffect(() => {
+    if (profile && !profile.location) {
+      setControl("EditProfile");
+      setOpen(true);
+    }
+  }, [profile]);
 
   return (
     <Grid item md={3} xs={12} className={classes.chefSideBarContainer}>
@@ -199,7 +205,7 @@ const ChefSideBar = (props) => {
         onClose={handleClose}
         control={control}
         profile={profile}
-        setProfile={setProfile}
+        setProfile={(e) => setProfile(e)}
       />
     </Grid>
   );
