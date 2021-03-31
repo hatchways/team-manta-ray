@@ -171,7 +171,6 @@ const OrderTable = ({
       setUser(selectedOrder.user);
       document.getElementById(selectedOrder._id).selected = true;
       setOpen(true);
-      console.log(1);
     }
     return () => {
       if (selectedOrder) {
