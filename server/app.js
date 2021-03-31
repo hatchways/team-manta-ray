@@ -16,6 +16,7 @@ const paymentRoutes = require("./routes/paymentRoutes");
 const imageRoutes = require("./routes/imageRoutes");
 const recipeRoutes = require("./routes/recipeRoutes");
 const searchRoutes = require("./routes/searchRoutes");
+const conversationRoutes = require("./routes/conversationRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 
 connectDB();
@@ -41,6 +42,8 @@ app.use("/api/image", imageRoutes);
 app.use("/api/recipes", recipeRoutes);
 // Routes for searching recipes and chefs
 app.use("/api/search", searchRoutes);
+//Routes for chats
+app.use("/api/chat", conversationRoutes);
 // Route for payment
 app.use("/payment", paymentRoutes);
 // Route for order

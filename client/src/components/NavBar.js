@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { UserDispatchContext } from "../context/UserContext";
 import { Link, withRouter } from "react-router-dom";
 import {
@@ -9,18 +9,23 @@ import {
   List,
   ListItem,
   ListItemText,
-
+  Snackbar,
+  Slide,
   // Avatar,
   makeStyles,
-  Box,
-  Container,
+  Grid,
+  Badge,
 } from "@material-ui/core";
-import socketIOClient from "socket.io-client";
+import NotificationsIcon from "@material-ui/icons/Notifications";
 import DragHandleIcon from "@material-ui/icons/DragHandle";
+import { useSocket } from "../context/SocketContext";
+import NotifsDrawer from "./NotifsDrawer";
 import plateLogo from "../assets/plate.svg";
 import { logout } from "../actions/userActions";
 import CartIcon from "./CartIcon";
 import Logo from "./Logo";
+
+import notificationsAPI from "../notificationsAPI";
 
 const useStyles = makeStyles((theme) => ({
   toolBar: {
@@ -45,82 +50,174 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SERVER = "http://localhost:3001";
+const Transition = (props) => {
+  return <Slide {...props} direction="left" />;
+};
 
 const NavBar = ({ history }) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
+  const [notifsDrawerOpen, setNotifsDrawerOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const socket = useSocket();
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [notifs, setNotifs] = useState([]);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
+  const handleIncomingNotification = useCallback(
+    (notification) => {
+      setNotifs([notification, ...notifs]);
+      setUnreadCount(unreadCount + 1);
+      if (notification.type === "message") {
+        const message = `${notification.name}: ${notification.preview}`;
+        setSnackbarMessage(message);
+      } else if (notification.type === "order") {
+        const message = `${notification.name} ${notification.preview}`;
+        setSnackbarMessage(message);
+      }
+      setNotifOpen(true);
+    },
+    [notifs, unreadCount]
+  );
+
+  useEffect(() => {
+    const notifications = notificationsAPI();
+    setNotifs(notifications);
+    setUnreadCount(notifications.length);
+  }, []);
+
+  useEffect(() => {
+    if (socket == null) return;
+    socket.on("notification", handleIncomingNotification);
+    return () => socket.off("notification");
+  }, [socket, handleIncomingNotification]);
 
   // reducer dispatch function
   const dispatch = useContext(UserDispatchContext);
 
-  const drawerHandler = () => {
-    setOpen(true);
+  const navDrawerHandler = () => {
+    setNavOpen(true);
+    setNotifsDrawerOpen(false);
   };
 
-  const socket = useRef();
-
-  useEffect(() => {
-    socket.current = socketIOClient(SERVER, {
-      withCredentials: true,
-    });
-    socket.current.on("connection", () => {
-      console.log("Connected to the socket");
-    });
-  }, []);
+  const notifsDrawerHandler = () => {
+    setNotifsDrawerOpen(true);
+    setNavOpen(false);
+    setUnreadCount(0);
+    setNotifOpen(false);
+  };
 
   const logoutHandler = async (e) => {
-    socket.current.disconnect();
+    socket.disconnect();
     e.preventDefault();
     await logout(dispatch);
     history.replace("/login");
   };
 
+  const testClickHandler = () => {
+    socket.emit("test", "Send notification");
+  };
+
+  const notifCloseHandler = () => {
+    setNotifOpen(false);
+  };
+
   return (
-    <Box color="white">
+    <div>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={notifOpen}
+        onClose={notifCloseHandler}
+        TransitionComponent={Transition}
+        message={snackbarMessage}
+        autoHideDuration={1600}
+        key="hey lol"
+        style={{ marginTop: "60px", cursor: "pointer" }}
+        onClick={notifsDrawerHandler}
+      />
       <AppBar className={classes.appBar} color="inherit" position="fixed">
-        <Container maxWidth="xl">
-          <Toolbar className={classes.toolBar}>
+        <Toolbar className={classes.toolBar}>
+          <Grid
+            container
+            direction="row"
+            justify="space-between"
+            alignItems="center"
+          >
             <Logo />
             {/* <Grid item>
                 <Avatar src={userData.avatar} alt="user profile pic" />
               </Grid> */}
-
-            <Box color="#000">
+            <Grid item style={{ marginRight: "5px" }}>
+              <IconButton
+                color="inherit"
+                aria-label="navbar"
+                onClick={testClickHandler}
+              >
+                <NotificationsIcon fontSize="default" />
+              </IconButton>
+            </Grid>
+            <Grid item style={{ marginRight: "5px" }}>
+              <IconButton
+                color="inherit"
+                aria-label="navbar"
+                onClick={notifsDrawerHandler}
+              >
+                <Badge badgeContent={unreadCount} color="secondary">
+                  <NotificationsIcon fontSize="default" />
+                </Badge>
+              </IconButton>
+            </Grid>
+            <Grid item>
               <CartIcon />
+            </Grid>
+            <Grid item>
               <IconButton
                 color="inherit"
                 aria-label="menu"
-                onClick={drawerHandler}
+                onClick={navDrawerHandler}
               >
                 <DragHandleIcon fontSize="large" />
               </IconButton>
-            </Box>
-          </Toolbar>
-
-          <Drawer
-            variant="temporary"
-            anchor="right"
-            open={open}
-            onClose={() => setOpen(false)}
-          >
-            <div className={classes.drawerDiv}>
-              <List component="nav" aria-label="navigation">
-                <ListItem divider className={classes.plateIcon}>
-                  <img src={plateLogo} alt="plate icon" />
-                </ListItem>
-                <ListItem button component={Link} to="/profile" divider>
-                  <ListItemText primary="Profile" />
-                </ListItem>
-                <ListItem button divider onClick={logoutHandler}>
-                  <ListItemText primary="Log Out" />
-                </ListItem>
-              </List>
-            </div>
-          </Drawer>
-        </Container>
+            </Grid>
+          </Grid>
+        </Toolbar>
       </AppBar>
-    </Box>
+
+      <Drawer
+        variant="temporary"
+        anchor="right"
+        open={navOpen}
+        onClose={() => setNavOpen(false)}
+      >
+        <div className={classes.drawerDiv}>
+          <List component="nav" aria-label="navigation">
+            <ListItem key="plateicon" divider className={classes.plateIcon}>
+              <img src={plateLogo} alt="plate icon" />
+            </ListItem>
+            <ListItem
+              key="profilebutton"
+              button
+              component={Link}
+              to="/profile"
+              divider
+            >
+              <ListItemText primary="Profile" />
+            </ListItem>
+            <ListItem key="logoutbutton" button divider onClick={logoutHandler}>
+              <ListItemText primary="Log Out" />
+            </ListItem>
+          </List>
+        </div>
+      </Drawer>
+      <NotifsDrawer
+        notifsDrawerOpen={notifsDrawerOpen}
+        setNotifsDrawerOpen={setNotifsDrawerOpen}
+        setUnreadCount={setUnreadCount}
+        classes={classes}
+        notifs={notifs}
+        setNotifs={setNotifs}
+      />
+    </div>
   );
 };
 
