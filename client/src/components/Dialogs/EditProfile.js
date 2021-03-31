@@ -33,7 +33,7 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditProfile = ({ create, profile, setProfile }) => {
+const EditProfile = ({ create, profile, setProfile, isChef }) => {
   const classes = useStyles();
 
   const [profileInfo, setProfileInfo] = useState(profile ? profile : null);
@@ -46,20 +46,41 @@ const EditProfile = ({ create, profile, setProfile }) => {
     name: userInfo.name,
     location: "",
     bio: create ? "" : profileInfo.bio,
-    cuisineTags: create ? "" : profileInfo.cuisineTags,
+    cuisines: create
+      ? ""
+      : profileInfo.cuisines
+          .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+          .join(","),
   };
 
-  const validationSchema = Yup.object({
+  const ChefValidationSchema = Yup.object({
     location: Yup.string().required("Location is required"),
-    cuisineTags: Yup.string().required("Cuisine Tags are required"),
+    cuisines: Yup.string().required("Cuisine Tags are required"),
+    name: Yup.string().required("Name is required"),
   });
+  const UserValidationSchema = Yup.object({
+    location: Yup.string().required("Location is required"),
+    name: Yup.string().required("Name is required"),
+  });
+  const validationSchema = userInfo.isChef
+    ? ChefValidationSchema
+    : UserValidationSchema;
 
   const onSubmit = async (values) => {
-    const profile = await axios.put(`/api/users/${userInfo._id}`, {
+    if (values.cuisines) {
+      values.cuisines = values.cuisines
+        .split(",")
+        .map((c) => c.trim().toLowerCase());
+    }
+
+    const res = await axios.put(`/api/users`, {
       ...values,
       profilePictureUrl,
     });
-    setProfileInfo(profile);
+    if (res.data) {
+      setProfileInfo(res.data.updatedUser);
+      setProfile(res.data.updatedUser);
+    }
   };
 
   return (
@@ -83,25 +104,28 @@ const EditProfile = ({ create, profile, setProfile }) => {
                 type="text"
                 label="Name"
                 name="name"
+                placeholder="*Required"
               />
               <FormikControl
                 control="input"
                 type="text"
                 label="Location"
                 name="location"
+                placeholder="*Required"
               />
               <FormikControl
                 control="input"
                 type="text"
-                label="Bio"
+                label={userInfo.isChef ? `Bio` : `About`}
                 name="bio"
               />
               <FormikControl
                 control="input"
                 type="text"
-                label="Cuisine Tags"
-                name="cuisineTags"
+                label={userInfo.isChef ? `Cuisine Tags` : `Faviorit Cuisines`}
+                name="cuisines"
                 helperText="please provide a comma separated list"
+                placeholder={userInfo.isChef ? "*Required" : ""}
               />
               <Button
                 type="submit"
