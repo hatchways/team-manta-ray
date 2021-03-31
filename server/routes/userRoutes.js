@@ -6,7 +6,7 @@ const {
   loginUser,
   logoutUser,
   makeUserAChef,
-  updateUser,
+  updateUserData,
   retrieveUser,
   getUserById,
   getUserCart,
@@ -29,6 +29,6 @@ router.route("/logout").get(logoutUser);
 router.route("/markChef").put(auth, makeUserAChef);
 router.route("/").get(auth, retrieveUser); // get authenticated user
 router.route("/:userId").get(auth, getUserById); //get user by id param
-router.route("/").put(auth, updateUser); //update user
+router.route("/").put(auth, updateUserData); //update user
 
 module.exports = router;

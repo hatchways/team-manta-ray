@@ -135,53 +135,59 @@ const retrieveUser = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
-  try {
-    // get user from middleware
-    const { user } = req;
+const updateUserData = AsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
 
-    const fields = req.body;
+  if (user) {
+    const addressStr =
+      req.body.address1 +
+      " " +
+      req.body.address2 +
+      " " +
+      req.body.city +
+      " " +
+      req.body.province +
+      " " +
+      req.body.zip;
+    const coord = await getCoordsFromAddress(addressStr);
+    user.name = req.body.name || user.name;
+    user.bio = req.body.bio || user.bio;
+    user.address = {
+      address1: req.body.address1,
+      address2: req.body.address2,
+      city: req.body.city,
+      province: req.body.province,
+      zip: req.body.zip,
+    };
 
-    // I think we need new routes for these fields
-    if (fields.email) throw new Error("Cannot update email.");
-    if (fields.stripeCustomer) throw new Error("Cannot update stripe.");
-    if (fields.password) throw new Error("Cannot update password.");
+    console.log("user location from backend", coord);
+    user.email;
+    user.location = {
+      type: "Point",
+      coordinates: coord,
+    };
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+    user.isChef;
 
-    // Convert req.body to an array to loop all given field props
-    // use await Promise.all to await
-    await Promise.all(
-      Object.keys(fields).map(async (key) => {
-        // if the field's name === 'location'
-        if (key === "location") {
-          // pass the location value
-          const coordinates = await getCoordsFromAddress(fields[key]);
+    user.profilePictureUrl = req.body.profilePictureUrl;
 
-          user[key] = {
-            type: "Point",
-            coordinates,
-          };
-        } else {
-          user[key] = fields[key];
-        }
-      })
-    );
-
-    // save the user
-    await user.save();
-
-    return res.status(200).json({
-      success: true,
-      updatedUser: user,
-    });
-  } catch (error) {
-    console.log(error);
-
-    return res.status(400).json({
-      success: false,
-      error: error.message,
-    });
+    user.cuisines = req.body.cuisines;
   }
-};
+
+  const updatedUser = await user.save();
+  res.json({
+    success: true,
+    updatedUser,
+    // _id: updatedUser._id,
+    // name: updatedUser.name,
+    // address: updatedUser.address,
+    // location: updatedUser.location,
+    // isChef: updatedUser.isChef,
+    // profilePictureUrl: updatedUser.profilePictureUrl,
+  });
+});
 
 const getUserById = async (req, res) => {
   try {
@@ -369,7 +375,7 @@ module.exports = {
   makeUserAChef,
   logoutUser,
   retrieveUser,
-  updateUser,
+  updateUserData,
   getUserById,
   getUserCart,
   editUserCart,
