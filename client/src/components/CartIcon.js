@@ -44,10 +44,6 @@ const CartIcon = () => {
           badgeContent={cart && cart.reduce((acc, cur) => acc + cur.qty, 0)}
           color="secondary"
           className={classes.icon}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right",
-          }}
         >
           <ShoppingCartIcon />
         </Badge>
