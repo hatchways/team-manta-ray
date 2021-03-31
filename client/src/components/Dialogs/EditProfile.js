@@ -1,4 +1,4 @@
-import { Button, DialogTitle } from "@material-ui/core";
+import { Button, Dialog, DialogTitle } from "@material-ui/core";
 import React, { useState, useContext } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -33,7 +33,15 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditProfile = ({ create, profile, setProfile, isChef }) => {
+const EditProfile = ({
+  create,
+  profile,
+  setProfile,
+  isChef,
+  open,
+  onClose,
+  selectedValue,
+}) => {
   const classes = useStyles();
 
   const [profileInfo, setProfileInfo] = useState(profile ? profile : null);
@@ -43,7 +51,7 @@ const EditProfile = ({ create, profile, setProfile, isChef }) => {
   const { userInfo } = useContext(UserContext);
 
   const initialValues = {
-    name: userInfo.name,
+    name: profileInfo ? profileInfo.name : userInfo.name,
     location: "",
     bio: create ? "" : profileInfo.bio,
     cuisines: create
@@ -81,65 +89,77 @@ const EditProfile = ({ create, profile, setProfile, isChef }) => {
       setProfileInfo(res.data.updatedUser);
       setProfile(res.data.updatedUser);
     }
+    onClose(selectedValue);
+  };
+  const handleClose = () => {
+    onClose(selectedValue);
   };
 
   return (
-    <div>
-      <DialogTitle id="simple-dialog-title">Edit Profile</DialogTitle>
-      <EditPicture
-        profile={true}
-        setSrcData={setprofilePictureUrl}
-        srcData={profilePictureUrl}
-      />
-      <div className={classes.form}>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {(formik) => (
-            <Form>
-              <FormikControl
-                control="input"
-                type="text"
-                label="Name"
-                name="name"
-                placeholder="*Required"
-              />
-              <FormikControl
-                control="input"
-                type="text"
-                label="Location"
-                name="location"
-                placeholder="*Required"
-              />
-              <FormikControl
-                control="input"
-                type="text"
-                label={userInfo.isChef ? `Bio` : `About`}
-                name="bio"
-              />
-              <FormikControl
-                control="input"
-                type="text"
-                label={userInfo.isChef ? `Cuisine Tags` : `Faviorit Cuisines`}
-                name="cuisines"
-                helperText="please provide a comma separated list"
-                placeholder={userInfo.isChef ? "*Required" : ""}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                color="secondary"
-                className={classes.btn}
-              >
-                Submit
-              </Button>
-            </Form>
-          )}
-        </Formik>
+    <Dialog
+      onClose={handleClose}
+      aria-labelledby="simple-dialog-title"
+      open={open}
+      maxWidth="sm"
+      fullWidth={true}
+    >
+      <div>
+        <DialogTitle id="simple-dialog-title">Edit Profile</DialogTitle>
+        <EditPicture
+          profile={true}
+          setSrcData={setprofilePictureUrl}
+          srcData={profilePictureUrl}
+        />
+        <div className={classes.form}>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            {(formik) => (
+              <Form>
+                <FormikControl
+                  control="input"
+                  type="text"
+                  label="Name"
+                  name="name"
+                  placeholder="*Required"
+                />
+                <FormikControl
+                  control="input"
+                  type="text"
+                  label="Location"
+                  name="location"
+                  placeholder="*Required"
+                />
+                <FormikControl
+                  control="input"
+                  type="text"
+                  label={userInfo.isChef ? `Bio` : `About`}
+                  name="bio"
+                />
+                <FormikControl
+                  control="input"
+                  type="text"
+                  label={userInfo.isChef ? `Cuisine Tags` : `Faviorit Cuisines`}
+                  name="cuisines"
+                  helperText="please provide a comma separated list"
+                  placeholder={userInfo.isChef ? "*Required" : ""}
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                  className={classes.btn}
+                >
+                  Submit
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
-    </div>
+    </Dialog>
   );
 };
 
