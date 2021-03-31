@@ -171,6 +171,7 @@ const OrderTable = ({
       setUser(selectedOrder.user);
       document.getElementById(selectedOrder._id).selected = true;
       setOpen(true);
+      console.log(1);
     }
     return () => {
       if (selectedOrder) {
@@ -191,7 +192,7 @@ const OrderTable = ({
   const handleClose = (value) => {
     setOpen(false);
   };
-  //--------sort----------//
+  //--------sort Logic----------//
   function descendingComparator(a, b, orderBy) {
     if (orderBy === "bookingDate") {
       if (new Date(b[orderBy]) < new Date(a[orderBy])) return -1;

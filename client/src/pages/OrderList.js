@@ -86,15 +86,15 @@ const OrderList = ({ match }) => {
       );
       setUpcomingOrders(upcomingOrders);
       setPreviousOrders(previousOrders);
+      if (orderId) {
+        const selectedOrder = allOrders.find(
+          (order) => order._id.toString() === orderId
+        );
+        setSelectedOrder(selectedOrder);
+        window.history.pushState({}, document.title, "/orders");
+      }
     }
 
-    if (orderId) {
-      const selectedOrder = allOrders.find(
-        (order) => order._id.toString() === orderId
-      );
-      setSelectedOrder(selectedOrder);
-      window.history.pushState({}, document.title, "/orders");
-    }
     return () => {
       setSelectedOrder(null);
     };
