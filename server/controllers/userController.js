@@ -83,12 +83,23 @@ const loginUser = AsyncHandler(async (req, res) => {
       httpOnly: true,
     });
 
-    res.status(200).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isChef: user.isChef,
-    });
+    if (user.address && user.location) {
+      res.status(200).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isChef: user.isChef,
+        address: user.address,
+        location: user.location,
+      });
+    } else {
+      res.status(200).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isChef: user.isChef,
+      });
+    }
   } else {
     res.status(401);
     throw new Error("Invalid user data");

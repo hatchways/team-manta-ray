@@ -150,13 +150,6 @@ const EditProfile = ({
                   name="name"
                   placeholder="*Required"
                 />
-                {/* <FormikControl
-                control="input"
-                type="text"
-                label="Location"
-                name="location"
-                placeholder="*Required"
-              /> */}
                 <FormikControl
                   control="input"
                   type="text"
