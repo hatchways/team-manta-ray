@@ -26,15 +26,16 @@ const useStyles = makeStyles((theme) => ({
   },
   nameCard: {
     paddingTop: "20px",
+    // maxHeight: theme.spacing(40),
   },
   profileImage: {
-    height: "80px",
-    width: "80px",
+    height: "90px",
+    width: "90px",
     borderRadius: "50%",
+    marginTop: theme.spacing(6),
     objectFit: "cover",
     border: "5px solid white",
     boxShadow: "0px 0px 10px 7px rgba(0,0,0,0.07)",
-    marginBottom: "10px",
   },
   nameText: {
     textAlign: "center",
@@ -60,9 +61,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomerProfile = () => {
+const CustomerProfile = ({ history }) => {
   //Dummy profile data for now
-  const { userInfo } = useContext(UserContext);
+  const { userInfo, loading, error } = useContext(UserContext);
 
   const user = {
     name: "Christine Wilson",
@@ -81,6 +82,9 @@ const CustomerProfile = () => {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
+    if (!userInfo) {
+      history.replace("/login");
+    }
     const getUserInfo = async () => {
       const res = await axios.get("/api/users");
       if (res.data) setUserData(res.data.user);
@@ -88,12 +92,14 @@ const CustomerProfile = () => {
     if (!userData) getUserInfo();
 
     if (userData && !userData.location) setOpen(true);
-  }, [userData]);
+  }, [userData, userInfo, history]);
 
-  return !userData ? (
+  return userInfo && !userData ? (
     <Loader />
   ) : (
     <div className={classes.root}>
+      {loading && <Loader />}
+      {error && { error }}
       <Paper className={classes.paper} elevation={5} square>
         <Grid container className={classes.gridParent}>
           <Grid
@@ -129,10 +135,13 @@ const CustomerProfile = () => {
                     {userInfo ? userInfo.name : userData.name}
                   </h2>
                   <h3
-                    style={{ fontSize: "11px", opacity: 0.4 }}
+                    style={{ fontSize: "12px", opacity: 0.4 }}
                     className={classes.nameText}
                   >
-                    {userData.city ? userData.city : ""}
+                    {userInfo.address !== undefined
+                      ? userInfo.address.city + ", " + userInfo.address.province
+                      : ""}
+                    {/* {userData.city ? userData.city : ""} */}
                   </h3>
                 </Grid>
               </Grid>
@@ -154,7 +163,7 @@ const CustomerProfile = () => {
               <h2 style={{ fontSize: "13px", paddingTop: "20px" }}>
                 ABOUT ME:
               </h2>
-              <p style={{ fontSize: "11px", opacity: 0.6 }}>
+              <p style={{ fontSize: "15px", opacity: 0.6, marginRight: "8px" }}>
                 {userData.bio ? userData.bio : "Write about yourself"}
               </p>
             </Grid>

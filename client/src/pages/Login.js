@@ -102,6 +102,7 @@ const Login = ({ history }) => {
           <Typography variant="h3">Login</Typography>
 
           {loading && <Loader />}
+          {loading && <p>{error}</p>}
 
           <div className={classes.form}>
             <Formik
