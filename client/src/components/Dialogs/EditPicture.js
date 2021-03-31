@@ -12,17 +12,18 @@ const useStyles = makeStyles((theme) =>
     img: {
       height: theme.spacing(25),
       width: theme.spacing(25),
+      objectFit: "cover",
       margin: "auto",
       borderRadius: "50%",
     },
     notRound: {
       height: theme.spacing(25),
       width: theme.spacing(25),
+      objectFit: "cover",
       margin: "auto",
     },
     uploadSection: {
       height: theme.spacing(10),
-      // width: theme.spacing(50),
       width: "95%",
       outline: "none",
       border: "3px dotted #ccc",
