@@ -52,11 +52,6 @@ const EditProfile = ({ create, profile, setProfile, isChef }) => {
     city: userInfo.address === undefined ? "" : userInfo.address.city,
     province: userInfo.address === undefined ? "" : userInfo.address.province,
     zip: userInfo.address === undefined ? "" : userInfo.address.zip,
-    // address1: profileInfo.address.address1 ? profileInfo.address.address1 : "",
-    // address2: profileInfo.address.address2 ? profileInfo.address.address2 : "",
-    // city: profileInfo.address.city ? profileInfo.address.city : "",
-    // province: profileInfo.address.province ? profileInfo.address.province : "",
-    // zip: profileInfo.address.zip ? profileInfo.address.zip : "",
     bio: create ? "" : profileInfo.bio,
     cuisines: create
       ? ""
