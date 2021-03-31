@@ -99,6 +99,7 @@ const CartModal = ({ open, onClose, selectedValue }) => {
   const classes = useStyles();
 
   const { cart, chosenChefProfile } = useContext(UserContext);
+
   const dispatch = useContext(UserDispatchContext);
 
   const handleClose = () => {
@@ -241,74 +242,77 @@ const CartModal = ({ open, onClose, selectedValue }) => {
               alignItems="center"
               className={classes.recipeCard}
             >
-              {cart.map(({ qty, recipe }) => (
-                <Grid
-                  container
-                  item
-                  key={recipe._id}
-                  direction="row"
-                  alignItems="center"
-                  justify="space-between"
-                  component={Card}
-                  xs={12}
-                  className={classes.recipeCardItem}
-                >
-                  <Grid item xs={1}>
-                    <Avatar
-                      alt="recipe"
-                      src={recipe.recipePictureUrl || plate}
-                    />
-                  </Grid>
+              {cart.map(({ qty, recipe }) => {
+                if (!recipe) return null;
+                return (
                   <Grid
-                    item
                     container
-                    direction="column"
-                    justify="space-around"
-                    alignItems="flex-start"
-                    xs={6}
-                    spacing={1}
+                    item
+                    key={recipe._id}
+                    direction="row"
+                    alignItems="center"
+                    justify="space-between"
+                    component={Card}
+                    xs={12}
+                    className={classes.recipeCardItem}
                   >
-                    <Grid item>
-                      <Typography>{recipe.name}</Typography>
+                    <Grid item xs={1}>
+                      <Avatar
+                        alt="recipe"
+                        src={recipe.recipePictureUrl || plate}
+                      />
                     </Grid>
-                    <Grid item>
-                      <span>{`${qty} x $${recipe.price}`}</span>{" "}
-                      <ButtonGroup
-                        disableElevation
-                        variant="contained"
-                        className={classes.btnGroup}
-                      >
-                        <Button
-                          onClick={() =>
-                            handleDecrease(recipe._id, qty, recipe.user)
-                          }
-                        >
-                          -
-                        </Button>
-                        <Button
-                          onClick={() =>
-                            handleIncrease(recipe._id, qty, recipe.user)
-                          }
-                        >
-                          +
-                        </Button>
-                      </ButtonGroup>
-                    </Grid>
-                  </Grid>
-                  <Hidden smDown>
-                    <Grid item>$ {addDecimals(qty * recipe.price)}</Grid>
-                  </Hidden>
-                  <Grid item xs={2} md={1}>
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={(e) => handleDelete(recipe._id)}
+                    <Grid
+                      item
+                      container
+                      direction="column"
+                      justify="space-around"
+                      alignItems="flex-start"
+                      xs={6}
+                      spacing={1}
                     >
-                      <DeleteForeverIcon />
-                    </IconButton>
+                      <Grid item>
+                        <Typography>{recipe.name}</Typography>
+                      </Grid>
+                      <Grid item>
+                        <span>{`${qty} x $${recipe.price}`}</span>{" "}
+                        <ButtonGroup
+                          disableElevation
+                          variant="contained"
+                          className={classes.btnGroup}
+                        >
+                          <Button
+                            onClick={() =>
+                              handleDecrease(recipe._id, qty, recipe.user)
+                            }
+                          >
+                            -
+                          </Button>
+                          <Button
+                            onClick={() =>
+                              handleIncrease(recipe._id, qty, recipe.user)
+                            }
+                          >
+                            +
+                          </Button>
+                        </ButtonGroup>
+                      </Grid>
+                    </Grid>
+                    <Hidden smDown>
+                      <Grid item>$ {addDecimals(qty * recipe.price)}</Grid>
+                    </Hidden>
+                    <Grid item xs={2} md={1}>
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={(e) => handleDelete(recipe._id)}
+                      >
+                        <DeleteForeverIcon />
+                      </IconButton>
+                    </Grid>
                   </Grid>
-                </Grid>
-              ))}
+                );
+              })}
             </Grid>
           </ListItem>
           <ListItem>
@@ -323,7 +327,8 @@ const CartModal = ({ open, onClose, selectedValue }) => {
                 $
                 {addDecimals(
                   cart.reduce(
-                    (acc, cur) => acc + cur.recipe.price * cur.qty,
+                    (acc, cur) =>
+                      cur.recipe ? acc + cur.recipe.price * cur.qty : acc + 0,
                     0
                   ),
                   2

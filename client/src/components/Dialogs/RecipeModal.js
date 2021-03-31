@@ -90,8 +90,8 @@ const RecipeModal = ({ edit, id, recipe, open, onClose, selectedValue }) => {
         ...values,
         recipePictureUrl,
       });
+      setRecipePictureUrl(null);
     }
-    setRecipePictureUrl(null);
     onClose(selectedValue);
   };
 

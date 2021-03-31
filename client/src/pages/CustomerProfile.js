@@ -126,7 +126,7 @@ const CustomerProfile = () => {
               <Grid item container justify="center" xs={12}>
                 <Grid item>
                   <h2 className={classes.nameText}>
-                    {userInfo ? userInfo.name : userData.name}
+                    {userData.name ? userData.name : ""}
                   </h2>
                   <h3
                     style={{ fontSize: "11px", opacity: 0.4 }}

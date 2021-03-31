@@ -51,7 +51,7 @@ const EditProfile = ({
   const { userInfo } = useContext(UserContext);
 
   const initialValues = {
-    name: userInfo.name,
+    name: profileInfo ? profileInfo.name : userInfo.name,
     location: "",
     bio: create ? "" : profileInfo.bio,
     cuisines: create
@@ -89,6 +89,7 @@ const EditProfile = ({
       setProfileInfo(res.data.updatedUser);
       setProfile(res.data.updatedUser);
     }
+    onClose(selectedValue);
   };
   const handleClose = () => {
     onClose(selectedValue);

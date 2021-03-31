@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) =>
     img: {
       height: theme.spacing(25),
       width: theme.spacing(25),
-      objectFit: "contain",
       margin: "auto",
       borderRadius: "50%",
     },
