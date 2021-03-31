@@ -12,14 +12,14 @@ const useStyles = makeStyles((theme) =>
     img: {
       height: theme.spacing(25),
       width: theme.spacing(25),
-      objectFit: "cover",
+      objectFit: "contain",
       margin: "auto",
       borderRadius: "50%",
     },
     notRound: {
       height: theme.spacing(25),
       width: theme.spacing(25),
-      objectFit: "cover",
+      objectFit: "contain",
       margin: "auto",
     },
     uploadSection: {
