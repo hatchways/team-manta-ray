@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Typography, Button, Hidden } from "@material-ui/core";
+import { Grid, Typography, Button, Hidden, Box } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -45,7 +45,11 @@ const Banner = ({ signUp }) => {
       <Grid item xs={false} sm={4} md={7} className={classes.image}>
         <div className={classes.content}>
           <Hidden smDown>
-            <Typography className={classes.txt}>{text}</Typography>
+            <Box color="white">
+              <Typography color="inherit" className={classes.txt}>
+                {text}
+              </Typography>
+            </Box>
           </Hidden>
           <Link to={signUp ? "/login" : "/signup"} className={classes.link}>
             <Button

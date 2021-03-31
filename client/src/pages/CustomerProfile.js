@@ -1,8 +1,7 @@
-import React from "react";
-// import { AuthContext } from "../context/auth-context";
+import React, { useContext } from "react";
 import { Paper, Grid, Button, makeStyles } from "@material-ui/core";
-
 import Map from "../components/Map";
+import { UserContext } from "../context/UserContext";
 
 import profilePic from "../assets/dummyavatar.png";
 
@@ -60,8 +59,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CustomerProfile = () => {
-  // const { userData } = useContext(AuthContext);
   //Dummy profile data for now
+  const { userInfo } = useContext(UserContext);
+
   const userData = {
     name: "Christine Wilson",
     city: "Toronto, Canada",
@@ -104,7 +104,9 @@ const CustomerProfile = () => {
               </Grid>
               <Grid item container justify="center" xs={12}>
                 <Grid item>
-                  <h2 className={classes.nameText}>{userData.name}</h2>
+                  <h2 className={classes.nameText}>
+                    {userInfo ? userInfo.name : userData.name}
+                  </h2>
                   <h3
                     style={{ fontSize: "11px", opacity: 0.4 }}
                     className={classes.nameText}

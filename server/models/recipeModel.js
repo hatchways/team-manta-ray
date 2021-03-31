@@ -6,14 +6,14 @@ const recipeSchema = new Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "ChefProfile",
+      ref: "User",
       required: true,
     },
     name: {
       type: String,
       required: true,
     },
-    pictureKey: {
+    recipePictureUrl: {
       type: String,
       required: true,
     },

@@ -15,10 +15,9 @@ const userRoutes = require("./routes/userRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const imageRoutes = require("./routes/imageRoutes");
 const recipeRoutes = require("./routes/recipeRoutes");
-const userProfileRoutes = require("./routes/userProfileRoutes");
-const chefProfileRoutes = require("./routes/chefProfileRoutes");
 const searchRoutes = require("./routes/searchRoutes");
 const conversationRoutes = require("./routes/conversationRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 connectDB();
 
@@ -39,18 +38,16 @@ app.use("/", indexRouter);
 app.use("/api/users", userRoutes);
 //Routes for images
 app.use("/api/image", imageRoutes);
-// Routes for userProfiles
-app.use("/api/userProfiles", userProfileRoutes);
-// // Routes for chefProfiles
-app.use("/api/chefProfiles", chefProfileRoutes);
 // Routes for recipes
 app.use("/api/recipes", recipeRoutes);
 // Routes for searching recipes and chefs
 app.use("/api/search", searchRoutes);
 //Routes for chats
 app.use("/api/chat", conversationRoutes);
-
+// Route for payment
 app.use("/payment", paymentRoutes);
+// Route for order
+app.use("/api/orders", orderRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
