@@ -91,6 +91,7 @@ const RecipeModal = ({ edit, id, recipe, open, onClose, selectedValue }) => {
         recipePictureUrl,
       });
     }
+    setRecipePictureUrl(null);
     onClose(selectedValue);
   };
 
