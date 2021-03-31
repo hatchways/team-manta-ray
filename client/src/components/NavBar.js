@@ -122,10 +122,6 @@ const NavBar = ({ history }) => {
     history.replace("/login");
   };
 
-  const testClickHandler = () => {
-    socket.emit("test", "Send notification");
-  };
-
   const notifCloseHandler = () => {
     setNotifOpen(false);
   };
@@ -155,15 +151,6 @@ const NavBar = ({ history }) => {
             {/* <Grid item>
                 <Avatar src={userData.avatar} alt="user profile pic" />
               </Grid> */}
-            <Grid item style={{ marginRight: "5px" }}>
-              <IconButton
-                color="inherit"
-                aria-label="navbar"
-                onClick={testClickHandler}
-              >
-                <NotificationsIcon fontSize="default" />
-              </IconButton>
-            </Grid>
             <Grid item style={{ marginRight: "5px" }}>
               <IconButton
                 color="inherit"

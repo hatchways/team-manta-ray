@@ -61,16 +61,6 @@ io.on("connection", (socket) => {
     sendMessageToDatabase(recipient, id, content);
   });
 
-  socket.on("test", (message) => {
-    socket.emit("notification", {
-      _id: "5",
-      type: "message",
-      name: "Jason Mills",
-      preview: "Are you available this Saturday?",
-      link: "/chat/535ab562df4471243d1431a",
-    });
-    console.log(message);
-  });
   socket.on("disconnect", () => {
     console.log(user.name + " has disconnected");
   });
