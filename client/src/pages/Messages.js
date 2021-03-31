@@ -54,14 +54,12 @@ const MessageItem = (props) => {
   const handleSelectedMessageItem = (message) => {
     setActiveMessageItem(message);
     history.push(`/chat/${message.chattingWith._id}`);
-    console.log(message);
   };
 
   //Fetching the conversation previews
   const getConversationPreviews = useCallback(async () => {
     try {
       const previews = await axios.get("/api/chat/previews");
-      console.log(previews.data.data);
       setConversationPreviews(previews.data.data);
     } catch (error) {
       console.log(error);
@@ -125,9 +123,6 @@ const MessageItem = (props) => {
         <Grid item md={2} sm={4} xs={12}>
           <Box height="90vh">
             {conversationPreviews.map((chat, i) => {
-              console.log(chat);
-              console.log(activeMessageItem);
-              console.log(messages);
               chat["i"] = i;
               return (
                 <MessageItems
