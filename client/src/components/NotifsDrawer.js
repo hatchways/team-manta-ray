@@ -20,11 +20,8 @@ const NotifsDrawer = ({
   notifs,
   setNotifs,
 }) => {
-  const notificationClickHandler = (notif) => {
-    notifs.splice(
-      notifs.findIndex((n) => n._id === notif._id),
-      1
-    );
+  const notificationClickHandler = (notif, index) => {
+    notifs.splice(index, 1);
     setNotifsDrawerOpen(false);
   };
 
@@ -36,88 +33,90 @@ const NotifsDrawer = ({
         open={notifsDrawerOpen}
         onClose={() => setNotifsDrawerOpen(false)}
       >
-        <div className={classes.drawerDiv} style={{ width: 350 }}>
+        <div className={classes.drawerDiv} style={{ width: 450 }}>
           <List component="nav" aria-label="navigation">
             <ListItem
               key="notificationsheader"
               divider
               style={{ height: 65, textAlign: "center" }}
             >
-              <ListItemText primary="NOTIFICATIONS" />
+              <ListItemText
+                primaryTypographyProps={{
+                  style: { textTransform: "uppercase", fontSize: "25px" },
+                }}
+                primary="Notifications"
+              />
             </ListItem>
             {notifs.length === 0 && (
               <ListItem
                 key="nonotifsmessage"
                 style={{ textAlign: "center", marginTop: "20px" }}
               >
-                <ListItemText secondary="You have no notifications." />
+                <ListItemText
+                  secondaryTypographyProps={{
+                    style: { fontSize: "18px" },
+                  }}
+                  secondary="You have no notifications."
+                />
               </ListItem>
             )}
-            {notifs.map((notif) => {
-              if (notif.type === "message") {
-                return (
-                  <ListItem
-                    button
-                    component={Link}
-                    to={notif.link}
-                    divider
-                    alignItems="center"
-                    onClick={() => {
-                      notificationClickHandler(notif);
-                    }}
-                    key={notif.id + notif.name}
-                  >
-                    <ListItemAvatar>
-                      <ListItemIcon>
-                        <ChatIcon />
-                      </ListItemIcon>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={
-                        <Typography
-                          variant="body1"
-                          style={{ fontSize: "11px" }}
-                          color="textPrimary"
-                        >
-                          {notif.name + ": "}
-                          <span style={{ opacity: 0.7 }}>{notif.preview}</span>
-                        </Typography>
-                      }
-                    />
-                  </ListItem>
-                );
-              } else {
-                return (
-                  <ListItem
-                    button
-                    component={Link}
-                    to={notif.link}
-                    divider
-                    alignItems="center"
-                    onClick={() => {
-                      notificationClickHandler(notif);
-                    }}
-                    key={notif.id + notif.name}
-                  >
-                    <ListItemAvatar>
-                      <ListItemIcon>
-                        <MonetizationOnIcon />
-                      </ListItemIcon>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={
-                        <Typography
-                          variant="body1"
-                          style={{ fontSize: "11px" }}
-                          color="textPrimary"
-                        >
-                          {notif.name + " " + notif.preview}
-                        </Typography>
-                      }
-                    />
-                  </ListItem>
-                );
-              }
+            {notifs.map((notif, index) => {
+              return (
+                <ListItem
+                  button
+                  component={Link}
+                  to={notif.link}
+                  divider
+                  alignItems="center"
+                  onClick={() => {
+                    notificationClickHandler(notif, index);
+                  }}
+                  key={notif.id + notif.name}
+                >
+                  {notif.type === "message" ? (
+                    <>
+                      <ListItemAvatar>
+                        <ListItemIcon>
+                          <ChatIcon fontSize="large" />
+                        </ListItemIcon>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={
+                          <Typography
+                            variant="body1"
+                            style={{ fontSize: "20px" }}
+                            color="textPrimary"
+                          >
+                            {notif.name + ": "}
+                            <span style={{ opacity: 0.7 }}>
+                              {notif.preview}
+                            </span>
+                          </Typography>
+                        }
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <ListItemAvatar>
+                        <ListItemIcon>
+                          <MonetizationOnIcon fontSize="large" />
+                        </ListItemIcon>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={
+                          <Typography
+                            variant="body1"
+                            style={{ fontSize: "20px" }}
+                            color="textPrimary"
+                          >
+                            {notif.name + " " + notif.preview}
+                          </Typography>
+                        }
+                      />
+                    </>
+                  )}
+                </ListItem>
+              );
             })}
           </List>
         </div>
