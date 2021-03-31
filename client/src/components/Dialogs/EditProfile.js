@@ -5,8 +5,8 @@ import * as Yup from "yup";
 import FormikControl from "../Formik/FormikControl";
 import { makeStyles } from "@material-ui/core/styles";
 import EditPicture from "./EditPicture";
-import axios from "axios";
-import { UserContext } from "../../context/UserContext";
+import { UserContext, UserDispatchContext } from "../../context/UserContext";
+import { updateUser } from "../../actions/userActions";
 
 export const useStyles = makeStyles((theme) => ({
   form: {
@@ -35,16 +35,28 @@ export const useStyles = makeStyles((theme) => ({
 
 const EditProfile = ({ create, profile, setProfile, isChef }) => {
   const classes = useStyles();
+  const { userInfo } = useContext(UserContext);
+
+  const dispatch = useContext(UserDispatchContext);
 
   const [profileInfo, setProfileInfo] = useState(profile ? profile : null);
+
   const [profilePictureUrl, setprofilePictureUrl] = useState(
     create ? "" : profileInfo.profilePictureUrl
   );
-  const { userInfo } = useContext(UserContext);
 
   const initialValues = {
     name: userInfo.name,
-    location: "",
+    address1: userInfo.address === undefined ? "" : userInfo.address.address1,
+    address2: userInfo.address === undefined ? "" : userInfo.address.address2,
+    city: userInfo.address === undefined ? "" : userInfo.address.city,
+    province: userInfo.address === undefined ? "" : userInfo.address.province,
+    zip: userInfo.address === undefined ? "" : userInfo.address.zip,
+    // address1: profileInfo.address.address1 ? profileInfo.address.address1 : "",
+    // address2: profileInfo.address.address2 ? profileInfo.address.address2 : "",
+    // city: profileInfo.address.city ? profileInfo.address.city : "",
+    // province: profileInfo.address.province ? profileInfo.address.province : "",
+    // zip: profileInfo.address.zip ? profileInfo.address.zip : "",
     bio: create ? "" : profileInfo.bio,
     cuisines: create
       ? ""
@@ -54,13 +66,25 @@ const EditProfile = ({ create, profile, setProfile, isChef }) => {
   };
 
   const ChefValidationSchema = Yup.object({
-    location: Yup.string().required("Location is required"),
+    // location: Yup.string().required("Location is required"),
     cuisines: Yup.string().required("Cuisine Tags are required"),
     name: Yup.string().required("Name is required"),
+    address1: Yup.string().required("address1 is required"),
+    city: Yup.string().required("City is required"),
+    province: Yup.string()
+      .required("Proivince is required")
+      .max(2, "Enter 2 digit province"),
+    zip: Yup.string().required("Zip is required"),
   });
   const UserValidationSchema = Yup.object({
-    location: Yup.string().required("Location is required"),
+    // location: Yup.string().required("Location is required"),
     name: Yup.string().required("Name is required"),
+    address1: Yup.string().required("address1 is required"),
+    city: Yup.string().required("City is required"),
+    province: Yup.string()
+      .required("Proivince is required")
+      .max(2, "Enter 2 digit province"),
+    zip: Yup.string().required("Zip is required"),
   });
   const validationSchema = userInfo.isChef
     ? ChefValidationSchema
@@ -73,13 +97,19 @@ const EditProfile = ({ create, profile, setProfile, isChef }) => {
         .map((c) => c.trim().toLowerCase());
     }
 
-    const res = await axios.put(`/api/users`, {
-      ...values,
-      profilePictureUrl,
-    });
-    if (res.data) {
-      setProfileInfo(res.data.updatedUser);
-      setProfile(res.data.updatedUser);
+    let payload = {};
+
+    payload.values = values;
+    payload.profilePictureUrl = profilePictureUrl;
+
+    try {
+      const updatedUser = await updateUser(dispatch, payload);
+      if (updatedUser) {
+        setProfileInfo(updatedUser);
+        setProfile(updatedUser);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -106,12 +136,42 @@ const EditProfile = ({ create, profile, setProfile, isChef }) => {
                 name="name"
                 placeholder="*Required"
               />
-              <FormikControl
+              {/* <FormikControl
                 control="input"
                 type="text"
                 label="Location"
                 name="location"
                 placeholder="*Required"
+              /> */}
+              <FormikControl
+                control="input"
+                type="text"
+                label="Address Line 1*"
+                name="address1"
+              />
+              <FormikControl
+                control="input"
+                type="text"
+                label="Address Line 2"
+                name="address2"
+              />
+              <FormikControl
+                control="input"
+                type="text"
+                label="City*"
+                name="city"
+              />
+              <FormikControl
+                control="input"
+                type="text"
+                label="Province*"
+                name="province"
+              />
+              <FormikControl
+                control="input"
+                type="text"
+                label="Zip Code*"
+                name="zip"
               />
               <FormikControl
                 control="input"
