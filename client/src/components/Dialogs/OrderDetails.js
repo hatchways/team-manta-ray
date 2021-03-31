@@ -17,8 +17,6 @@ import {
 import React from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import defaultUserImage from "../../assets/defaultUserImage.png";
-import plate from "../../assets/plate.svg";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -96,9 +94,6 @@ const OrderDetails = ({ items, user, orderId }) => {
                   <Hidden smDown>
                     <TableCell align="center">Price</TableCell>
                   </Hidden>
-                  {/* <Hidden smDown>
-                    <TableCell align="center">Ingredients</TableCell>
-                  </Hidden> */}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -116,11 +111,6 @@ const OrderDetails = ({ items, user, orderId }) => {
                         item.quantity * item.price
                       )}`}</TableCell>
                     </Hidden>
-                    {/* <Hidden smDown>
-                      <TableCell align="left" nowrap="nowrap">
-                        {item.ingredients.join(",")}
-                      </TableCell>
-                    </Hidden> */}
                   </TableRow>
                 ))}
               </TableBody>
@@ -138,7 +128,7 @@ const OrderDetails = ({ items, user, orderId }) => {
               {" "}
               $
               {addDecimals(
-                items.reduce((acc, cur) => acc + cur.price * cur.qty, 0),
+                items.reduce((acc, cur) => acc + cur.price * cur.quantity, 0),
                 2
               )}
             </Typography>
