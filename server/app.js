@@ -41,8 +41,10 @@ app.use("/api/image", imageRoutes);
 app.use("/api/recipes", recipeRoutes);
 // Routes for searching recipes and chefs
 app.use("/api/search", searchRoutes);
-
+// Route for payment
 app.use("/payment", paymentRoutes);
+// Route for order
+app.use("/api/orders", orderRoutes);
 
 app.use("/api/orders", orderRoutes);
 

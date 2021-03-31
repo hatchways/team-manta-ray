@@ -1,4 +1,8 @@
 import {
+  CART_SAVE_BOOKING_DATE,
+  CART_SAVE_SHIPPING_ADDRESS,
+} from "../constants/cartConstants";
+import {
   ADD_TO_CART,
   DECREASE_COUNT,
   DELETE_FROM_CART,
@@ -15,6 +19,8 @@ export const cartInitialState = {
   cart: [],
   chosenChefProfile: null,
   chefConflictErr: null,
+  shippingAddress: "",
+  bookingDetails: "",
 };
 
 export const CartReducer = (state, action) => {
@@ -73,6 +79,17 @@ export const CartReducer = (state, action) => {
         cart: [],
         chosenChef: null,
         chefConflictErr: null,
+      };
+    case CART_SAVE_SHIPPING_ADDRESS:
+      return {
+        ...state,
+        shippingAddress: action.payload,
+      };
+
+    case CART_SAVE_BOOKING_DATE:
+      return {
+        ...state,
+        bookingDetails: action.payload,
       };
     default:
       return state;

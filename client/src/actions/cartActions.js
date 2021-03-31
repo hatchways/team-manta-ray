@@ -12,6 +12,11 @@ import {
   SET_CHEF,
 } from "../constants/userConstants";
 
+import {
+  CART_SAVE_SHIPPING_ADDRESS,
+  CART_SAVE_BOOKING_DATE,
+} from "../constants/cartConstants";
+
 export const getCartInfo = async (dispatch) => {
   try {
     const res = await axios.get("/api/users/cart");
@@ -114,4 +119,18 @@ export const clearCart = async (dispatch) => {
   } catch (err) {
     console.log(err);
   }
+};
+
+export const saveShippingAddress = async (dispatch, data) => {
+  dispatch({
+    type: CART_SAVE_SHIPPING_ADDRESS,
+    payload: data,
+  });
+};
+
+export const saveBooking = async (dispatch, data) => {
+  dispatch({
+    type: CART_SAVE_BOOKING_DATE,
+    payload: data,
+  });
 };

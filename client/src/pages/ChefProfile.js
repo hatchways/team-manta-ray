@@ -8,7 +8,7 @@ import axios from "axios";
 import { getRecipesByChef } from "../actions/recipeActions";
 
 const ChefProfile = ({ history, match }) => {
-  const { recipeId, userId } = match.params;
+  const { userId } = match.params;
 
   const useStyles = makeStyles((theme) => ({
     chefMenuName: {
@@ -37,8 +37,6 @@ const ChefProfile = ({ history, match }) => {
         }
       };
       getProfileAndRecipes();
-    } else if (!userInfo) {
-      history.replace("/login");
     }
     setIsOwner(userId && userId !== userInfo._id ? false : true);
   }, [dispatch, userInfo, history, userId]);

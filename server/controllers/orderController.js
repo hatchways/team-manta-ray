@@ -2,6 +2,45 @@ const Order = require("../models/orderModel.js");
 const AsyncHandler = require("express-async-handler");
 
 /**
+ * @description Create new order
+ * @route       POST /api/orders
+ * @access      Private
+ */
+const addOrderItems = AsyncHandler(async (req, res) => {
+  const {
+    orderItems,
+    shippingAddress,
+    chefId,
+    bookingDate,
+    instructions,
+    itemsPrice,
+    totalPrice,
+  } = req.body;
+
+  if (orderItems && orderItems.length === 0) {
+    res.status(400);
+    throw new Error("No order items");
+    return;
+  } else {
+    const order = new Order({
+      orderItems,
+      user: req.user._id,
+      shippingAddress,
+      chefId,
+      bookingDate,
+      instructions,
+      itemsPrice,
+      totalPrice,
+      paidAt: Date.now(),
+    });
+
+    const createdOrder = await order.save();
+
+    res.status(201).json(createdOrder);
+  }
+});
+
+/**
  * @description get current user's orders
  * @route       Get /api/orders
  * @access      Private
@@ -33,4 +72,4 @@ const getCurrentUserOrders = AsyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { getCurrentUserOrders };
+module.exports = { addOrderItems, getCurrentUserOrders };
