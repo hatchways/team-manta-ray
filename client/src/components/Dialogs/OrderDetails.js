@@ -13,6 +13,7 @@ import {
   TableHead,
   TableRow,
   Typography,
+  Dialog,
 } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -61,12 +62,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrderDetails = ({ items, user, orderId }) => {
+const OrderDetails = ({
+  items,
+  user,
+  orderId,
+  open,
+  onClose,
+  selectedValue,
+}) => {
   const classes = useStyles();
 
   const addDecimals = (num) => (Math.round(num * 100) / 100).toFixed(2);
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
   return (
-    <>
+    <Dialog
+      onClose={handleClose}
+      aria-labelledby="simple-dialog-title"
+      open={open}
+      maxWidth="sm"
+      fullWidth={true}
+    >
       <DialogTitle id="simple-dialog-title">{`Order ${orderId}`}</DialogTitle>
       <List dense>
         <ListItem alignItems="center">
@@ -142,7 +159,7 @@ const OrderDetails = ({ items, user, orderId }) => {
           </Link>
         </ListItem>
       </List>
-    </>
+    </Dialog>
   );
 };
 

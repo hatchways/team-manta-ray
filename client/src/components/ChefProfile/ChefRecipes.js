@@ -30,14 +30,18 @@ const ChefProfile = ({ recipe, isOwner }) => {
   } = recipe;
 
   const dispatch = useContext(UserDispatchContext);
-  const { chosenChefProfile, cart, chefConflictErr } = useContext(UserContext);
+  const { chosenChefProfile, cart, chefConflictErr, userInfo } = useContext(
+    UserContext
+  );
 
   const [open, setOpen] = useState(false);
 
   const handleClose = (value) => {
     setOpen(false);
   };
+
   const handleAddToCart = () => {
+    if (userInfo.isChef || isOwner) return;
     if (cart.length === 0) {
       getChosenChefProfile(dispatch, recipe.user);
       addToCart(dispatch, recipe);
@@ -64,17 +68,11 @@ const ChefProfile = ({ recipe, isOwner }) => {
       backgroundSize: "contain",
       backgroundPosition: "center",
       height: "300px",
-      cursor: "pointer",
       "& button": {
         visibility: "hidden",
       },
     },
-    chefRecipeImageWithBtn: {
-      backgroundImage: `url("${recipePictureUrl ? recipePictureUrl : plate}")`,
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "contain",
-      backgroundPosition: "center",
-      height: "300px",
+    cartBtn: {
       cursor: "pointer",
       display: "flex",
       "& button": {
@@ -91,10 +89,11 @@ const ChefProfile = ({ recipe, isOwner }) => {
         transition: "all 0.5s ease-out",
         "& button": {
           visibility: "visible",
-          zIndex: 1,
-          opacity: "1",
         },
       },
+    },
+    addPointer: {
+      cursor: "pointer",
     },
   }));
 
@@ -143,9 +142,18 @@ const ChefProfile = ({ recipe, isOwner }) => {
         <Grid item sm={6} xs={12}>
           <Box
             m={5}
-            className={
-              isOwner ? classes.chefRecipeImage : classes.chefRecipeImageWithBtn
-            }
+            className={`${classes.chefRecipeImage} ${
+              isOwner
+                ? classes.addPointer
+                : !userInfo.isChef
+                ? classes.cartBtn
+                : null
+            }`}
+            // isOwner
+            //     ? classes.chefRecipeImage
+            //     : userInfo.isChef
+            //     ? classes.chefRecipeImageNoPointer
+            //     : classes.chefRecipeImageWithBtn
             onClick={() => (isOwner ? setOpen(true) : null)}
           >
             <Button
