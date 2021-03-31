@@ -160,7 +160,6 @@ const updateUserData = AsyncHandler(async (req, res) => {
       zip: req.body.zip,
     };
 
-    console.log("user location from backend", coord);
     user.email;
     user.location = {
       type: "Point",
@@ -180,12 +179,6 @@ const updateUserData = AsyncHandler(async (req, res) => {
   res.json({
     success: true,
     updatedUser,
-    // _id: updatedUser._id,
-    // name: updatedUser.name,
-    // address: updatedUser.address,
-    // location: updatedUser.location,
-    // isChef: updatedUser.isChef,
-    // profilePictureUrl: updatedUser.profilePictureUrl,
   });
 });
 
