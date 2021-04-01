@@ -17,7 +17,7 @@ import Messages from "./pages/Messages";
 import ChefProfile from "./pages/ChefProfile";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import NavBar from "./components/NavBar";
-import TestChefProfile from "./pages/TestChefProfile";
+import OrderList from "./pages/OrderList";
 import BrowseChefs from "./pages/BrowseChefs";
 import { SocketProvider } from "./context/SocketContext";
 import Update from "./pages/Update";
@@ -41,7 +41,9 @@ const Private = () => {
           path="/chefprofile/:userId?/:recipeId?"
           component={ChefProfile}
         />
-        <Route path="/chef/:userId?/recipeId?" component={TestChefProfile} />
+        <Route path="/orders/:orderId?" component={OrderList} />
+        <Route path="/browsechefs" component={BrowseChefs} />
+        <Route path="/messages" component={Messages} />
       </Switch>
     </>
   );
