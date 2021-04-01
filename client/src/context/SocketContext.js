@@ -17,7 +17,7 @@ export const SocketProvider = ({ children }) => {
     if (userInfo) {
       const newSocket = io("http://localhost:3001", {
         withCredentials: true,
-        query: { id: userInfo._id },
+        query: { id: `${userInfo._id}` },
       });
       setSocket(newSocket);
 

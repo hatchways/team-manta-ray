@@ -89,9 +89,9 @@ const MessageItem = (props) => {
     }
   }, [chattingWithId, getConversation]);
 
-  //getConversation
   const handleIncomingMessage = useCallback(
     (message) => {
+      console.log("hello");
       setMessages([message, ...messages]);
     },
     [messages]
