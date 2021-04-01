@@ -42,6 +42,7 @@ io.on("connection", (socket) => {
   const user = socket.request.user;
   const id = socket.handshake.query.id;
   socket.join(id);
+  socket.broadcast.emit("logged-on", id);
   socket.on("send-message", ({ recipient, content }) => {
     socket.broadcast.to(recipient).emit("receive-message", {
       sender: id,
@@ -63,6 +64,7 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log(user.name + " has disconnected");
+    socket.broadcast.emit("logged-off", id);
   });
 });
 
