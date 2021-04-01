@@ -17,7 +17,7 @@ import Messages from "./pages/Messages";
 import ChefProfile from "./pages/ChefProfile";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import NavBar from "./components/NavBar";
-import TestChefProfile from "./pages/TestChefProfile";
+import OrderList from "./pages/OrderList";
 import BrowseChefs from "./pages/BrowseChefs";
 import SearchRecipes from "./pages/SearchRecipes";
 import { SocketProvider } from "./context/SocketContext";
@@ -36,12 +36,12 @@ const Private = () => {
         <Route path="/profile" component={CustomerProfile} />
         <Route path="/search/chefs" component={BrowseChefs} />
         <Route path="/search/recipes" component={SearchRecipes} />
-        <Route path="/messages" component={Messages} />
+        <Route path="/chat/:chattingWithId?" component={Messages} />
         <Route
           path="/chefprofile/:userId?/:recipeId?"
           component={ChefProfile}
         />
-        <Route path="/chef/:userId?/recipeId?" component={TestChefProfile} />
+        <Route path="/orders/:orderId?" component={OrderList} />
       </Switch>
     </>
   );

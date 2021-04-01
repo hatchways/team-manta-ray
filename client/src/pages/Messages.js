@@ -1,4 +1,11 @@
-import React, { useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  useContext,
+  useCallback,
+  useRef,
+} from "react";
+import { useParams, useHistory } from "react-router-dom";
 import {
   Box,
   Grid,
@@ -13,8 +20,17 @@ import MessageItems from "../components/messages/MessageItems";
 import MessageTitle from "../components/messages/MessageTitle";
 import Chat from "../components/messages/Chat";
 import SendIcon from "@material-ui/icons/Send";
+import { UserContext } from "../context/UserContext";
+import { useSocket } from "../context/SocketContext";
+import axios from "axios";
 
 const MessageItem = (props) => {
+  const { userInfo } = useContext(UserContext);
+  const { chattingWithId } = useParams();
+  const messageInput = useRef();
+  const history = useHistory();
+  const socket = useSocket();
+
   const useStyles = makeStyles((theme) => ({
     noBorderRadius: {
       borderRadius: "0",
@@ -28,207 +44,104 @@ const MessageItem = (props) => {
 
   const classes = useStyles();
 
-  const usersChat = {
-    _id: "userChatId1",
-    user: {
-      _id: "user1",
-    },
-    chats: [
-      {
-        _id: "chatId1",
-        chattingWith: {
-          user: {
-            _id: "user2",
-            name: "Val Palma",
-            location: "Toronto, ON",
-            profilePictureUrl:
-              "https://cdn.iconscout.com/icon/free/png-256/chef-2309868-1943778.png",
-          },
-        },
-        lastMessage: {
-          sentBy: {
-            _id: "user2",
-            profilePictureUrl:
-              "https://i1.sndcdn.com/avatars-000624434067-r5kehg-t500x500.jpg",
-          },
-          body: "Hi Gordon!",
-          seen: false,
-        },
-      },
-    ],
-  };
-
-  const messages = [
-    {
-      sentBy: {
-        _id: "user2",
-        profilePictureUrl:
-          "https://cdn.iconscout.com/icon/free/png-256/chef-2309868-1943778.png",
-      },
-      body: "Hi Gordon!",
-      seen: false,
-    },
-    {
-      sentBy: {
-        _id: "user1",
-        profilePictureUrl:
-          "https://i1.sndcdn.com/avatars-000624434067-r5kehg-t500x500.jpg",
-      },
-      body: "What!s up?",
-      seen: true,
-    },
-    {
-      sentBy: {
-        _id: "user2",
-        profilePictureUrl:
-          "https://cdn.iconscout.com/icon/free/png-256/chef-2309868-1943778.png",
-      },
-      body: "How is the cooking show going?",
-      seen: true,
-    },
-    {
-      sentBy: {
-        _id: "user1",
-        profilePictureUrl:
-          "https://i1.sndcdn.com/avatars-000624434067-r5kehg-t500x500.jpg",
-      },
-      body: "Can't complain",
-      seen: true,
-    },
-    {
-      sentBy: {
-        _id: "user1",
-        profilePictureUrl:
-          "https://i1.sndcdn.com/avatars-000624434067-r5kehg-t500x500.jpg",
-      },
-      body: "Same, rocky road!",
-      seen: true,
-    },
-    {
-      sentBy: {
-        _id: "user2",
-        profilePictureUrl:
-          "https://cdn.iconscout.com/icon/free/png-256/chef-2309868-1943778.png",
-      },
-      body: "Lorem Ipsum!",
-      seen: true,
-    },
-    {
-      sentBy: {
-        _id: "user2",
-        profilePictureUrl:
-          "https://cdn.iconscout.com/icon/free/png-256/chef-2309868-1943778.png",
-      },
-      body: "Lorem Ipsum!",
-      seen: true,
-    },
-    {
-      sentBy: {
-        _id: "user2",
-        profilePictureUrl:
-          "https://cdn.iconscout.com/icon/free/png-256/chef-2309868-1943778.png",
-      },
-      body: "Lorem Ipsum!",
-      seen: true,
-    },
-    {
-      sentBy: {
-        _id: "user1",
-        profilePictureUrl:
-          "https://i1.sndcdn.com/avatars-000624434067-r5kehg-t500x500.jpg",
-      },
-      body: "Do you want to book appointment?",
-      seen: true,
-    },
-    {
-      sentBy: {
-        _id: "user1",
-        profilePictureUrl:
-          "https://i1.sndcdn.com/avatars-000624434067-r5kehg-t500x500.jpg",
-      },
-      body: "Do you want to book appointment?",
-      seen: true,
-    },
-    {
-      sentBy: {
-        _id: "user1",
-        profilePictureUrl:
-          "https://i1.sndcdn.com/avatars-000624434067-r5kehg-t500x500.jpg",
-      },
-      body: "Do you want to book appointment?",
-      seen: true,
-    },
-    {
-      sentBy: {
-        _id: "user1",
-        profilePictureUrl:
-          "https://i1.sndcdn.com/avatars-000624434067-r5kehg-t500x500.jpg",
-      },
-      body: "Do you want to book appointment?",
-      seen: true,
-    },
-    {
-      sentBy: {
-        _id: "user1",
-        profilePictureUrl:
-          "https://i1.sndcdn.com/avatars-000624434067-r5kehg-t500x500.jpg",
-      },
-      body: "Do you want to book appointment?",
-      seen: true,
-    },
-    {
-      sentBy: {
-        _id: "user1",
-        profilePictureUrl:
-          "https://i1.sndcdn.com/avatars-000624434067-r5kehg-t500x500.jpg",
-      },
-      body: "Do you want to book appointment?",
-      seen: true,
-    },
-    {
-      sentBy: {
-        _id: "user1",
-        profilePictureUrl:
-          "https://i1.sndcdn.com/avatars-000624434067-r5kehg-t500x500.jpg",
-      },
-      body: "Do you want to book appointment?",
-      seen: true,
-    },
-    {
-      sentBy: {
-        _id: "user1",
-        profilePictureUrl:
-          "https://i1.sndcdn.com/avatars-000624434067-r5kehg-t500x500.jpg",
-      },
-      body: "Are you there?",
-      seen: true,
-    },
-  ];
+  useEffect(() => {});
 
   const [activeMessageItem, setActiveMessageItem] = useState({});
+  const [conversationPreviews, setConversationPreviews] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [connectedUsers, setConnectedUsers] = useState([]);
 
-  // this will set the active message state
-  // will be used those state to chat area
+  // Selecting the conversation
   const handleSelectedMessageItem = (message) => {
     setActiveMessageItem(message);
+    history.push(`/chat/${message.chattingWith._id}`);
   };
+
+  //Fetching the conversation previews
+  const getConversationPreviews = useCallback(async () => {
+    try {
+      const previews = await axios.get("/api/chat/previews");
+      setConversationPreviews(previews.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  //Fetch conversation previews on page load
+  useEffect(() => {
+    getConversationPreviews();
+  }, [getConversationPreviews]);
+
+  //Get the conversation data for the current conversation
+  const getConversation = useCallback(async (id) => {
+    try {
+      const conversation = await axios.get(`/api/chat/${id}`);
+      setActiveMessageItem(conversation.data.data);
+      setMessages(conversation.data.data[0].messages.reverse());
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  //Fetches the active conversation whenever the chattingWithId changes (/chat/:chattingWithId)
+  useEffect(() => {
+    if (chattingWithId) {
+      getConversation(chattingWithId);
+    }
+  }, [chattingWithId, getConversation]);
+
+  const handleIncomingMessage = useCallback(
+    (message) => {
+      setMessages([message, ...messages]);
+      getConversationPreviews();
+    },
+    [messages, getConversationPreviews]
+  );
+
+  //Socket emission for sending a message
+  const sendMessageHandler = () => {
+    const message = messageInput.current.value;
+    if (message.length > 0) {
+      socket.emit("send-message", {
+        recipient: chattingWithId,
+        content: message,
+      });
+      messageInput.current.value = "";
+    }
+  };
+
+  //Receive message socket listener
+  useEffect(() => {
+    if (socket == null) return;
+    socket.on("receive-message", handleIncomingMessage);
+    return () => socket.off("receive-message");
+  }, [socket, handleIncomingMessage]);
+
+  //Receive connected users listener
+  useEffect(() => {
+    if (socket == null) return;
+    socket.on("connected", (users) => {
+      setConnectedUsers(users);
+    });
+    return () => socket.off("connected");
+  }, [socket, connectedUsers]);
 
   return (
     <Box className={classes.messageContainer}>
       <Grid container>
         {/* SIDEBAR */}
         <Grid item md={2} sm={4} xs={12}>
-          <Box height="100vh">
-            {usersChat.chats.map((chat, i) => {
+          <Box height="90vh">
+            {conversationPreviews.map((chat, i) => {
               chat["i"] = i;
               return (
                 <MessageItems
                   chat={chat}
-                  name={chat.chattingWith.user.name}
-                  isOnline={true}
-                  lastMessage={chat.lastMessage.body}
-                  profilePictureUrl={chat.chattingWith.user.profilePictureUrl}
-                  key={`${chat.chattingWith.user._id}chat${i}`}
+                  name={chat.chattingWith.name}
+                  isOnline={connectedUsers.includes(chat.chattingWith._id)}
+                  lastMessage={chat.lastMessage.content}
+                  profilePictureUrl={chat.chattingWith.profilePictureUrl}
+                  key={`${chat._id}chat${i}`}
                   handleSelectedMessageItem={handleSelectedMessageItem}
                   isSelected={activeMessageItem.i === i}
                 />
@@ -241,7 +154,7 @@ const MessageItem = (props) => {
         <Grid item md={10} sm={8} xs={12}>
           <Paper
             component={Box}
-            height={"100vh"}
+            height={"92vh"}
             className={classes.noBorderRadius}
           >
             {Object.keys(activeMessageItem).length > 0 ? (
@@ -249,12 +162,14 @@ const MessageItem = (props) => {
                 {/* MESSAGE TITLE */}
                 <Grid item xl={9} lg={10} md={11} xs={12}>
                   <MessageTitle
-                    isOnline={true}
+                    isOnline={connectedUsers.includes(
+                      activeMessageItem.chattingWith._id
+                    )}
                     profilePictureUrl={
-                      activeMessageItem.chattingWith.user.profilePictureUrl
+                      activeMessageItem.chattingWith.profilePictureUrl
                     }
-                    name={activeMessageItem.chattingWith.user.name}
-                    location={activeMessageItem.chattingWith.user.location}
+                    name={activeMessageItem.chattingWith.name}
+                    location="Toronto, ON"
                   />
                 </Grid>
                 <Grid container>
@@ -292,26 +207,37 @@ const MessageItem = (props) => {
                         }}
                       >
                         {messages.length > 0 ? (
-                          messages.reverse().map((message, i) => (
+                          messages.map((message, i) => (
                             <Chat
-                              key={`${message.sentBy}chat${i}`}
+                              key={`${message.sender}chat${i}`}
                               profilePictureUrl={
-                                message.sentBy.profilePictureUrl
+                                activeMessageItem.chattingWith.profilePictureUrl
                               }
-                              body={message.body}
+                              body={message.content}
                               // CHANGE THIS! must be authenticated.user._id
-                              isOwner={message.sentBy._id === "user1"}
+                              isOwner={message.sender === userInfo._id}
                             />
                           ))
                         ) : (
-                          <Box display="flex" justifyContent="center" mt={3}>
-                            No messages found.
+                          <Box
+                            display="flex"
+                            justifyContent="center"
+                            style={{ marginBottom: 50, opacity: 0.6 }}
+                            mt={3}
+                          >
+                            No messages in this conversation yet.
                           </Box>
                         )}
                       </Box>
                       {/* TEXT FIELD */}
                       <Box mb={2}>
                         <FilledInput
+                          onKeyPress={(e) => {
+                            if (e.key === "Enter") {
+                              sendMessageHandler();
+                            }
+                          }}
+                          inputRef={messageInput}
                           style={{
                             padding: "10px 10px 17px 10px",
                             borderRadius: "0px",
@@ -324,7 +250,7 @@ const MessageItem = (props) => {
                               position="end"
                               style={{ marginRight: "10px" }}
                             >
-                              <IconButton>
+                              <IconButton onClick={sendMessageHandler}>
                                 <SendIcon color="secondary" />
                               </IconButton>
                             </InputAdornment>
@@ -342,7 +268,7 @@ const MessageItem = (props) => {
                 justifyContent="center"
                 alignItems="center"
               >
-                Please select message.
+                Select a conversation.
               </Box>
             )}
           </Paper>

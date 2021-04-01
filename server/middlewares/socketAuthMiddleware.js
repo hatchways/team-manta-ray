@@ -7,6 +7,7 @@ const socketAuth = async (req, res, next) => {
 
   if (req && req.headers.cookie)
     token = req.headers.cookie.substr(6).split(";")[0];
+  if (req && req.cookies) token = req.cookies["token"];
   if (!token) console.log("Access denied...No token provided...");
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

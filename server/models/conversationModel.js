@@ -20,12 +20,19 @@ const conversationSchema = new Schema({
         ref: "User",
       },
       createdAt: { type: Date },
-      seen: {
-        type: Boolean,
-        default: false,
-      },
     },
   ],
+  lastMessage: {
+    content: {
+      type: String,
+      max: 500, //Max 500 characters
+    },
+    sender: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    createdAt: { type: Date },
+  },
 });
 
 const Conversation = mongoose.model("Conversation", conversationSchema);

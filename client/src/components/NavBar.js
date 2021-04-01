@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useCallback } from "react";
-import { UserDispatchContext } from "../context/UserContext";
-import { Link, withRouter } from "react-router-dom";
+import { UserDispatchContext, UserContext } from "../context/UserContext";
+import { Link, withRouter, useLocation } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -65,21 +65,31 @@ const NavBar = ({ history }) => {
   const [notifOpen, setNotifOpen] = useState(false);
   const [notifs, setNotifs] = useState([]);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const location = useLocation();
 
-  const handleIncomingNotification = useCallback(
-    (notification) => {
-      setNotifs([notification, ...notifs]);
+  const triggerNotification = useCallback(
+    (notif, message) => {
+      setNotifs([notif, ...notifs]);
       setUnreadCount(unreadCount + 1);
-      if (notification.type === "message") {
-        const message = `${notification.name}: ${notification.preview}`;
-        setSnackbarMessage(message);
-      } else if (notification.type === "order") {
-        const message = `${notification.name} ${notification.preview}`;
-        setSnackbarMessage(message);
-      }
+      setSnackbarMessage(message);
       setNotifOpen(true);
     },
     [notifs, unreadCount]
+  );
+
+  const handleIncomingNotification = useCallback(
+    (notification) => {
+      if (notification.type === "message") {
+        if (location.pathname !== notification.link) {
+          const message = `${notification.name}: ${notification.preview}`;
+          triggerNotification(notification, message);
+        }
+      } else if (notification.type === "order") {
+        const message = `${notification.name} ${notification.preview}`;
+        triggerNotification(notification, message);
+      }
+    },
+    [location, triggerNotification]
   );
 
   useEffect(() => {
@@ -96,6 +106,7 @@ const NavBar = ({ history }) => {
 
   // reducer dispatch function
   const dispatch = useContext(UserDispatchContext);
+  const { userInfo } = useContext(UserContext);
 
   const navDrawerHandler = () => {
     setNavOpen(true);
@@ -114,10 +125,6 @@ const NavBar = ({ history }) => {
     e.preventDefault();
     await logout(dispatch);
     history.replace("/login");
-  };
-
-  const testClickHandler = () => {
-    socket.emit("test", "Send notification");
   };
 
   const notifCloseHandler = () => {
@@ -146,18 +153,6 @@ const NavBar = ({ history }) => {
             alignItems="center"
           >
             <Logo />
-            {/* <Grid item>
-                <Avatar src={userData.avatar} alt="user profile pic" />
-              </Grid> */}
-            <Grid item style={{ marginRight: "5px" }}>
-              <IconButton
-                color="inherit"
-                aria-label="navbar"
-                onClick={testClickHandler}
-              >
-                <NotificationsIcon fontSize="default" />
-              </IconButton>
-            </Grid>
             <Grid item style={{ marginRight: "5px" }}>
               <IconButton
                 color="inherit"
@@ -197,10 +192,9 @@ const NavBar = ({ history }) => {
               <img src={plateLogo} alt="plate icon" />
             </ListItem>
             <ListItem
-              key="profilebutton"
               button
               component={Link}
-              to="/profile"
+              to={userInfo.isChef ? "/chefprofile" : "/profile"}
               divider
             >
               <ListItemText primary="Profile" />
@@ -213,6 +207,18 @@ const NavBar = ({ history }) => {
               divider
             >
               <ListItemText primary="Search Recipes" />
+            </ListItem>
+            <ListItem
+              key="chatbutton"
+              button
+              component={Link}
+              to="/chat"
+              divider
+            >
+              <ListItemText primary="Chat" />
+            </ListItem>
+            <ListItem button component={Link} to="/orders" divider>
+              <ListItemText primary="Orders" />
             </ListItem>
             <ListItem key="logoutbutton" button divider onClick={logoutHandler}>
               <ListItemText primary="Log Out" />

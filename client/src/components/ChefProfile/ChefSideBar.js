@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import {
   Grid,
   Box,
@@ -13,10 +13,13 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import DialogControl from "../Dialogs/DialogControl";
 import { UserContext } from "../../context/UserContext";
 import defaultUserPicture from "../../assets/defaultUserImage.png";
+import axios from "axios";
 
 const ChefSideBar = (props) => {
   const { chefProfile } = props.chefInfosAndRecipes;
   const { userInfo, profile, setProfile, isOwner } = props;
+  const { userId } = useParams();
+  const history = useHistory();
 
   const { coverPictureUrl, location } = chefProfile;
 
@@ -28,6 +31,7 @@ const ChefSideBar = (props) => {
     chefSideBarContainer: {
       position: isBrowser ? "fixed" : "relative",
       marginTop: theme.spacing(8),
+      width: "100%",
     },
 
     chefSideBar: {
@@ -72,6 +76,7 @@ const ChefSideBar = (props) => {
     chefReqBtnContainer: {
       height: "15%",
       display: "flex",
+      width: "100%",
     },
 
     chefReqBtn: {
@@ -99,6 +104,17 @@ const ChefSideBar = (props) => {
   const [open, setOpen] = useState(false);
   const [control, setControl] = useState(null);
   const { cart } = useContext(UserContext);
+
+  const contactChefHandler = async () => {
+    try {
+      await axios.post("/api/chat/contact", {
+        recipient: userId,
+      });
+      history.push(`/chat/${userId}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleClickOpen = (ctl) => {
     setOpen(true);
@@ -178,16 +194,15 @@ const ChefSideBar = (props) => {
             </Button>
           </Box>
         ) : (
-          <Box className={classes.chefReqBtnContainer}>
-            <Link to="/messages" className={classes.chefReqBtn}>
-              <Button
-                variant="contained"
-                color="secondary"
-                className={classes.chefReqBtn}
-              >
-                Contact Chef
-              </Button>
-            </Link>
+          <Box className={classes.chefReqBtnContainer} display="flex">
+            <Button
+              onClick={contactChefHandler}
+              variant="contained"
+              color="secondary"
+              className={classes.chefReqBtn}
+            >
+              Contact Chef
+            </Button>
             {!isOwner && cart.length > 0 && (
               <Link to="/payment" className={classes.chefReqBtn}>
                 <Button
