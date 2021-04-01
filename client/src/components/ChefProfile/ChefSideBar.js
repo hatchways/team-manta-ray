@@ -122,17 +122,24 @@ const ChefSideBar = (props) => {
             <Box>
               {userInfo && (
                 <Typography variant="h4">
-                  {userInfo ? userInfo.name : profile.name}
+                  {profile ? profile.name : userInfo.name}
                 </Typography>
               )}
             </Box>
             <Box>
-              <Typography variant="body2">
-                {userInfo.address !== undefined
-                  ? userInfo.address.city + ", " + userInfo.address.province
-                  : ""}
-                {/* {location} */}
-              </Typography>
+              {userInfo && (
+                <Typography variant="body2">
+                  {profile
+                    ? profile.address.city + ", " + profile.address.province
+                    : userInfo
+                    ? userInfo.address.city + ", " + userInfo.address.province
+                    : ""}
+                  {/* {userInfo.address !== undefined
+                    ? userInfo.address.city + ", " + userInfo.address.province
+                    : ""} */}
+                  {/* {location} */}
+                </Typography>
+              )}
             </Box>
             <Box className={classes.lineBreak}>
               <img src={line} alt="linebreak" />
