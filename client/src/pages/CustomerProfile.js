@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 
 const CustomerProfile = ({ history }) => {
   //Dummy profile data for now
-  const { userInfo, loading, error } = useContext(UserContext);
+  const { userInfo, loading } = useContext(UserContext);
 
   const user = {
     name: "Christine Wilson",
@@ -88,7 +88,8 @@ const CustomerProfile = ({ history }) => {
     const getUserInfo = async () => {
       try {
         const res = await axios.get("/api/users");
-        if (res) {
+        console.log(res);
+        if (res.data) {
           setUserData(res.data.user);
         } else {
           console.log("No data");
@@ -150,7 +151,6 @@ const CustomerProfile = ({ history }) => {
                   </h3>
                 </Grid>
                 {loading && <Loader />}
-                {error && { error }}
               </Grid>
               <Grid item>
                 <Button
