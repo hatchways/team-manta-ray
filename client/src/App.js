@@ -34,16 +34,14 @@ const Private = () => {
         <Route path="/payment" render={(props) => <Payment {...props} />} />
         <Route path="/test" component={TestComponent} />
         <Route path="/profile" component={CustomerProfile} />
-        <Route path="/browsechefs" component={BrowseChefs} />
         <Route path="/update" component={Update} />
-        <Route path="/messages" component={Messages} />
+        <Route path="/search/chefs" component={BrowseChefs} />
+        <Route path="/chat/:chattingWithId?" component={Messages} />
         <Route
           path="/chefprofile/:userId?/:recipeId?"
           component={ChefProfile}
         />
         <Route path="/orders/:orderId?" component={OrderList} />
-        <Route path="/browsechefs" component={BrowseChefs} />
-        <Route path="/messages" component={Messages} />
       </Switch>
     </>
   );
