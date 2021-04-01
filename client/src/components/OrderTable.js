@@ -412,6 +412,7 @@ const OrderTable = ({
         items={items}
         user={user}
         orderId={orderId}
+        isChef={isChef}
       />
     </div>
   );

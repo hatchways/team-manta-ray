@@ -20,6 +20,7 @@ const DialogControl = ({ control, ...rest }) => {
       return <CartModal {...rest} />;
     case "OrderDetails":
       return <OrderDetails {...rest} />;
+    // return <OrderDetails {...rest} />;
     default:
       return null;
   }
