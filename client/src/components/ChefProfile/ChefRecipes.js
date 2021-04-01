@@ -27,6 +27,7 @@ const ChefProfile = ({ recipe, isOwner }) => {
     requiredStuff,
     portionDescription,
     recipePictureUrl,
+    _id,
   } = recipe;
 
   const dispatch = useContext(UserDispatchContext);
@@ -149,12 +150,9 @@ const ChefProfile = ({ recipe, isOwner }) => {
                 ? classes.cartBtn
                 : null
             }`}
-            // isOwner
-            //     ? classes.chefRecipeImage
-            //     : userInfo.isChef
-            //     ? classes.chefRecipeImageNoPointer
-            //     : classes.chefRecipeImageWithBtn
-            onClick={() => (isOwner ? setOpen(true) : null)}
+            // (isOwner ? setOpen(true) : null)
+
+            onClick={() => console.log(_id)}
           >
             <Button
               variant="contained"

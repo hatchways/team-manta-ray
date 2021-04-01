@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Grid, Hidden, Box, Typography, Paper } from "@material-ui/core";
 import ChefSideBar from "../components/ChefProfile/ChefSideBar";
 import ChefRecipes from "../components/ChefProfile/ChefRecipes";
@@ -8,7 +8,11 @@ import axios from "axios";
 import { getRecipesByChef } from "../actions/recipeActions";
 
 const ChefProfile = ({ history, match }) => {
-  const { userId } = match.params;
+  console.log("chefprofile");
+  const { userId, recipeId } = match.params;
+  // const myRef = useRef(null);
+  console.log(recipeId);
+  // const executeScroll = () => myRef.current.scrollIntoView();
 
   const useStyles = makeStyles((theme) => ({
     chefMenuName: {
@@ -24,6 +28,11 @@ const ChefProfile = ({ history, match }) => {
 
   const [profile, setProfile] = useState(null);
   const [isOwner, setIsOwner] = useState(true);
+  // const [refs, setRefs] = useState(null);
+  const refs = recipes.reduce((acc, recipe) => {
+    acc[recipe._id] = React.createRef();
+    return acc;
+  }, {});
 
   useEffect(() => {
     if (userInfo) {
@@ -37,9 +46,25 @@ const ChefProfile = ({ history, match }) => {
         }
       };
       getProfileAndRecipes();
+
+      // setRefs(refs);
     }
+
     setIsOwner(userId && userId !== userInfo._id ? false : true);
-  }, [dispatch, userInfo, history, userId]);
+  }, [dispatch, userInfo, userId]);
+
+  useEffect(() => {
+    if (recipeId && refs[recipeId]) {
+      refs[recipeId].current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+    return () => {
+      // window.history.replaceState({}, document.title, `/chefprofile/${userId}`);
+      // history.push(`/chefprofile/${userId}`);
+    };
+  }, [refs, recipeId, userId]);
 
   const chefInfosAndRecipes = {
     name: "Gordon Ramsey",
@@ -85,12 +110,19 @@ const ChefProfile = ({ history, match }) => {
             <Paper elevation={3}>
               {recipes &&
                 recipes.map((recipe) => (
-                  <ChefRecipes
-                    recipe={recipe}
+                  <div
                     key={recipe._id}
-                    id={recipe._id}
-                    isOwner={isOwner}
-                  />
+                    // ref={recipeId && recipeId === recipe._id ? myRef : null}
+                    ref={refs[recipe._id]}
+                  >
+                    <ChefRecipes
+                      recipe={recipe}
+                      key={recipe._id}
+                      id={recipe._id}
+                      isOwner={isOwner}
+                      // ref={recipeId && recipeId === recipe._id ? myRef : null}
+                    />
+                  </div>
                 ))}
             </Paper>
           </Grid>
