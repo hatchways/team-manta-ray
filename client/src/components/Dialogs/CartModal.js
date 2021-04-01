@@ -225,6 +225,10 @@ const CartModal = ({ open, onClose, selectedValue }) => {
                         {`${
                           chosenChefProfile && chosenChefProfile.cuisines
                             ? chosenChefProfile.cuisines
+                                .map(
+                                  (s) => s.charAt(0).toUpperCase() + s.slice(1)
+                                )
+                                .join(", ")
                             : ""
                         }`}
                       </Grid>
