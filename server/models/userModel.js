@@ -42,6 +42,13 @@ const userSchema = new Schema(
       required: true,
       default: false,
     },
+    address: {
+      address1: { type: String },
+      address2: { type: String },
+      city: { type: String },
+      province: { type: String },
+      zip: { type: String },
+    },
     stripeCustomer: {
       type: String,
       required: false,

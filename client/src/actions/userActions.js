@@ -12,6 +12,10 @@ import {
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
   RESET_RECIPES,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_FAIL,
+  USER_UPDATE_PASSWORD_REQUEST,
+  USER_UPDATE_PASSWORD_SUCCESS,
 } from "../constants/userConstants";
 
 // User login action
@@ -91,6 +95,84 @@ export const register = async (dispatch, registerPayload) => {
   } catch (err) {
     dispatch({
       type: USER_REGISTER_FAIL,
+      payload:
+        err.response && err.response.data.error
+          ? err.response.data.error
+          : err.message,
+    });
+  }
+};
+
+// update user
+export const updateUser = async (dispatch, payload) => {
+  try {
+    dispatch({
+      type: USER_UPDATE_REQUEST,
+    });
+    const { values, profilePictureUrl } = payload;
+
+    const { data } = await axios.put(`/api/users`, {
+      ...values,
+      profilePictureUrl,
+    });
+
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data.updatedUser,
+    });
+
+    const userData = {
+      name: data.updatedUser.name,
+      email: data.updatedUser.email,
+      isChef: data.updatedUser.isChef,
+      _id: data.updatedUser._id,
+      address: data.updatedUser.address,
+      location: data.updatedUser.location,
+    };
+
+    localStorage.setItem("userInfo", JSON.stringify(userData));
+    return data.updatedUser;
+  } catch (err) {
+    dispatch({
+      type: USER_UPDATE_FAIL,
+      payload:
+        err.response && err.response.data.error
+          ? err.response.data.error
+          : err.message,
+    });
+  }
+};
+
+// update user password
+export const updatePassword = async (dispatch, passwordPayload) => {
+  try {
+    dispatch({
+      type: USER_UPDATE_PASSWORD_REQUEST,
+    });
+
+    const { userId, oldPassword, password } = passwordPayload;
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.put(
+      "/api/users/update",
+      { userId, oldPassword, password },
+      config
+    );
+
+    dispatch({
+      type: USER_UPDATE_PASSWORD_SUCCESS,
+      payload: data,
+    });
+
+    return data;
+  } catch (err) {
+    dispatch({
+      type: USER_UPDATE_FAIL,
       payload:
         err.response && err.response.data.error
           ? err.response.data.error
