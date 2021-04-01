@@ -8,11 +8,7 @@ import axios from "axios";
 import { getRecipesByChef } from "../actions/recipeActions";
 
 const ChefProfile = ({ history, match }) => {
-  console.log("chefprofile");
   const { userId, recipeId } = match.params;
-  // const myRef = useRef(null);
-  console.log(recipeId);
-  // const executeScroll = () => myRef.current.scrollIntoView();
 
   const useStyles = makeStyles((theme) => ({
     chefMenuName: {
@@ -28,7 +24,10 @@ const ChefProfile = ({ history, match }) => {
 
   const [profile, setProfile] = useState(null);
   const [isOwner, setIsOwner] = useState(true);
-  // const [refs, setRefs] = useState(null);
+
+  const [selectedRecipe, setSelectedRecipe] = useState(
+    recipeId ? recipeId : null
+  );
   const refs = recipes.reduce((acc, recipe) => {
     acc[recipe._id] = React.createRef();
     return acc;
@@ -46,25 +45,19 @@ const ChefProfile = ({ history, match }) => {
         }
       };
       getProfileAndRecipes();
-
-      // setRefs(refs);
     }
-
     setIsOwner(userId && userId !== userInfo._id ? false : true);
   }, [dispatch, userInfo, userId]);
 
   useEffect(() => {
-    if (recipeId && refs[recipeId]) {
-      refs[recipeId].current.scrollIntoView({
+    if (selectedRecipe && refs[selectedRecipe]) {
+      refs[selectedRecipe].current.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
+      setSelectedRecipe(null);
     }
-    return () => {
-      // window.history.replaceState({}, document.title, `/chefprofile/${userId}`);
-      // history.push(`/chefprofile/${userId}`);
-    };
-  }, [refs, recipeId, userId]);
+  }, [refs, userId, selectedRecipe]);
 
   const chefInfosAndRecipes = {
     name: "Gordon Ramsey",
