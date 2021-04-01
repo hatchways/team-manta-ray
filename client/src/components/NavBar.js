@@ -212,6 +212,15 @@ const NavBar = ({ history }) => {
               <ListItemText primary="Search Recipes" />
             </ListItem>
             <ListItem
+              key="searchchefs"
+              button
+              component={Link}
+              to="/search/chefs"
+              divider
+            >
+              <ListItemText primary="Search Chefs" />
+            </ListItem>
+            <ListItem
               key="chatbutton"
               button
               component={Link}
