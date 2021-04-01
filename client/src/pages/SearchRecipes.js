@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import NavBar from "../components/NavBar";
 import SearchRecipesCard from "../components/SearchRecipesCard.js";
 import {
   Grid,
@@ -171,9 +170,8 @@ const SearchRecipes = () => {
 
   return (
     <>
-      <NavBar />
       <Grid container className={classes.root}>
-        <Grid item container xs={3} style={{}} className={classes.sideBarGrid}>
+        <Grid item container xs={3} s className={classes.sideBarGrid}>
           <div className={classes.sideBar}>
             <Grid container style={{ marginTop: 15 }}>
               <Grid item xs={12}>
@@ -308,7 +306,7 @@ const SearchRecipes = () => {
                       ? recipe.portionDescription
                       : "Meal for 2"
                   }
-                  link={`/chefprofile/${recipe.user._id}/${recipe._id}`}
+                  link={recipe.user ? `/chefprofile/${recipe.user._id}` : ""}
                 />
               </Grid>
             );
