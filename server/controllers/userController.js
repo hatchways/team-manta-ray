@@ -62,8 +62,6 @@ const registerUser = AsyncHandler(async (req, res) => {
 const loginUser = AsyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  console.log("Password data", password);
-
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
@@ -199,22 +197,27 @@ const updateUserPassword = AsyncHandler(async (req, res) => {
   const { oldPassword, password, userId } = req.body;
   const user = await User.findById(userId);
 
-  if (user && (await user.matchPassword(password))) {
-    throw new Error("Old password entered, please try again");
-  } else if (user && !(await user.matchPassword(oldPassword))) {
-    res.status(401);
-    throw new Error("Old password not found, please enter correct password");
-  } else if (user && password.length <= 6) {
-    res.status(400);
-    throw new Error("Password length must be atleast 7 characters");
-  } else {
-    user.password = req.body.password;
+  if (user) {
+    if (user && (await user.matchPassword(password))) {
+      throw new Error("Old password entered, please try again");
+    } else if (user && !(await user.matchPassword(oldPassword))) {
+      res.status(401);
+      throw new Error("Old password not found, please enter correct password");
+    } else if (user && password.length <= 6) {
+      res.status(400);
+      throw new Error("Password length must be atleast 7 characters");
+    } else {
+      user.password = req.body.password;
 
-    updatedUser = await user.save();
-    res.status(200).json({
-      success: true,
-      message: "Password successfully updated",
-    });
+      updatedUser = await user.save();
+      res.status(200).json({
+        success: true,
+        message: "Password successfully updated",
+      });
+    }
+  } else {
+    res.status(401);
+    throw new Error("Invalid user data");
   }
 });
 

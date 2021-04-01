@@ -88,7 +88,11 @@ const CustomerProfile = ({ history }) => {
     const getUserInfo = async () => {
       try {
         const res = await axios.get("/api/users");
-        if (res.data) setUserData(res.data.user);
+        if (res) {
+          setUserData(res.data.user);
+        } else {
+          console.log("No data");
+        }
       } catch (err) {
         console.log(err);
       }

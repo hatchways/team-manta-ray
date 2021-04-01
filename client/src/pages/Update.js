@@ -93,7 +93,14 @@ const Update = ({ history }) => {
       password.trim() !== "" ||
       oldPassword.trim() !== ""
     ) {
-      if (password !== confirmPassword) {
+      if (
+        oldPassword.length <= 6 ||
+        password.length <= 6 ||
+        confirmPassword.length <= 6
+      ) {
+        setErrMsg("Password too short");
+        setErrorOpen(true);
+      } else if (password !== confirmPassword) {
         setErrMsg("Password do not match");
         setErrorOpen(true);
       } else if (oldPassword === password) {

@@ -18,7 +18,7 @@ const ChefSideBar = (props) => {
   const { chefProfile } = props.chefInfosAndRecipes;
   const { userInfo, profile, setProfile, isOwner } = props;
 
-  const { coverPictureUrl, location } = chefProfile;
+  const { coverPictureUrl } = chefProfile;
 
   const theme = useTheme();
 
@@ -122,12 +122,17 @@ const ChefSideBar = (props) => {
             <Box>
               {userInfo && (
                 <Typography variant="h4">
-                  {profile ? profile.name : userInfo.name}
+                  {userInfo ? userInfo.name : profile.name}
                 </Typography>
               )}
             </Box>
             <Box>
-              <Typography variant="body2">{location}</Typography>
+              <Typography variant="body2">
+                {userInfo.address !== undefined
+                  ? userInfo.address.city + ", " + userInfo.address.province
+                  : ""}
+                {/* {location} */}
+              </Typography>
             </Box>
             <Box className={classes.lineBreak}>
               <img src={line} alt="linebreak" />
