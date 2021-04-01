@@ -37,12 +37,17 @@ const sendMessageToDatabase = async (recipient, sender, content) => {
   );
 };
 
+const connectedUsers = [];
+
 //Socket logic here
 io.on("connection", (socket) => {
   const user = socket.request.user;
   const id = socket.handshake.query.id;
   socket.join(id);
-  socket.broadcast.emit("logged-on", id);
+  connectedUsers.push(id);
+  console.log(connectedUsers);
+  socket.broadcast.emit("connected", connectedUsers);
+  socket.emit("conneted", connectedUsers);
   socket.on("send-message", ({ recipient, content }) => {
     socket.broadcast.to(recipient).emit("receive-message", {
       sender: id,
@@ -64,7 +69,9 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log(user.name + " has disconnected");
-    socket.broadcast.emit("logged-off", id);
+    connectedUsers.splice(connectedUsers.indexOf(id), 1);
+    socket.broadcast.emit("connected", connectedUsers);
+    socket.emit("conneted", connectedUsers);
   });
 });
 

@@ -49,6 +49,7 @@ const MessageItem = (props) => {
   const [activeMessageItem, setActiveMessageItem] = useState({});
   const [conversationPreviews, setConversationPreviews] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [connectedUsers, setConnectedUsers] = useState([]);
 
   // Selecting the conversation
   const handleSelectedMessageItem = (message) => {
@@ -91,7 +92,6 @@ const MessageItem = (props) => {
 
   const handleIncomingMessage = useCallback(
     (message) => {
-      console.log("hello");
       setMessages([message, ...messages]);
     },
     [messages]
@@ -116,6 +116,15 @@ const MessageItem = (props) => {
     return () => socket.off("receive-message");
   }, [socket, handleIncomingMessage]);
 
+  //Receive connected users listener
+  useEffect(() => {
+    if (socket == null) return;
+    socket.on("connected", (users) => {
+      setConnectedUsers(users);
+    });
+    return () => socket.off("connected");
+  }, [socket, connectedUsers]);
+
   return (
     <Box className={classes.messageContainer}>
       <Grid container>
@@ -128,7 +137,7 @@ const MessageItem = (props) => {
                 <MessageItems
                   chat={chat}
                   name={chat.chattingWith.name}
-                  isOnline={true}
+                  isOnline={connectedUsers.includes(chat.chattingWith._id)}
                   lastMessage={chat.lastMessage.content}
                   profilePictureUrl={chat.chattingWith.profilePictureUrl}
                   key={`${chat._id}chat${i}`}
@@ -152,7 +161,9 @@ const MessageItem = (props) => {
                 {/* MESSAGE TITLE */}
                 <Grid item xl={9} lg={10} md={11} xs={12}>
                   <MessageTitle
-                    isOnline={true}
+                    isOnline={connectedUsers.includes(
+                      activeMessageItem.chattingWith._id
+                    )}
                     profilePictureUrl={
                       activeMessageItem.chattingWith.profilePictureUrl
                     }
