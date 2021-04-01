@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Grid, Hidden, Box, Typography, Paper } from "@material-ui/core";
+import { Grid, Box, Typography, Paper } from "@material-ui/core";
 import ChefSideBar from "../components/ChefProfile/ChefSideBar";
 import ChefRecipes from "../components/ChefProfile/ChefRecipes";
 import { makeStyles } from "@material-ui/core/styles";
@@ -58,18 +58,15 @@ const ChefProfile = ({ history, match }) => {
   return (
     <Grid container>
       {/* Chef infos */}
-      <ChefSideBar
-        chefInfosAndRecipes={chefInfosAndRecipes}
-        profile={profile}
-        userInfo={userInfo}
-        setProfile={setProfile}
-        isOwner={isOwner}
-      />
-
-      {/* Imaginary Grid for mdUp views*/}
-      <Hidden smDown>
-        <Grid item md={3} xs={12} />
-      </Hidden>
+      <Grid item md={3} xs={12}>
+        <ChefSideBar
+          chefInfosAndRecipes={chefInfosAndRecipes}
+          profile={profile}
+          userInfo={userInfo}
+          setProfile={setProfile}
+          isOwner={isOwner}
+        />
+      </Grid>
 
       {/* Recipes */}
       <Grid item md={9} xs={12}>

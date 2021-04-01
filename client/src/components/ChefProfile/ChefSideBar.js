@@ -28,6 +28,7 @@ const ChefSideBar = (props) => {
     chefSideBarContainer: {
       position: isBrowser ? "fixed" : "relative",
       marginTop: theme.spacing(8),
+      width: "100%",
     },
 
     chefSideBar: {
@@ -68,6 +69,7 @@ const ChefSideBar = (props) => {
     chefReqBtnContainer: {
       height: "15%",
       display: "flex",
+      width: "100%",
     },
 
     chefReqBtn: {
@@ -163,7 +165,7 @@ const ChefSideBar = (props) => {
             </Button>
           </Box>
         ) : (
-          <Box className={classes.chefReqBtnContainer}>
+          <Box className={classes.chefReqBtnContainer} display="flex">
             <Link to="/messages" className={classes.chefReqBtn}>
               <Button
                 variant="contained"
