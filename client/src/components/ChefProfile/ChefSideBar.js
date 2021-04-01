@@ -21,7 +21,7 @@ const ChefSideBar = (props) => {
   const { userId } = useParams();
   const history = useHistory();
 
-  const { coverPictureUrl, location } = chefProfile;
+  const { coverPictureUrl } = chefProfile;
 
   const theme = useTheme();
 
@@ -156,9 +156,19 @@ const ChefSideBar = (props) => {
               )}
             </Box>
             <Box>
-              <Typography variant="body2" className={classes.location}>
-                {location}
-              </Typography>
+              {userInfo && (
+                <Typography variant="body2">
+                  {profile && profile.address
+                    ? profile.address.city + ", " + profile.address.province
+                    : userInfo.address !== undefined
+                    ? userInfo.address.city + ", " + userInfo.address.province
+                    : ""}
+                  {/* {userInfo.address !== undefined
+                    ? userInfo.address.city + ", " + userInfo.address.province
+                    : ""} */}
+                  {/* {location} */}
+                </Typography>
+              )}
             </Box>
             <Box className={classes.lineBreak}>
               <img src={line} alt="linebreak" />
