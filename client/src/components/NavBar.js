@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useCallback } from "react";
-import { UserDispatchContext } from "../context/UserContext";
+import { UserDispatchContext, UserContext } from "../context/UserContext";
 import { Link, withRouter } from "react-router-dom";
 import {
   AppBar,
@@ -94,6 +94,7 @@ const NavBar = ({ history }) => {
 
   // reducer dispatch function
   const dispatch = useContext(UserDispatchContext);
+  const { userInfo } = useContext(UserContext);
 
   const navDrawerHandler = () => {
     setNavOpen(true);
@@ -144,9 +145,6 @@ const NavBar = ({ history }) => {
             alignItems="center"
           >
             <Logo />
-            {/* <Grid item>
-                <Avatar src={userData.avatar} alt="user profile pic" />
-              </Grid> */}
             <Grid item style={{ marginRight: "5px" }}>
               <IconButton
                 color="inherit"
@@ -195,13 +193,15 @@ const NavBar = ({ history }) => {
               <img src={plateLogo} alt="plate icon" />
             </ListItem>
             <ListItem
-              key="profilebutton"
               button
               component={Link}
-              to="/profile"
+              to={userInfo.isChef ? "/chefprofile" : "/profile"}
               divider
             >
               <ListItemText primary="Profile" />
+            </ListItem>
+            <ListItem button component={Link} to="/orders" divider>
+              <ListItemText primary="Orders" />
             </ListItem>
             <ListItem key="logoutbutton" button divider onClick={logoutHandler}>
               <ListItemText primary="Log Out" />
