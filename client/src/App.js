@@ -19,7 +19,8 @@ import ProtectedRoutes from "./routes/ProtectedRoutes";
 import NavBar from "./components/NavBar";
 import TestChefProfile from "./pages/TestChefProfile";
 import BrowseChefs from "./pages/BrowseChefs";
-import SearchRecipes from "./pages/SearchRecipes"
+import SearchRecipes from "./pages/SearchRecipes";
+import { SocketProvider } from "./context/SocketContext";
 
 /** This will be moved once we have a parent component for payment */
 const promise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
@@ -51,13 +52,15 @@ function App() {
     <BrowserRouter>
       <MuiThemeProvider theme={theme}>
         <ContextProvider>
-          <Elements stripe={promise}>
-            <Switch>
-              <Route path="/login" component={Login} exact />
-              <Route path="/signup" component={Signup} exact />
-              <ProtectedRoutes path="/" component={Private} />
-            </Switch>
-          </Elements>
+          <SocketProvider>
+            <Elements stripe={promise}>
+              <Switch>
+                <Route path="/login" component={Login} exact />
+                <Route path="/signup" component={Signup} exact />
+                <ProtectedRoutes path="/" component={Private} />
+              </Switch>
+            </Elements>
+          </SocketProvider>
         </ContextProvider>
       </MuiThemeProvider>
     </BrowserRouter>
