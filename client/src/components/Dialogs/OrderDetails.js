@@ -1,24 +1,21 @@
 import {
   Avatar,
   Button,
-  IconButton,
   List,
   ListItem,
   ListItemText,
   Typography,
-  ButtonGroup,
   Grid,
   Card,
   Hidden,
   Dialog,
 } from "@material-ui/core";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import React, { useContext } from "react";
+
+import React from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import defaultUserImage from "../../assets/defaultUserImage.png";
 import plate from "../../assets/plate.svg";
-import { UserContext, UserDispatchContext } from "../../context/UserContext";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -146,7 +143,7 @@ const OrderDetails2 = ({
             >
               <Grid item xs={3}>
                 <img
-                  src={user.profilePictureUrl}
+                  src={user.profilePictureUrl || defaultUserImage}
                   alt="profileImage"
                   className={classes.img}
                 />
