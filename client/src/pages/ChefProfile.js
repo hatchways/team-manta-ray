@@ -58,18 +58,20 @@ const ChefProfile = ({ history, match }) => {
   return (
     <Grid container>
       {/* Chef infos */}
-      <ChefSideBar
-        chefInfosAndRecipes={chefInfosAndRecipes}
-        profile={profile}
-        userInfo={userInfo}
-        setProfile={setProfile}
-        isOwner={isOwner}
-      />
+      <Grid item md={3} xs={12}>
+        <ChefSideBar
+          chefInfosAndRecipes={chefInfosAndRecipes}
+          profile={profile}
+          userInfo={userInfo}
+          setProfile={setProfile}
+          isOwner={isOwner}
+        />
+      </Grid>
 
       {/* Imaginary Grid for mdUp views*/}
-      <Hidden smDown>
+      {/* <Hidden smDown>
         <Grid item md={3} xs={12} />
-      </Hidden>
+      </Hidden> */}
 
       {/* Recipes */}
       <Grid item md={9} xs={12}>
