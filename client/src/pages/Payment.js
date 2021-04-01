@@ -444,6 +444,7 @@ const Payment = ({ history }) => {
       setProcessing(false);
       setSucceeded(true);
       setSuccessOpen(true);
+      placeOrder();
       setTimeout(() => {
         history.replace("/orders");
         placeOrder();
