@@ -45,9 +45,8 @@ io.on("connection", (socket) => {
   const id = socket.handshake.query.id;
   socket.join(id);
   connectedUsers.push(id);
-  console.log(connectedUsers);
   socket.broadcast.emit("connected", connectedUsers);
-  socket.emit("conneted", connectedUsers);
+  socket.emit("connected", connectedUsers);
   socket.on("send-message", ({ recipient, content }) => {
     socket.broadcast.to(recipient).emit("receive-message", {
       sender: id,
@@ -71,7 +70,7 @@ io.on("connection", (socket) => {
     console.log(user.name + " has disconnected");
     connectedUsers.splice(connectedUsers.indexOf(id), 1);
     socket.broadcast.emit("connected", connectedUsers);
-    socket.emit("conneted", connectedUsers);
+    socket.emit("connected", connectedUsers);
   });
 });
 
