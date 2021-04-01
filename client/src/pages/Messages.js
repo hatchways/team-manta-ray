@@ -93,8 +93,9 @@ const MessageItem = (props) => {
     (message) => {
       console.log("hello");
       setMessages([message, ...messages]);
+      getConversationPreviews();
     },
-    [messages]
+    [messages, getConversationPreviews]
   );
 
   //Socket emission for sending a message
