@@ -149,11 +149,6 @@ const ChefProfile = ({ recipe, isOwner }) => {
                 ? classes.cartBtn
                 : null
             }`}
-            // isOwner
-            //     ? classes.chefRecipeImage
-            //     : userInfo.isChef
-            //     ? classes.chefRecipeImageNoPointer
-            //     : classes.chefRecipeImageWithBtn
             onClick={() => (isOwner ? setOpen(true) : null)}
           >
             <Button

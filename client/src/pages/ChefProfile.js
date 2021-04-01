@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Grid, Hidden, Box, Typography, Paper } from "@material-ui/core";
+import { Grid, Box, Typography, Paper } from "@material-ui/core";
 import ChefSideBar from "../components/ChefProfile/ChefSideBar";
 import ChefRecipes from "../components/ChefProfile/ChefRecipes";
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,7 +8,7 @@ import axios from "axios";
 import { getRecipesByChef } from "../actions/recipeActions";
 
 const ChefProfile = ({ history, match }) => {
-  const { userId } = match.params;
+  const { userId, recipeId } = match.params;
 
   const useStyles = makeStyles((theme) => ({
     chefMenuName: {
@@ -25,6 +25,14 @@ const ChefProfile = ({ history, match }) => {
   const [profile, setProfile] = useState(null);
   const [isOwner, setIsOwner] = useState(true);
 
+  const [selectedRecipe, setSelectedRecipe] = useState(
+    recipeId ? recipeId : null
+  );
+  const refs = recipes.reduce((acc, recipe) => {
+    acc[recipe._id] = React.createRef();
+    return acc;
+  }, {});
+
   useEffect(() => {
     if (userInfo) {
       const getProfileAndRecipes = async () => {
@@ -39,7 +47,17 @@ const ChefProfile = ({ history, match }) => {
       getProfileAndRecipes();
     }
     setIsOwner(userId && userId !== userInfo._id ? false : true);
-  }, [dispatch, userInfo, history, userId]);
+  }, [dispatch, userInfo, userId]);
+
+  useEffect(() => {
+    if (selectedRecipe && refs[selectedRecipe]) {
+      refs[selectedRecipe].current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      setSelectedRecipe(null);
+    }
+  }, [refs, userId, selectedRecipe]);
 
   const chefInfosAndRecipes = {
     name: "Gordon Ramsey",
@@ -58,18 +76,15 @@ const ChefProfile = ({ history, match }) => {
   return (
     <Grid container>
       {/* Chef infos */}
-      <ChefSideBar
-        chefInfosAndRecipes={chefInfosAndRecipes}
-        profile={profile}
-        userInfo={userInfo}
-        setProfile={setProfile}
-        isOwner={isOwner}
-      />
-
-      {/* Imaginary Grid for mdUp views*/}
-      <Hidden smDown>
-        <Grid item md={3} xs={12} />
-      </Hidden>
+      <Grid item md={3} xs={12}>
+        <ChefSideBar
+          chefInfosAndRecipes={chefInfosAndRecipes}
+          profile={profile}
+          userInfo={userInfo}
+          setProfile={setProfile}
+          isOwner={isOwner}
+        />
+      </Grid>
 
       {/* Recipes */}
       <Grid item md={9} xs={12}>
@@ -85,12 +100,19 @@ const ChefProfile = ({ history, match }) => {
             <Paper elevation={3}>
               {recipes &&
                 recipes.map((recipe) => (
-                  <ChefRecipes
-                    recipe={recipe}
+                  <div
                     key={recipe._id}
-                    id={recipe._id}
-                    isOwner={isOwner}
-                  />
+                    // ref={recipeId && recipeId === recipe._id ? myRef : null}
+                    ref={refs[recipe._id]}
+                  >
+                    <ChefRecipes
+                      recipe={recipe}
+                      key={recipe._id}
+                      id={recipe._id}
+                      isOwner={isOwner}
+                      // ref={recipeId && recipeId === recipe._id ? myRef : null}
+                    />
+                  </div>
                 ))}
             </Paper>
           </Grid>

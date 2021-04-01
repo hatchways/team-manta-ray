@@ -93,8 +93,9 @@ const MessageItem = (props) => {
   const handleIncomingMessage = useCallback(
     (message) => {
       setMessages([message, ...messages]);
+      getConversationPreviews();
     },
-    [messages]
+    [messages, getConversationPreviews]
   );
 
   //Socket emission for sending a message
@@ -231,6 +232,11 @@ const MessageItem = (props) => {
                       {/* TEXT FIELD */}
                       <Box mb={2}>
                         <FilledInput
+                          onKeyPress={(e) => {
+                            if (e.key === "Enter") {
+                              sendMessageHandler();
+                            }
+                          }}
                           inputRef={messageInput}
                           style={{
                             padding: "10px 10px 17px 10px",
