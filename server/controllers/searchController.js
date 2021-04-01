@@ -75,7 +75,7 @@ const getFiltered = async (req, res) => {
         filteredOutput = await Recipe.find(mongoQuery)
           .populate({
             path: "user",
-            populate: { path: "user" },
+            populate: { path: "user", select: "-password" },
           })
           .skip(skip)
           .limit(limit);
