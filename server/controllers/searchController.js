@@ -13,7 +13,7 @@ const getFiltered = async (req, res) => {
     let filteredOutput = {};
 
     const cuisinesTagsParam = req.query.cuisines
-      ? JSON.parse(req.query.cuisines)
+      ? req.query.cuisines.split(",") //As per Dan's suggestion
       : [];
 
     const getChefsParam = req.query.chefs ? JSON.parse(req.query.chefs) : false;
@@ -32,7 +32,11 @@ const getFiltered = async (req, res) => {
 
     //Filter for matching cuisine tags
     if (cuisinesTagsParam.length > 0) {
-      mongoQuery.cuisineTags = { $in: cuisinesTagsParam };
+      if (getChefsParam) {
+        mongoQuery.cuisines = { $in: cuisinesTagsParam };
+      } else {
+        mongoQuery.cuisineTags = { $in: cuisinesTagsParam };
+      }
     }
 
     //Max distance filtering for chefs
@@ -48,21 +52,33 @@ const getFiltered = async (req, res) => {
 
     //Pagination
     const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 12; //Results per page
+    const limit = parseInt(req.query.limit, 10) || 50; //Results per page
     const skip = (page - 1) * limit;
 
     //Determine whether to return chefs or recipes
     if (getChefsParam) {
-      filteredOutput = await User.find(mongoQuery).skip(skip).limit(limit);
+      filteredOutput = await User.find({ isChef: true, ...mongoQuery })
+        .skip(skip)
+        .limit(limit);
     } else {
       //To sort or not to sort
       if (sortByParam === "price") {
         filteredOutput = await Recipe.find(mongoQuery)
+          .populate({
+            path: "user",
+            populate: { path: "user", select: "-password" },
+          })
           .sort({ price: orderParam === "asc" ? 1 : -1 })
           .skip(skip)
           .limit(limit);
       } else {
-        filteredOutput = await Recipe.find(mongoQuery).skip(skip).limit(limit);
+        filteredOutput = await Recipe.find(mongoQuery)
+          .populate({
+            path: "user",
+            populate: { path: "user" },
+          })
+          .skip(skip)
+          .limit(limit);
       }
     }
 

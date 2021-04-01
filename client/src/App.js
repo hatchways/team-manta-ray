@@ -19,6 +19,7 @@ import ProtectedRoutes from "./routes/ProtectedRoutes";
 import NavBar from "./components/NavBar";
 import OrderList from "./pages/OrderList";
 import BrowseChefs from "./pages/BrowseChefs";
+import SearchRecipes from "./pages/SearchRecipes";
 import { SocketProvider } from "./context/SocketContext";
 
 /** This will be moved once we have a parent component for payment */
@@ -34,6 +35,7 @@ const Private = () => {
         <Route path="/test" component={TestComponent} />
         <Route path="/profile" component={CustomerProfile} />
         <Route path="/search/chefs" component={BrowseChefs} />
+        <Route path="/search/recipes" component={SearchRecipes} />
         <Route path="/chat/:chattingWithId?" component={Messages} />
         <Route
           path="/chefprofile/:userId?/:recipeId?"

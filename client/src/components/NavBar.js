@@ -36,7 +36,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   appBar: {
-    boxShadow: "0px 10px 30px 0px rgba(204, 204, 204, 0.5)",
+    boxShadow: "0px 10px 30px 0px rgba(204, 204, 204, 0.3)",
+    position: "fixed",
+    top: 0,
   },
   drawerDiv: {
     width: 200,
@@ -196,6 +198,15 @@ const NavBar = ({ history }) => {
               divider
             >
               <ListItemText primary="Profile" />
+            </ListItem>
+            <ListItem
+              key="searchrecipes"
+              button
+              component={Link}
+              to="/search/recipes"
+              divider
+            >
+              <ListItemText primary="Search Recipes" />
             </ListItem>
             <ListItem
               key="chatbutton"

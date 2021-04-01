@@ -35,7 +35,7 @@ const ChefSideBar = (props) => {
     },
 
     chefSideBar: {
-      height: isBrowser ? "calc(100vh - 75px)" : "100vh",
+      height: isBrowser ? "calc(100vh - 60px)" : "100vh",
       backgroundColor: "white",
     },
 
@@ -55,6 +55,10 @@ const ChefSideBar = (props) => {
       marginRight: theme.spacing(8),
       marginLeft: theme.spacing(8),
       lineHeight: "1.6",
+    },
+    chefBioText: {
+      fontSize: "20px",
+      fontWeight: 400,
     },
 
     chefCover: {
@@ -84,6 +88,15 @@ const ChefSideBar = (props) => {
 
     chefInfoContainer: {
       height: "60%",
+    },
+
+    location: {
+      fontSize: "20px",
+      fontWeight: 600,
+    },
+
+    profileName: {
+      fontWeight: 600,
     },
   }));
 
@@ -137,19 +150,21 @@ const ChefSideBar = (props) => {
           <Box marginTop={-7} textAlign="center">
             <Box>
               {userInfo && (
-                <Typography variant="h4">
+                <Typography variant="h4" className={classes.profileName}>
                   {profile ? profile.name : userInfo.name}
                 </Typography>
               )}
             </Box>
             <Box>
-              <Typography variant="body2">{location}</Typography>
+              <Typography variant="body2" className={classes.location}>
+                {location}
+              </Typography>
             </Box>
             <Box className={classes.lineBreak}>
               <img src={line} alt="linebreak" />
             </Box>
             <Box className={classes.chefBio}>
-              <Typography variant="body1">
+              <Typography variant="body1" className={classes.chefBioText}>
                 {profile ? profile.bio : "Add a bio to your profile"}
               </Typography>
             </Box>
