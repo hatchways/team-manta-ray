@@ -92,8 +92,9 @@ const MessageItem = (props) => {
   const handleIncomingMessage = useCallback(
     (message) => {
       setMessages([message, ...messages]);
+      getConversationPreviews();
     },
-    [messages]
+    [messages, getConversationPreviews]
   );
 
   //Socket emission for sending a message
