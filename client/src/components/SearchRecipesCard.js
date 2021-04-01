@@ -103,9 +103,9 @@ const SearchRecipesCard = ({
         </CardContent>
         <Divider />
         <CardContent className={classes.cardContent}>
-          <Grid container>
+          <Grid container spacing={1}>
             <Grid item xs={3}>
-              <Avatar classname={classes.chefProfilePic} src={chefProfilePic} />
+              <Avatar className={classes.chefProfilePic} src={chefProfilePic} />
             </Grid>
             <Grid item container xs={8}>
               <Grid item xs={12}>

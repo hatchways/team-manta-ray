@@ -110,7 +110,6 @@ const SearchRecipes = () => {
         const res = await axios.get(url);
         const data = res.data.data;
         await setRecipes(data);
-        console.log(data);
         if (data.length === 0) {
           setResultsHeader("No recipes found. Try adjusting the filters.");
         } else {

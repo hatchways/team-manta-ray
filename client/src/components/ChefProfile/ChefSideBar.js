@@ -52,6 +52,10 @@ const ChefSideBar = (props) => {
       marginLeft: theme.spacing(8),
       lineHeight: "1.6",
     },
+    chefBioText: {
+      fontSize: "20px",
+      fontWeight: 400,
+    },
 
     chefCover: {
       backgroundImage: `url("${coverPictureUrl}")`,
@@ -79,6 +83,15 @@ const ChefSideBar = (props) => {
 
     chefInfoContainer: {
       height: "60%",
+    },
+
+    location: {
+      fontSize: "20px",
+      fontWeight: 600,
+    },
+
+    profileName: {
+      fontWeight: 600,
     },
   }));
 
@@ -121,16 +134,13 @@ const ChefSideBar = (props) => {
           <Box marginTop={-7} textAlign="center">
             <Box>
               {userInfo && (
-                <Typography variant="h4" style={{ fontWeight: 500 }}>
+                <Typography variant="h4" className={classes.profileName}>
                   {profile ? profile.name : userInfo.name}
                 </Typography>
               )}
             </Box>
             <Box>
-              <Typography
-                variant="body2"
-                style={{ fontSize: "20px", fontWeight: 600 }}
-              >
+              <Typography variant="body2" className={classes.location}>
                 {location}
               </Typography>
             </Box>
@@ -138,10 +148,7 @@ const ChefSideBar = (props) => {
               <img src={line} alt="linebreak" />
             </Box>
             <Box className={classes.chefBio}>
-              <Typography
-                variant="body1"
-                style={{ fontSize: "20px", fontWeight: 400 }}
-              >
+              <Typography variant="body1" className={classes.chefBioText}>
                 {profile ? profile.bio : "Add a bio to your profile"}
               </Typography>
             </Box>
