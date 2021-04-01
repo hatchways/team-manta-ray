@@ -49,8 +49,6 @@ app.use("/payment", paymentRoutes);
 // Route for order
 app.use("/api/orders", orderRoutes);
 
-app.use("/api/orders", orderRoutes);
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

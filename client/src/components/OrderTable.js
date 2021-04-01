@@ -165,11 +165,9 @@ const OrderTable = ({
 
   useEffect(() => {
     if (selectedOrder) {
-      // setFocusOrder(selectedOrder);
       setOrderId(selectedOrder._id);
       setItems(selectedOrder.items);
       setUser(selectedOrder.user);
-      document.getElementById(selectedOrder._id).selected = true;
       setOpen(true);
     }
     return () => {

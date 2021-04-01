@@ -21,22 +21,10 @@ function TabPanel(props) {
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(12),
-    // display: "flex",
-    // justifyContent: "space-around",
-    // flexWrap: "wrap",
   },
   sideBar: {
     height: "100%",
     marginRight: theme.spacing(5),
-  },
-  orders: {
-    // height: "85vh",
-    // width: "85vw",
-  },
-  paper: {
-    // height: "97%",
-    // width: "100%",
-    // fontFamily: "Montserrat, sans-serif",
   },
   tabs: {
     backgroundColor: "#fff",
@@ -122,9 +110,7 @@ const OrderList = ({ match }) => {
           </Tabs>
         </AppBar>
       </Grid>
-      {/* <Grid item md={1} xs={0}></Grid> */}
       <Grid item xs={12} className={classes.margin}>
-        {/* <div className={classes.orders}> */}
         <Paper className={classes.paper} elevation={5}>
           <TabPanel value={value} index={0}>
             <OrderTable
@@ -135,10 +121,20 @@ const OrderList = ({ match }) => {
             />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <OrderTable orders={previousOrders} title="Previous orders" />
+            <OrderTable
+              orders={previousOrders}
+              title="Previous orders"
+              selectedOrder={selectedOrder}
+              setSelectedOrder={(v) => setSelectedOrder(v)}
+            />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <OrderTable orders={allOrders} title="All orders" />
+            <OrderTable
+              orders={allOrders}
+              title="All orders"
+              selectedOrder={selectedOrder}
+              setSelectedOrder={(v) => setSelectedOrder(v)}
+            />
           </TabPanel>
         </Paper>
       </Grid>
