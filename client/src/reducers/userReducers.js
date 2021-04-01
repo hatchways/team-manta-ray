@@ -134,7 +134,7 @@ export const UserUpdatePasswordReducer = (initialState, action) => {
 
     case USER_UPDATE_PASSWORD_FAIL:
       return {
-        initialState,
+        ...initialState,
         loading: false,
         error: action.payload,
       };
