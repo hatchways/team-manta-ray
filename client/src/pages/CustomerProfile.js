@@ -62,7 +62,6 @@ const useStyles = makeStyles((theme) => ({
 
 const CustomerProfile = () => {
   //Dummy profile data for now
-  const { userInfo } = useContext(UserContext);
 
   const user = {
     name: "Christine Wilson",

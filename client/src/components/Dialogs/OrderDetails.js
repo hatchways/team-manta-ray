@@ -10,7 +10,8 @@ import {
   Hidden,
   Dialog,
 } from "@material-ui/core";
-
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 import React from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -96,13 +97,25 @@ const OrderDetails2 = ({
   selectedValue,
 }) => {
   const classes = useStyles();
-
+  const history = useHistory();
   const handleClose = () => {
     onClose(selectedValue);
+    contactHandler(user._id);
   };
 
   const addDecimals = (num) => (Math.round(num * 100) / 100).toFixed(2);
   if (!user || !items) return null;
+
+  const contactHandler = async (recipient) => {
+    try {
+      await axios.post("/api/chat/contact", {
+        recipient,
+      });
+      history.push(`/chat/${recipient}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Dialog
@@ -253,7 +266,6 @@ const OrderDetails2 = ({
             variant="contained"
             color="secondary"
             component={Link}
-            to="/messages"
             onClick={handleClose}
             className={classes.btn}
           >

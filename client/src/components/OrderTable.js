@@ -14,6 +14,8 @@ import {
   TableSortLabel,
   Typography,
 } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
@@ -232,6 +234,20 @@ const OrderTable = ({
     setOrderBy(property);
   };
   //----------end of sort logic-------------//
+
+  const history = useHistory();
+
+  const contactHandler = async (recipient) => {
+    try {
+      await axios.post("/api/chat/contact", {
+        recipient,
+      });
+      history.push(`/chat/${recipient}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <List>
@@ -368,7 +384,12 @@ const OrderTable = ({
                           color="secondary"
                           className={classes.btn}
                           component={Link}
-                          to={`/message/${order.user}`}
+                          onClick={() => {
+                            const userToContact = isChef
+                              ? order.user._id
+                              : order.chefId._id;
+                            contactHandler(userToContact);
+                          }}
                         >
                           Contact
                         </Button>
