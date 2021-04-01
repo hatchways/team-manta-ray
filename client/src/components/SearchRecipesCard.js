@@ -33,11 +33,27 @@ const useStyles = makeStyles({
     marginTop: 5,
     fontWeight: 700,
   },
+  cardContent: {
+    paddingBottom: "20px",
+    paddingTop: "20px",
+  },
   titleText: {
     fontSize: 20,
     fontWeight: 500,
     marginTop: 10,
     marginLeft: 10,
+  },
+  chefName: {
+    fontSize: 16,
+    fontWeight: 500,
+  },
+  chefProfilePic: {
+    height: 50,
+    width: 50,
+  },
+  cityName: {
+    fontSize: 14,
+    opacity: 0.6,
   },
   price: {
     fontSize: 17,
@@ -86,22 +102,19 @@ const SearchRecipesCard = ({
           </Typography>
         </CardContent>
         <Divider />
-        <CardContent style={{ paddingBottom: "20px", paddingTop: "20px" }}>
+        <CardContent className={classes.cardContent}>
           <Grid container>
             <Grid item xs={3}>
-              <Avatar style={{ height: 50, width: 50 }} src={chefProfilePic} />
+              <Avatar classname={classes.chefProfilePic} src={chefProfilePic} />
             </Grid>
             <Grid item container xs={8}>
               <Grid item xs={12}>
-                <Typography
-                  style={{ fontSize: 18, fontWeight: 500 }}
-                  variant="h4"
-                >
+                <Typography className={classes.chefName} variant="h4">
                   {chefName}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography style={{ fontSize: 14, opacity: 0.6 }} variant="h5">
+                <Typography className={classes.cityName} variant="h5">
                   Toronto, Canada
                 </Typography>
               </Grid>

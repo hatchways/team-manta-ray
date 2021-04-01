@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 10,
     marginLeft: 5,
     marginBottom: 20,
+    height: "100%",
   },
   filterHeader: {
     fontSize: "25px",
@@ -61,6 +62,13 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#FF510C",
     },
     fontSize: "22px",
+  },
+  menuItem: {
+    fontSize: "20px",
+  },
+  sideBarGrid: {
+    backgroundColor: "white",
+    minHeight: "95vh",
   },
 }));
 
@@ -166,12 +174,7 @@ const SearchRecipes = () => {
     <>
       <NavBar />
       <Grid container className={classes.root}>
-        <Grid
-          item
-          container
-          xs={3}
-          style={{ backgroundColor: "white", minHeight: "95vh" }}
-        >
+        <Grid item container xs={3} style={{}} className={classes.sideBarGrid}>
           <div className={classes.sideBar}>
             <Grid container style={{ marginTop: 15 }}>
               <Grid item xs={12}>
@@ -250,13 +253,17 @@ const SearchRecipes = () => {
                     displayEmpty
                     style={{ fontSize: "20px" }}
                   >
-                    <MenuItem style={{ fontSize: "20px" }} value={""}>
+                    <MenuItem
+                      className={classes.menuItem}
+                      style={{}}
+                      value={""}
+                    >
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem style={{ fontSize: "20px" }} value={"price,asc"}>
+                    <MenuItem className={classes.menuItem} value={"price,asc"}>
                       Price: Low to high
                     </MenuItem>
-                    <MenuItem style={{ fontSize: "20px" }} value={"price,desc"}>
+                    <MenuItem className={classes.menuItem} value={"price,desc"}>
                       Price: High to low
                     </MenuItem>
                   </Select>
@@ -275,14 +282,18 @@ const SearchRecipes = () => {
           </div>
         </Grid>
         <Grid item container spacing={5} xs={9} className={classes.results}>
-          <Grid item xs={12}>
-            <Typography component="h2" variant="h2" style={{ fontSize: 20 }}>
+          <Grid item xs={12} style={{ height: "10px", margin: 0 }}>
+            <Typography
+              component="h2"
+              variant="h2"
+              style={{ fontSize: "20px" }}
+            >
               {resultsHeader}
             </Typography>
           </Grid>
           {recipes.map((recipe) => {
             return (
-              <Grid item xs={3}>
+              <Grid key={recipe._id} item xs={3}>
                 <SearchRecipesCard
                   chefName={recipe.user ? recipe.user.name : "A chef"}
                   chefProfilePic={

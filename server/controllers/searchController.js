@@ -52,7 +52,7 @@ const getFiltered = async (req, res) => {
 
     //Pagination
     const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 12; //Results per page
+    const limit = parseInt(req.query.limit, 10) || 50; //Results per page
     const skip = (page - 1) * limit;
 
     //Determine whether to return chefs or recipes
