@@ -86,8 +86,12 @@ const CustomerProfile = ({ history }) => {
       history.replace("/login");
     }
     const getUserInfo = async () => {
-      const res = await axios.get("/api/users");
-      if (res.data) setUserData(res.data.user);
+      try {
+        const res = await axios.get("/api/users");
+        if (res.data) setUserData(res.data.user);
+      } catch (err) {
+        console.log(err);
+      }
     };
     if (!userData) getUserInfo();
 
@@ -98,8 +102,6 @@ const CustomerProfile = ({ history }) => {
     <Loader />
   ) : (
     <div className={classes.root}>
-      {loading && <Loader />}
-      {error && { error }}
       <Paper className={classes.paper} elevation={5} square>
         <Grid container className={classes.gridParent}>
           <Grid
@@ -141,9 +143,10 @@ const CustomerProfile = ({ history }) => {
                     {userInfo.address !== undefined
                       ? userInfo.address.city + ", " + userInfo.address.province
                       : ""}
-                    {/* {userData.city ? userData.city : ""} */}
                   </h3>
                 </Grid>
+                {loading && <Loader />}
+                {error && { error }}
               </Grid>
               <Grid item>
                 <Button

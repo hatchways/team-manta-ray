@@ -14,6 +14,8 @@ import {
   RESET_RECIPES,
   USER_UPDATE_REQUEST,
   USER_UPDATE_FAIL,
+  USER_UPDATE_PASSWORD_REQUEST,
+  USER_UPDATE_PASSWORD_SUCCESS,
 } from "../constants/userConstants";
 
 // User login action
@@ -130,6 +132,44 @@ export const updateUser = async (dispatch, payload) => {
 
     localStorage.setItem("userInfo", JSON.stringify(userData));
     return data.updatedUser;
+  } catch (err) {
+    dispatch({
+      type: USER_UPDATE_FAIL,
+      payload:
+        err.response && err.response.data.error
+          ? err.response.data.error
+          : err.message,
+    });
+  }
+};
+
+// update user password
+export const updatePassword = async (dispatch, passwordPayload) => {
+  try {
+    dispatch({
+      type: USER_UPDATE_PASSWORD_REQUEST,
+    });
+
+    const { userId, oldPassword, password } = passwordPayload;
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.put(
+      "/api/users/update",
+      { userId, oldPassword, password },
+      config
+    );
+
+    dispatch({
+      type: USER_UPDATE_PASSWORD_SUCCESS,
+      payload: data,
+    });
+
+    return data;
   } catch (err) {
     dispatch({
       type: USER_UPDATE_FAIL,

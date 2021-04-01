@@ -20,6 +20,7 @@ import NavBar from "./components/NavBar";
 import TestChefProfile from "./pages/TestChefProfile";
 import BrowseChefs from "./pages/BrowseChefs";
 import { SocketProvider } from "./context/SocketContext";
+import Update from "./pages/Update";
 
 /** This will be moved once we have a parent component for payment */
 const promise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
@@ -34,6 +35,7 @@ const Private = () => {
         <Route path="/test" component={TestComponent} />
         <Route path="/profile" component={CustomerProfile} />
         <Route path="/browsechefs" component={BrowseChefs} />
+        <Route path="/update" component={Update} />
         <Route path="/messages" component={Messages} />
         <Route
           path="/chefprofile/:userId?/:recipeId?"

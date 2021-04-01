@@ -203,6 +203,9 @@ const NavBar = ({ history }) => {
             >
               <ListItemText primary="Profile" />
             </ListItem>
+            <ListItem button divider onClick={() => history.push("/update")}>
+              <ListItemText primary="Update Password"></ListItemText>
+            </ListItem>
             <ListItem key="logoutbutton" button divider onClick={logoutHandler}>
               <ListItemText primary="Log Out" />
             </ListItem>
