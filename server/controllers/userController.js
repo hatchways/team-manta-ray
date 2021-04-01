@@ -41,17 +41,6 @@ const registerUser = AsyncHandler(async (req, res) => {
       httpOnly: true,
     });
 
-    //------/Temporary for Demo/-----Create a profile-------
-    // if (user.isChef) {
-    //   const profile = await ChefProfile.create({
-    //     user: user._id,
-    //   });
-    // } else {
-    //   const profile = await UserProfile.create({
-    //     user: user._id,
-    //   });
-    // }
-
     res.status(201).json({
       _id: user._id,
       name: user.name,
@@ -72,6 +61,8 @@ const registerUser = AsyncHandler(async (req, res) => {
 
 const loginUser = AsyncHandler(async (req, res) => {
   const { email, password } = req.body;
+
+  console.log("Password data", password);
 
   const user = await User.findOne({ email });
 
@@ -146,6 +137,11 @@ const retrieveUser = async (req, res) => {
   }
 };
 
+/**
+ * @description Update user data
+ * @route POST /api/users
+ * @access Private
+ */
 const updateUserData = AsyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
 
@@ -191,6 +187,35 @@ const updateUserData = AsyncHandler(async (req, res) => {
     success: true,
     updatedUser,
   });
+});
+
+/**
+ * @description Update user password
+ * @route PUT /api/users/update
+ * @access Private
+ */
+
+const updateUserPassword = AsyncHandler(async (req, res) => {
+  const { oldPassword, password, userId } = req.body;
+  const user = await User.findById(userId);
+
+  if (user && (await user.matchPassword(password))) {
+    throw new Error("Old password entered, please try again");
+  } else if (user && !(await user.matchPassword(oldPassword))) {
+    res.status(401);
+    throw new Error("Old password not found, please enter correct password");
+  } else if (user && password.length <= 6) {
+    res.status(400);
+    throw new Error("Password length must be atleast 7 characters");
+  } else {
+    user.password = req.body.password;
+
+    updatedUser = await user.save();
+    res.status(200).json({
+      success: true,
+      message: "Password successfully updated",
+    });
+  }
 });
 
 const getUserById = async (req, res) => {
@@ -380,6 +405,7 @@ module.exports = {
   logoutUser,
   retrieveUser,
   updateUserData,
+  updateUserPassword,
   getUserById,
   getUserCart,
   editUserCart,
