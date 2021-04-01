@@ -91,7 +91,6 @@ const MessageItem = (props) => {
 
   const handleIncomingMessage = useCallback(
     (message) => {
-      console.log("hello");
       setMessages([message, ...messages]);
     },
     [messages]
@@ -220,6 +219,11 @@ const MessageItem = (props) => {
                       {/* TEXT FIELD */}
                       <Box mb={2}>
                         <FilledInput
+                          onKeyPress={(e) => {
+                            if (e.key === "Enter") {
+                              sendMessageHandler();
+                            }
+                          }}
                           inputRef={messageInput}
                           style={{
                             padding: "10px 10px 17px 10px",
