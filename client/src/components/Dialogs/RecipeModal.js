@@ -69,8 +69,9 @@ const RecipeModal = ({ edit, id, recipe, open, onClose, selectedValue }) => {
       .test(
         "maxDigitsAfterDecimal",
         "Only up to two decimals are allowed for price",
-        (price) => Number.isInteger(price * 10 ** 2)
+        (price) => (price + "").match(/^\d+(\.\d{1,2})?$/)
       ),
+
     ingredients: Yup.string().required("Ingredients of the recipe is required"),
     portionDescription: Yup.string().required(
       "Portion Description is required"
