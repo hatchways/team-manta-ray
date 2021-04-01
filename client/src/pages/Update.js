@@ -173,7 +173,7 @@ const Update = ({ history }) => {
                   onClick={handleClickShowPassword}
                   edge="end"
                 >
-                  {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
               </InputAdornment>
             }

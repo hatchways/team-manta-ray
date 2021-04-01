@@ -129,9 +129,9 @@ const ChefSideBar = (props) => {
             <Box>
               {userInfo && (
                 <Typography variant="body2">
-                  {profile
+                  {profile && profile.address
                     ? profile.address.city + ", " + profile.address.province
-                    : userInfo
+                    : userInfo.address !== undefined
                     ? userInfo.address.city + ", " + userInfo.address.province
                     : ""}
                   {/* {userInfo.address !== undefined
