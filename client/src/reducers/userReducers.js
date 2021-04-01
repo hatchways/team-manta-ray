@@ -13,7 +13,6 @@ import {
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAIL,
-  USER_UPDATE_RESET,
 } from "../constants/userConstants";
 
 // check if user logged in
@@ -110,9 +109,6 @@ export const UserUpdateReducer = (initialState, action) => {
         loading: false,
         error: action.payload,
       };
-
-    case USER_UPDATE_RESET:
-      return {};
 
     default:
       return initialState;

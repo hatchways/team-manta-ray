@@ -7,6 +7,7 @@ import {
   userInitialState,
   UserLoginReducer,
   UserRegisterReducer,
+  UserUpdateReducer,
 } from "../reducers/userReducers";
 
 import { recipeInitialState, RecipeReducer } from "../reducers/RecipeReducer";
@@ -36,7 +37,8 @@ export const ContextProvider = ({ children }) => {
       UserLoginReducer,
       UserRegisterReducer,
       CartReducer,
-      RecipeReducer
+      RecipeReducer,
+      UserUpdateReducer
     ),
     initialState
   ); // User reducer function

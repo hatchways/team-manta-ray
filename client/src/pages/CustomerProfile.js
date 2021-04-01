@@ -98,8 +98,6 @@ const CustomerProfile = ({ history }) => {
     <Loader />
   ) : (
     <div className={classes.root}>
-      {loading && <Loader />}
-      {error && { error }}
       <Paper className={classes.paper} elevation={5} square>
         <Grid container className={classes.gridParent}>
           <Grid
@@ -144,6 +142,8 @@ const CustomerProfile = ({ history }) => {
                     {/* {userData.city ? userData.city : ""} */}
                   </h3>
                 </Grid>
+                {loading && <Loader />}
+                {error && { error }}
               </Grid>
               <Grid item>
                 <Button
