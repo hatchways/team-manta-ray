@@ -399,22 +399,26 @@ const Payment = ({ history }) => {
     }
 
     if (cart.totalPrice && cart.totalPrice > 0) {
-      fetch("/payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          price: cart.totalPrice,
-          userInfo,
-        }),
-      })
-        .then((res) => {
-          return res.json();
+      try {
+        fetch("/payment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            price: cart.totalPrice,
+            userInfo,
+          }),
         })
-        .then((data) => {
-          setClientSecret(data.clientSecret);
-        });
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            setClientSecret(data.clientSecret);
+          });
+      } catch (err) {
+        console.log(err);
+      }
     }
     // Create PaymentIntent as soon as the page loads
   }, [history, userInfo, cart, chosenChefProfile]);

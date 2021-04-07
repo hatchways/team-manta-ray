@@ -99,7 +99,9 @@ const Login = ({ history }) => {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <Logo className={classes.margin} />
         <div className={classes.paper}>
-          <Typography variant="h3">Login</Typography>
+          <Typography style={{ margin: "10px 0" }} variant="h3">
+            Login
+          </Typography>
 
           {loading && <Loader />}
 
