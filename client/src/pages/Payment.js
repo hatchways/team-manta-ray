@@ -14,7 +14,6 @@ import {
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { UserContext, UserDispatchContext } from "../context/UserContext";
 import Loader from "../components/Loader";
-// import sushi from "../assets/sushi.png";
 
 //Shipping checkout
 import Stepper from "@material-ui/core/Stepper";
@@ -241,7 +240,7 @@ export const useStyles = makeStyles((theme) => ({
     width: "80px",
     height: "80px",
     marginRight: theme.spacing(3),
-    // marginBottom: theme.spacing(3),
+    objectFit: "cover",
   },
   total: {
     display: "flex",
